@@ -1,15 +1,14 @@
 'use client';
-import { useQuery } from '@tanstack/react-query';
-import { Radar } from 'react-chartjs-2';
 import Link from 'next/link';
+import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import ReviewsReceivedSkeleton from './SkeletonRadar';
 import SkeletonReviewList from './SkeletonReviewList';
 import { getReview, getStatus } from '@/lib/review/received';
-import { REVIEW_METRICS } from '@/constants/review';
+import { dummyReviewData, REVIEW_METRICS } from '@/constants/review';
 import DefaultProfileImage from '@/assets/icons/ic_default_profile.svg';
 import { ReviewPros } from '@/types/review';
-import '@/utils/chartConfig';
+import clsx from 'clsx';
 
 export default function ReviewsReceived() {
   const {
@@ -40,58 +39,41 @@ export default function ReviewsReceived() {
       </div>
     );
   if (isError || isEmpty) return <div>오류가 발생했어요 😥</div>;
-
+  // 차트 변환
+  const max = Math.max(
+    ...REVIEW_METRICS.map((item) => dummyReviewData[item.countKey] ?? 0),
+  );
+  const chartData = REVIEW_METRICS.map((item) => {
+    const count = dummyReviewData[item.countKey] ?? 0;
+    return {
+      label: item.name,
+      value: (count / max) * 100,
+      count,
+    };
+  });
   return (
     <div className="mt-5 flex items-start gap-5">
-      <div className="w-[23rem] rounded-lg bg-[#28282a] px-[2.375rem] pt-[3.75rem] pb-[2.375rem]">
-        <div className="mx-auto h-[18.5rem] w-[18.5rem]">
-          <Radar
-            data={{
-              labels: REVIEW_METRICS.map((item) => item.label),
-              datasets: [
-                {
-                  label: '리뷰',
-                  data: REVIEW_METRICS.map(
-                    (data) =>
-                      radar[data.percentageKey as keyof typeof radar] ?? 0,
-                  ),
-                  backgroundColor: 'rgba(151, 71, 255, 0.3)',
-                  borderColor: 'rgba(151, 71, 255, 1)',
-                  borderWidth: 2,
-                  pointBackgroundColor: '#fff',
-                },
-              ],
-            }}
-            options={{
-              responsive: true,
-              maintainAspectRatio: false,
-              scales: {
-                r: {
-                  beginAtZero: true,
-                  max: 100,
-                  ticks: { display: false },
-                  grid: { color: '#444' },
-                  angleLines: { color: '#444' },
-                  pointLabels: {
-                    color: '#fff',
-                    font: { size: 10 },
-                  },
-                },
-              },
-              plugins: {
-                legend: { display: false },
-              },
-            }}
-          />
-        </div>
-        <ul className="mt-[53px] flex w-full flex-col gap-4">
-          {REVIEW_METRICS.map((review) => (
+      <div className="w-[23rem] rounded-lg bg-[#28282a] px-[2.375rem] py-[2.375rem]">
+        <div className="mx-auto w-[12.25rem]"></div>
+        <ul className="mt-[3.25rem] flex w-full flex-col gap-4">
+          {chartData.map((item) => (
             <li
-              key={review.name}
-              className="flex h-10 items-center justify-between rounded-lg bg-[linear-gradient(to_right,#9747FF20_54%,#00000020_100%)] px-4"
+              key={item.label}
+              className="relative flex h-10 items-center overflow-hidden rounded-lg bg-[#52525E] px-4"
             >
-              {review.name}
-              <span>{radar[review.countKey as keyof typeof radar] ?? 0}</span>
+              <div className="relative z-10 flex w-full justify-between">
+                <p>{item.label}</p>
+                <p>{item.count}</p>
+              </div>
+              <div
+                className={clsx(
+                  'absolute top-0 left-0 z-1 h-full rounded-lg transition-all',
+                  item.count === max
+                    ? 'bg-[var(--purple-700)]'
+                    : 'bg-[#6F52A3]',
+                )}
+                style={{ width: `${item.value}%` }}
+              />
             </li>
           ))}
         </ul>

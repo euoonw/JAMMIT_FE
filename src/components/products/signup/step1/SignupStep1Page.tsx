@@ -1,18 +1,17 @@
 'use client';
-
-import AuthCard from '@/components/commons/AuthCard';
-import Button from '@/components/commons/Button';
-import Input from '@/components/commons/Input';
-import { useSignupStore } from '@/stores/useSignupStore';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import debounce from 'lodash.debounce';
 import {
   FormProvider,
   SubmitHandler,
   useForm,
   useWatch,
 } from 'react-hook-form';
-import { useRouter } from 'next/navigation';
-import debounce from 'lodash.debounce';
-import { useCallback, useEffect, useState } from 'react';
+import AuthCard from '@/components/commons/AuthCard';
+import Button from '@/components/commons/Button';
+import Input from '@/components/commons/Input';
+import { useSignupStore } from '@/stores/useSignupStore';
 import { checkEmailDuplicate } from '@/lib/auth/signup';
 
 interface FormValues {
@@ -42,26 +41,26 @@ export default function SignUpStep1Page() {
   const [duplicateMessage, setDuplicateMessage] = useState<string | null>(null);
   const isValidEmailFormat = (email: string) =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-
-  const debounceCheckEmail = useCallback(
-    debounce(async (emailToCheck: string) => {
-      setChecking(true);
-      try {
-        const exists = await checkEmailDuplicate(emailToCheck);
-        setIsDuplicate(exists);
-        if (exists) {
-          setDuplicateMessage('이미 사용 중인 이메일입니다.');
-        } else {
-          setDuplicateMessage('사용 가능한 이메일입니다.');
-        }
-      } catch {
-        setDuplicateMessage('중복 검사 중 오류가 발생했습니다.');
-        setIsDuplicate(null);
-      } finally {
-        setChecking(false);
+  const checkEmail = useCallback(async (emailToCheck: string) => {
+    setChecking(true);
+    try {
+      const exists = await checkEmailDuplicate(emailToCheck);
+      setIsDuplicate(exists);
+      if (exists) {
+        setDuplicateMessage('이미 사용 중인 이메일입니다.');
+      } else {
+        setDuplicateMessage('사용 가능한 이메일입니다.');
       }
-    }, 500),
-    [],
+    } catch {
+      setDuplicateMessage('중복 검사 중 오류가 발생했습니다.');
+      setIsDuplicate(null);
+    } finally {
+      setChecking(false);
+    }
+  }, []);
+  const debounceCheckEmail = useMemo(
+    () => debounce(checkEmail, 500),
+    [checkEmail],
   );
 
   useEffect(() => {
@@ -80,7 +79,7 @@ export default function SignUpStep1Page() {
     return () => {
       debounceCheckEmail.cancel();
     };
-  }, [email, setError, clearErrors]);
+  }, [email, setError, clearErrors, debounceCheckEmail]);
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     useSignupStore.getState().setStep1Data(data);

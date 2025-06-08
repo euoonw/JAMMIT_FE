@@ -51,61 +51,79 @@ export const mockReviews: ReviewPros[] = Array.from({ length: 5 }).map(
   },
 );
 
+export const dummyReviewData = {
+  goodWithMusicCount: 15,
+  goodWithMusicPercentage: 75,
+
+  practiceHelpedCount: 11,
+  practiceHelpedPercentage: 55,
+
+  keepingPromisesCount: 8,
+  keepingPromisesPercentage: 40,
+
+  goodWithOthersCount: 5,
+  goodWithOthersPercentage: 25,
+
+  managingWellCount: 4,
+  managingWellPercentage: 20,
+
+  sharesPracticeResourcesCount: 3,
+  sharesPracticeResourcesPercentage: 15,
+
+  helpfulCount: 2,
+  helpfulPercentage: 10,
+
+  goodLearnerCount: 1,
+  goodLearnerPercentage: 5,
+};
+
 export const REVIEW_METRICS = [
   {
     key: 'isPracticeHelped',
     label: '연주',
     name: '연주 실력이 좋아요',
     countKey: 'goodWithMusicCount',
-    percentageKey: 'goodWithMusicPercentage',
   },
   {
     key: 'isGoodWithMusic',
     label: '준비',
     name: '곡 준비를 잘 해왔어요',
     countKey: 'practiceHelpedCount',
-    percentageKey: 'practiceHelpedPercentage',
   },
   {
     key: 'isKeepingPromises',
     label: '약속',
     name: '합주 시간 약속을 잘 지켜요',
     countKey: 'keepingPromisesCount',
-    percentageKey: 'keepingPromisesPercentage',
   },
   {
     key: 'isGoodWithOthers',
     label: '호흡',
     name: '다른 파트와의 호흡이 잘 맞아요',
     countKey: 'goodWithOthersCount',
-    percentageKey: 'goodWithOthersPercentage',
   },
   {
     key: 'isManagingWell',
     label: '팀워크',
     name: '분위기를 잘 이끌어요',
     countKey: 'managingWellCount',
-    percentageKey: 'managingWellPercentage',
   },
   {
     key: 'isSharesPracticeResources',
     label: '자료 공유',
     name: '악보나 연습 자료를 잘 공유해줬어요',
     countKey: 'sharesPracticeResourcesCount',
-    percentageKey: 'sharesPracticeResourcesPercentage',
   },
   {
     key: 'isHelpful',
     label: '도움 됨',
     name: '팀워크가 좋고 함께 연주하기 편했어요',
     countKey: 'helpfulCount',
-    percentageKey: 'helpfulPercentage',
   },
   {
     key: 'isGoodLearner',
     label: '학습자',
     name: '빨리 배워서 잘 따라해줘요',
     countKey: 'goodLearnerCount',
-    percentageKey: 'goodLearnerPercentage',
   },
 ] as const;

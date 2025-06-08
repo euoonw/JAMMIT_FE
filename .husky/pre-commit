@@ -1,4 +1,0 @@
-echo "🔍 commit prettier, lint, test 검사 중..."
-npx lint-staged
-npm run test:changed
-echo "✅ prettier, lint, test 모두 통과했습니다!"

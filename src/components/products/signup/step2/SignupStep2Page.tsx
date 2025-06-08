@@ -1,22 +1,21 @@
 'use client';
-
-import AuthCard from '@/components/commons/AuthCard';
-import Button from '@/components/commons/Button';
-import Input from '@/components/commons/Input';
-import ProfileImageUpload from '@/components/commons/ProfileImageUpload';
-import TagSection from '@/components/commons/TagSection';
-import { GENRE_TAGS, SESSION_TAGS } from '@/constants/tags';
-import { useSignupStore } from '@/stores/useSignupStore';
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   Controller,
   FormProvider,
   SubmitHandler,
   useForm,
 } from 'react-hook-form';
+import AuthCard from '@/components/commons/AuthCard';
+import Button from '@/components/commons/Button';
+import Input from '@/components/commons/Input';
+import ProfileImageUpload from '@/components/commons/ProfileImageUpload';
+import TagSection from '@/components/commons/TagSection';
+import { useSignupStore } from '@/stores/useSignupStore';
 import { useSignupMutation } from '@/hooks/queries/user/useSignupMutation';
 import { GENRE_KR_TO_ENUM, SESSION_KR_TO_ENUM } from '@/constants/tagsMapping';
-import { useRouter } from 'next/navigation';
+import { GENRE_TAGS, SESSION_TAGS } from '@/constants/tags';
 
 interface FormValues {
   image: File;
@@ -35,7 +34,7 @@ export default function SignupStep2Page() {
       alert('이전 단계 정보를 확인할 수 없어, 다시 입력이 필요합니다.');
       router.replace('/signup/step1');
     }
-  }, []);
+  }, [email, name, password, router]);
 
   const methods = useForm<FormValues>({
     mode: 'all',
@@ -50,19 +49,12 @@ export default function SignupStep2Page() {
     control,
   } = methods;
 
-  const handleSessionTagChange = useCallback(
-    (selected: string[]) => {
-      setValue('session', selected);
-    },
-    [setValue],
-  );
-
-  const handleGenreTagChange = useCallback(
-    (selected: string[]) => {
-      setValue('genre', selected);
-    },
-    [setValue],
-  );
+  const handleSessionTagChange = (selected: string[]) => {
+    setValue('session', selected);
+  };
+  const handleGenreTagChange = (selected: string[]) => {
+    setValue('genre', selected);
+  };
 
   const tagSections = [
     {

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { format, setHours, setMinutes } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
 import {
@@ -38,22 +38,23 @@ export function DatePicker({ value, onChange }: DatePickerProps) {
     const hour24 = ampm === 'PM' ? (hour % 12) + 12 : hour % 12;
     return setMinutes(setHours(date, hour24), minute);
   }
+  const handleDateChange = useCallback(
+    (selectedDate?: Date) => {
+      if (!selectedDate) return;
 
-  const handleDateChange = (selectedDate?: Date) => {
-    if (!selectedDate) {
-      return;
-    }
-    const newDate = combineDateAndTime(selectedDate, hour, minute, ampm);
-    setDate(newDate);
-    onChange?.(newDate);
-  };
+      const newDate = combineDateAndTime(selectedDate, hour, minute, ampm);
+      setDate(newDate);
+      onChange?.(newDate);
+    },
+    [hour, minute, ampm, onChange],
+  );
 
   useEffect(() => {
     if (!date) {
       return;
     }
     handleDateChange(date);
-  }, [hour, minute, ampm]);
+  }, [date, handleDateChange]);
 
   useEffect(() => {
     if (value) {
