@@ -4,7 +4,7 @@ export interface EditFormData {
   email: string;
   username: string;
   password: string | null;
-  image?: File;
+  image?: string | File;
   preferredGenres: Genre[];
   preferredBandSessions: BandSession[];
 }

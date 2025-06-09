@@ -1,12 +1,13 @@
-'use client';
-
 import clsx from 'clsx';
+import { useMemo } from 'react';
 import { useQueryTab } from '@/hooks/useQueryTab';
 import UserCard from '@/components/products/mypage/UserCard';
 import Participating from '@/components/products/mypage/Participating';
 import Created from '@/components/products/mypage/Created';
 import ReviewsReceived from '@/components/products/mypage/ReviewsReceived';
 import ReviewsToWrite from '@/components/products/mypage/ReviewsToWrite';
+import { useGatherMeCreate } from '@/hooks/queries/gather/useGatherMeCreate';
+import { useGatherMeParticipants } from '@/hooks/queries/gather/useGatherMeParticipants';
 
 type TabKey =
   | 'participating'
@@ -14,44 +15,67 @@ type TabKey =
   | 'reviews_received'
   | 'reviews_towrite';
 
-const tabList = [
-  {
-    key: 'participating',
-    label: '참여 모임',
-    // API 교체 필요
-    count: 2,
-    component: <Participating />,
-  },
-  {
-    key: 'created',
-    label: '내가 만든 모임',
-    // API 교체 필요
-    count: 2,
-    component: <Created />,
-  },
-  {
-    key: 'reviews_received',
-    label: '내가 받은 리뷰',
-    // API 교체 필요
-    count: 2,
-    component: <ReviewsReceived />,
-  },
-  {
-    key: 'reviews_towrite',
-    label: '작성 가능한 리뷰',
-    // API 교체 필요
-    count: 2,
-    component: <ReviewsToWrite />,
-  },
-] as const;
-
-export default function MyPageContent() {
-  const { activeTab, setTab } = useQueryTab<
-    'participating' | 'created' | 'reviews_received' | 'reviews_towrite'
-  >(
-    'tab',
+export default function MyPage() {
+  const { activeTab, setTab } = useQueryTab<TabKey>('tab', 'participating', [
     'participating',
-    tabList.map((tab) => tab.key),
+    'created',
+    'reviews_received',
+    'reviews_towrite',
+  ]);
+
+  const { data: participatingData } = useGatherMeParticipants({
+    page: 0,
+    size: 8,
+    includeCanceled: true,
+  });
+  const { data: createdData } = useGatherMeCreate({
+    page: 0,
+    size: 8,
+    includeCanceled: true,
+  });
+
+  const tabList = useMemo(
+    () => [
+      {
+        key: 'participating',
+        label: '참여 모임',
+        count: participatingData?.totalElements ?? 0,
+        component: (
+          <Participating
+            gatherings={participatingData?.gatherings ?? []}
+            currentPage={participatingData?.currentPage ?? 0}
+            totalPage={participatingData?.totalPage ?? 1}
+            totalElements={participatingData?.totalElements ?? 0}
+          />
+        ),
+      },
+      {
+        key: 'created',
+        label: '내가 만든 모임',
+        count: createdData?.totalElements ?? 0,
+        component: (
+          <Created
+            gatherings={createdData?.gatherings ?? []}
+            currentPage={createdData?.currentPage ?? 0}
+            totalPage={createdData?.totalPage ?? 1}
+            totalElements={createdData?.totalElements ?? 0}
+          />
+        ),
+      },
+      {
+        key: 'reviews_received',
+        label: '내가 받은 리뷰',
+        count: 2, // API 연결 시 수정
+        component: <ReviewsReceived />,
+      },
+      {
+        key: 'reviews_towrite',
+        label: '작성 가능한 리뷰',
+        count: 2, // API 연결 시 수정
+        component: <ReviewsToWrite />,
+      },
+    ],
+    [participatingData, createdData],
   );
 
   const tabClass = (isActive: boolean) =>
@@ -85,7 +109,7 @@ export default function MyPageContent() {
       <UserCard />
       <div className="mx-auto flex h-[4.625rem] w-[84rem] gap-[1.25rem]">
         {tabList.map(({ key, label, count }) =>
-          renderTabButton(key, label, count, activeTab === key),
+          renderTabButton(key as TabKey, label, count, activeTab === key),
         )}
       </div>
       <div className="mx-auto h-auto w-[84rem]">

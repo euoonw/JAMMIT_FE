@@ -78,12 +78,10 @@ export default function UserCard() {
             ))}
             <div className="h-[1.25rem] w-[0.0938rem] bg-gray-500" />
             <p>개설모임수</p>
-            {/* TODO: API 업데이트 후 GET API 가져오기*/}
-            <p>8</p>
+            <p>{user.totalCreatedGatheringCount}</p>
             <div className="h-[1.25rem] w-[0.0938rem] bg-gray-500" />
             <p>작성글수</p>
-            {/* TODO: API 업데이트 후 GET API 가져오기*/}
-            <p>20</p>
+            <p>{user.completedGatheringCount}</p>
           </div>
         </div>
       </div>

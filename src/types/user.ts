@@ -10,6 +10,8 @@ export interface UserResponse {
   updatedAt: string;
   preferredGenres: Genre[];
   preferredBandSessions: BandSession[];
+  totalCreatedGatheringCount: number;
+  completedGatheringCount: number;
 }
 
 export interface UpdateProfileRequest {

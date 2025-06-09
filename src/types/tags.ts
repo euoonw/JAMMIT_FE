@@ -23,3 +23,32 @@ export enum BandSession {
   PERCUSSION = 'PERCUSSION',
   KEYBOARD = 'KEYBOARD',
 }
+
+export type GatheringStatus =
+  | 'RECRUITING'
+  | 'CONFIRMED'
+  | 'COMPLETED'
+  | 'CANCELED';
+
+export type GenreType =
+  | 'ROCK'
+  | 'METAL'
+  | 'POP'
+  | 'BALLAD'
+  | 'INDIE'
+  | 'ALTERNATIVE'
+  | 'JAZZ'
+  | 'PUNK'
+  | 'ACOUSTIC'
+  | 'FOLK'
+  | 'RNB';
+
+export type BandSessionType =
+  | 'VOCAL'
+  | 'ELECTRIC_GUITAR'
+  | 'DRUM'
+  | 'ACOUSTIC_GUITAR'
+  | 'BASS'
+  | 'STRING_INSTRUMENT'
+  | 'PERCUSSION'
+  | 'KEYBOARD';
