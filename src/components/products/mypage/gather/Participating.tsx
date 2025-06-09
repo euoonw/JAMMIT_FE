@@ -41,7 +41,6 @@ export default function Participating({
         // 임시 추가
         thumbnail={item.thumbnail as unknown as StaticImageData}
         alt={item.name}
-        isLike={false}
       />
       <Card.TagList tags={item.genres} />
       <Card.TitleBlock title={item.name} author={item.creator.nickname} />
@@ -50,7 +49,7 @@ export default function Participating({
         totalCurrent={item.totalCurrent}
         totalRecruit={item.totalRecruit}
         recruitDeadline={item.recruitDeadline}
-        //member={item.member}
+        member={item.sessions}
       />
     </Link>
   );

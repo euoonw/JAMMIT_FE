@@ -1,5 +1,6 @@
 import { StaticImageData } from 'next/image';
-import { GenreType, BandSessionType, GatheringStatus } from './tags';
+// 카드의 리팩토링 완료 후 다음으로 수정import { GenreType, BandSessionType, GatheringStatus } from './tags';
+import { GenreType, GatheringStatus } from './tags';
 
 export interface RecruitCardData {
   id: number;
@@ -55,8 +56,8 @@ export interface GatheringCard {
   };
   /** 세션 */
   sessions: {
-    bandSession: BandSessionType;
+    bandSession: string;
     recruitCount: number;
     currentCount: number;
-  };
+  }[];
 }

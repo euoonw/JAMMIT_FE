@@ -1,9 +1,12 @@
+// MEMO: 서버컴포넌트로 변경 예정
+'use client';
+
 import clsx from 'clsx';
 import { useMemo } from 'react';
 import { useQueryTab } from '@/hooks/useQueryTab';
 import UserCard from '@/components/products/mypage/UserCard';
-import Participating from '@/components/products/mypage/Participating';
-import Created from '@/components/products/mypage/Created';
+import Participating from './gather/Participating';
+import Created from './gather/Created';
 import ReviewsReceived from '@/components/products/mypage/review/ReviewsReceived';
 import ReviewsToWrite from '@/components/products/mypage/ReviewsToWrite';
 import { useGatherMeCreate } from '@/hooks/queries/gather/useGatherMeCreate';
