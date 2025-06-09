@@ -3,10 +3,10 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import IconLove from '@/assets/icons/ic_love.svg';
 import { useWishStore } from '@/stores/useWishStore';
-import { RecruitCardData } from '@/types/card';
+import { GatheringCard } from '@/types/card';
 
 interface LikeProps {
-  item: RecruitCardData;
+  item: GatheringCard;
 }
 
 export default function Like({ item }: LikeProps) {

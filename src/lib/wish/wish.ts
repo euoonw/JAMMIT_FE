@@ -21,7 +21,5 @@ export async function getLiked({
   params.append('includeCanceled', includeCanceled.toString());
   params.append('page', pageParam.toString());
   params.append('size', size.toString());
-  return await apiClient.get(
-    `${process.env.NEXT_PUBLIC_API_URL}/gatherings?${params.toString()}`,
-  );
+  return await apiClient.get(`/gatherings?${params.toString()}`);
 }
