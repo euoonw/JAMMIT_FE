@@ -52,3 +52,11 @@ export type BandSessionType =
   | 'STRING_INSTRUMENT'
   | 'PERCUSSION'
   | 'KEYBOARD';
+
+export type ParticipantStatus =
+  | 'PENDING'
+  | 'APPROVED'
+  | 'REJECTED'
+  | 'COMPLETED'
+  | 'CANCELED';
+

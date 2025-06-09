@@ -5,13 +5,14 @@ import Checkbox from '@/assets/icons/ic_checkbox.svg';
 import CheckboxEmpty from '@/assets/icons/ic_checkbox_empty.svg';
 import DefaultProfile from '@/assets/icons/ic_default_profile.svg';
 import { useMemo } from 'react';
+import { SESSION_ENUM_TO_KR } from '@/constants/tagsMapping';
 
 interface MemberRowProps {
-  id: string;
+  id: number;
   selected: boolean;
-  onSelectChange: (id: string) => void;
+  onSelectChange: (id: number) => void;
   nickname: string;
-  sessions: string[];
+  session: string;
   introduction: string;
   profileImage?: File | null;
   isSelectable?: boolean;
@@ -22,7 +23,7 @@ export default function MemberRow({
   selected,
   onSelectChange,
   nickname,
-  sessions,
+  session,
   introduction,
   profileImage = null,
   isSelectable = true,
@@ -57,14 +58,9 @@ export default function MemberRow({
         </div>
 
         <div className="flex w-[10.4375rem] gap-[0.25rem]">
-          {sessions.map((session) => (
-            <div
-              key={session}
-              className="rounded-[0.5rem] bg-[#34343A] px-[0.75rem] py-[0.375rem] text-gray-100"
-            >
-              {session}
-            </div>
-          ))}
+          <div className="rounded-[0.5rem] bg-[#34343A] px-[0.75rem] py-[0.375rem] text-gray-100">
+            {SESSION_ENUM_TO_KR[session]}
+          </div>
         </div>
         <div className="line-clamp-2 w-[22.875rem] overflow-hidden text-ellipsis">
           {introduction}

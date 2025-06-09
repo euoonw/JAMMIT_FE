@@ -1,14 +1,14 @@
-import { Member } from '@/types/member';
 import Checkbox from '@/assets/icons/ic_checkbox.svg';
 import CheckboxEmpty from '@/assets/icons/ic_checkbox_empty.svg';
 import MemberRow from './MemberRow';
+import { Participant } from '@/types/gathering';
 
 interface MemberListProps {
   title: string;
-  members: Member[];
+  members: Participant[];
   isSelectable?: boolean;
-  selectedIds?: string[];
-  setSelectedIds?: React.Dispatch<React.SetStateAction<string[]>>;
+  selectedIds?: number[];
+  setSelectedIds?: React.Dispatch<React.SetStateAction<number[]>>;
 }
 
 export default function MemberList({
@@ -18,7 +18,7 @@ export default function MemberList({
   selectedIds = [],
   setSelectedIds,
 }: MemberListProps) {
-  const handleSelectChange = (id: string) => {
+  const handleSelectChange = (id: number) => {
     if (!isSelectable || !setSelectedIds) {
       return;
     }
@@ -35,7 +35,7 @@ export default function MemberList({
     if (selectedIds.length === members.length) {
       setSelectedIds([]);
     } else {
-      setSelectedIds(members.map((m) => m.id));
+      setSelectedIds(members.map((m) => m.userId));
     }
   };
 
@@ -76,13 +76,13 @@ export default function MemberList({
           </div>
           {members.map((member) => (
             <MemberRow
-              key={member.id}
-              id={member.id}
-              nickname={member.nickname}
-              sessions={member.sessions}
+              key={member.userId}
+              id={member.userId}
+              nickname={member.userNickname}
+              session={member.bandSession}
               introduction={member.introduction}
-              profileImage={member.profileImage}
-              selected={selectedIds.includes(member.id)}
+              // profileImage={member.profileImage}
+              selected={selectedIds.includes(member.userId)}
               onSelectChange={handleSelectChange}
               isSelectable={isSelectable}
             />

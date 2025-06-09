@@ -6,45 +6,103 @@ import bannerImages from '@/constants/bannerImages';
 import GroupPageLayout from '@/components/commons/GroupPageLayout';
 import { useQueryTab } from '@/hooks/useQueryTab';
 import MemberInfoSection from './MemberInfoSection';
+import ParticipantsSection from './ParticipantsSection';
+import { useParams } from 'next/navigation';
+import { useGatheringDetailQuery } from '@/hooks/queries/gatherings/useGatheringsDetailQuery';
+import { useUserStore } from '@/stores/useUserStore';
+import { useGatheringParticipantsQuery } from '@/hooks/queries/gatherings/useGatheringsParticipantsQuery';
+import { useState } from 'react';
+import Button from '@/components/commons/Button';
+import ParticipationForm from './ParticipationForm';
 
 export default function GroupPage() {
   const { activeTab } = useQueryTab<'recruit' | 'members'>('tab', 'recruit', [
     'recruit',
     'members',
   ]);
+  const user = useUserStore((state) => state.user);
+  const { groupId } = useParams();
+  const numericId = Number(groupId);
+  const [showParticipationForm, setShowParticipationForm] = useState(false);
 
-  const groupData = {
-    bannerImageIndex: 0,
-    title: 'KPOP 위주로 합주해보실 세션 모집',
-    hostName: '현호박',
-    location: '홍대입구역',
-    meetingDate: '2025년 5월 31일 토요일 PM 2시',
-    closingDate: '2025년 5월 31일 토요일 PM 2시',
-    sessions: [
-      { name: '보컬', current: 9, max: 9 },
-      { name: '일렉 기타', current: 9, max: 9 },
-      { name: '통기타', current: 9, max: 9 },
-      { name: '베이스', current: 9, max: 9 },
-      { name: '드럼', current: 9, max: 9 },
-      { name: '건반', current: 9, max: 9 },
-      { name: '현악기', current: 9, max: 9 },
-      { name: '타악기', current: 9, max: 9 },
-    ],
-    genres: ['락', '메탈', '팝', '발라드', 'R&B', '포크'],
-    description: `안녕하세요! 퇴근하고 간단하게 합주 좀 하고
-뒷풀이 맥주 한 잔 후 헤어지는 잼을 계획 중에 있습니다~
+  const {
+    data: gatheringDetailData,
+    isLoading,
+    error,
+  } = useGatheringDetailQuery(numericId);
 
-일단, 홍대입구역 8출 근처 연습실 xxx에서 만나구요.
-뒷풀이는 근처 치킨집 ○○로 예약해두려고 합니다.
-모임 확정되면 단톡 팠테니 많은 참여 부탁드려요~`,
+  const {
+    data: participantsData,
+    isLoading: isParticipantsLoading,
+    error: participantsError,
+  } = useGatheringParticipantsQuery(numericId);
+
+  // TODO: 스켈레톤 적용
+  if (isLoading || isParticipantsLoading) return <div>로딩 중...</div>;
+  if (error || participantsError) return <div>에러 발생</div>;
+  if (!gatheringDetailData || !participantsData)
+    return <div>모임 정보를 찾을 수 없습니다.</div>;
+
+  const isHost = user?.id === gatheringDetailData.creator.id;
+
+  const participants = participantsData.participants;
+  const approvedParticipants = participants.filter(
+    (participant) => participant.status === 'APPROVED',
+  );
+  const pendingParticipants = participants.filter(
+    (participant) => participant.status === 'PENDING',
+  );
+
+  const isParticipating = participants.some(
+    (participant) => participant.userId === user?.id,
+  );
+
+  // TODO: 참여 취소 로직 추가
+  const handleCanceleParticipation = () => {
+    console.log('참여 취소');
+  };
+
+  const renderActionButtons = () => {
+    if (showParticipationForm) {
+      return <ParticipationForm gathering={gatheringDetailData} />;
+    }
+
+    if (isHost) return null;
+
+    if (!isParticipating) {
+      return (
+        <Button
+          variant="solid"
+          className="w-[22.75rem]"
+          onClick={() => setShowParticipationForm(true)}
+        >
+          함께하기
+        </Button>
+      );
+    }
+
+    return (
+      <div>
+        <Button variant="solid" disabled className="w-[22.75rem]">
+          참여 완료
+        </Button>
+        <button
+          className="mt-[1.125rem] w-full text-center text-[0.9375rem] font-medium text-[#BF5EFF] underline underline-offset-2"
+          onClick={handleCanceleParticipation}
+        >
+          참여 취소
+        </button>
+      </div>
+    );
   };
 
   return (
     <GroupPageLayout
+      participantsNumber={approvedParticipants.length}
       banner={
         <div className="relative h-[22rem] w-full overflow-hidden rounded-[0.5rem]">
           <Image
-            src={bannerImages[groupData.bannerImageIndex]}
+            src={bannerImages[1]}
             alt="모임 배너"
             layout="fill"
             objectFit="cover"
@@ -52,20 +110,21 @@ export default function GroupPage() {
           />
         </div>
       }
+      actionButtons={renderActionButtons()}
     >
       {activeTab === 'recruit' ? (
-        <GroupInfoSection
-          title={groupData.title}
-          hostName={groupData.hostName}
-          location={groupData.location}
-          meetingDate={groupData.meetingDate}
-          closingDate={groupData.closingDate}
-          sessions={groupData.sessions}
-          genres={groupData.genres}
-          description={groupData.description}
+        <GroupInfoSection gathering={gatheringDetailData} isHost={isHost} />
+      ) : isHost ? (
+        <MemberInfoSection
+          gathering={gatheringDetailData}
+          approvedParticipants={approvedParticipants}
+          pendingParticipants={pendingParticipants}
         />
       ) : (
-        <MemberInfoSection />
+        <ParticipantsSection
+          gathering={gatheringDetailData}
+          participants={approvedParticipants}
+        />
       )}
     </GroupPageLayout>
   );

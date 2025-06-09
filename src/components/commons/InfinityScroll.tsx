@@ -1,4 +1,4 @@
-'use clients';
+'use client';
 
 import { forwardRef, Fragment, ReactNode, useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';

@@ -8,6 +8,7 @@ interface GroupPageLayoutProps {
   actionButtons?: ReactNode;
   children: ReactNode;
   isTab?: boolean;
+  participantsNumber?: number;
 }
 
 export default function GroupPageLayout({
@@ -15,15 +16,13 @@ export default function GroupPageLayout({
   actionButtons,
   children,
   isTab = true,
+  participantsNumber,
 }: GroupPageLayoutProps) {
   const { activeTab, setTab } = useQueryTab<'recruit' | 'members'>(
     'tab',
     'recruit',
     ['recruit', 'members'],
   );
-
-  // TODO: 참여 멤버 수 관리 받아올 수 있게바꾸기
-  const membersCount = 2;
 
   const tabClass = (isActive: boolean) =>
     clsx(
@@ -63,13 +62,13 @@ export default function GroupPageLayout({
                   : 'bg-[#6E00B8] text-gray-300',
               )}
             >
-              {membersCount}
+              {participantsNumber}
             </span>
           </div>
         </div>
       )}
 
-      <div className="flex gap-[1.25rem] pb-[3.875rem]">
+      <div className="flex justify-between pb-[3.875rem]">
         {/* 메인 본문 */}
         {children}
 
