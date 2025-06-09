@@ -76,13 +76,13 @@ export default function MemberList({
           </div>
           {members.map((member) => (
             <MemberRow
-              key={member.userId}
-              id={member.userId}
+              key={`${member.userId}-${member.bandSession}`}
+              id={member.participantId}
               nickname={member.userNickname}
               session={member.bandSession}
               introduction={member.introduction}
               // profileImage={member.profileImage}
-              selected={selectedIds.includes(member.userId)}
+              selected={selectedIds.includes(member.participantId)}
               onSelectChange={handleSelectChange}
               isSelectable={isSelectable}
             />

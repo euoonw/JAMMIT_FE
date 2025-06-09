@@ -15,10 +15,12 @@ interface ParticipationFormData {
 
 interface ParticipationFormProps {
   gathering: GatheringDetailResponse;
+  onComplete: (data: { session: string; introduction: string }) => void;
 }
 
 export default function ParticipationForm({
   gathering,
+  onComplete,
 }: ParticipationFormProps) {
   const {
     handleSubmit,
@@ -50,15 +52,14 @@ export default function ParticipationForm({
     setValue('session', selected);
   };
 
-  const onSubmit = (data: ParticipationFormData) => {
-    // TODO: 신청 API
-    console.log('신청 데이터:', data);
+  const handleFormSubmit = (data: ParticipationFormData) => {
+    onComplete({ session: data.session[0], introduction: data.introduction });
   };
 
   return (
     <div className="w-[22.625rem]">
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(handleFormSubmit)}
         className="flex flex-col gap-[1.25rem]"
       >
         <div className="flex flex-col gap-[1.25rem] rounded-[0.5rem] bg-[#212226] p-[1.75rem]">

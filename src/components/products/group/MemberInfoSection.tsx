@@ -3,6 +3,8 @@ import Button from '@/components/commons/Button';
 import MemberList from './MemberList';
 import { useState } from 'react';
 import { GatheringDetailResponse, Participant } from '@/types/gathering';
+import { useApproveParticipantMutation } from '@/hooks/queries/gatherings/useApproveParticipantMutation';
+import { useRejectParticipantMutation } from '@/hooks/queries/gatherings/useRejectParticipantMutation';
 
 interface MemberInfoSectionProps {
   approvedParticipants: Participant[];
@@ -16,14 +18,31 @@ export default function MemberInfoSection({
   pendingParticipants,
 }: MemberInfoSectionProps) {
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const approveMutation = useApproveParticipantMutation();
+  const rejectMutation = useRejectParticipantMutation();
 
-  // TODO: 수락, 거절 API 연결
-  const handleAccept = () => {
-    console.log('수락한 멤버 ID:', selectedIds);
+  const handleAccept = async () => {
+    await Promise.all(
+      selectedIds.map((participantId) =>
+        approveMutation.mutateAsync({
+          gatheringId: gathering.id,
+          participantId,
+        }),
+      ),
+    );
+    setSelectedIds([]);
   };
 
-  const handleReject = () => {
-    console.log('거절한 멤버 ID:', selectedIds);
+  const handleReject = async () => {
+    await Promise.all(
+      selectedIds.map((participantId) =>
+        rejectMutation.mutateAsync({
+          gatheringId: gathering.id,
+          participantId,
+        }),
+      ),
+    );
+    setSelectedIds([]);
   };
 
   return (

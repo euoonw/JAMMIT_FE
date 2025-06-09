@@ -45,3 +45,16 @@ export interface ParticipantsResponse {
   participants: Participant[];
   total: number;
 }
+
+export interface ParticipateGatheringResponse {
+  gatheringId: number;
+  userId: number;
+  bandSession: BandSessionType;
+  status: ParticipantStatus;
+  message: string;
+  completed: boolean;
+  canceled: boolean;
+  approved: boolean;
+  rejected: boolean;
+  pending: boolean;
+}

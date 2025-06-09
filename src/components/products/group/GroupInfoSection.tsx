@@ -5,6 +5,7 @@ import Button from '@/components/commons/Button';
 import { GatheringDetailResponse } from '@/types/gathering';
 import { GENRE_ENUM_TO_KR, SESSION_ENUM_TO_KR } from '@/constants/tagsMapping';
 import { formatDateToKoreanStyle } from '@/utils/formatDate';
+import { useDeleteGatheringMutation } from '@/hooks/queries/gatherings/useDeleteGatheringMutation';
 
 interface GroupInfoSectionProps {
   gathering: GatheringDetailResponse;
@@ -24,7 +25,14 @@ export default function GroupInfoSection({
     sessions,
     description,
     creator,
+    status,
   } = gathering;
+
+  const isCanceled = status === 'CANCELED';
+  const isHostAndCanceled = isHost && isCanceled;
+  const isHostAndActive = isHost && !isCanceled;
+
+  const deleteMutation = useDeleteGatheringMutation();
 
   const actionButtons = [
     {
@@ -38,9 +46,10 @@ export default function GroupInfoSection({
     {
       label: '삭제하기',
       variant: 'outline',
+      // TODO: 확인 모달 적용
       onClick: () => {
-        // TODO: 삭제하기 로직
-        console.log('삭제하기 클릭');
+        if (!confirm('정말로 이 모임을 취소하시겠습니까?')) return;
+        deleteMutation.mutate(gathering.id);
       },
     },
   ];
@@ -126,7 +135,13 @@ export default function GroupInfoSection({
       </section>
 
       <div className="ml-[1.25rem]">
-        {isHost && (
+        {isHostAndCanceled && (
+          <Button variant="solid" disabled className="w-[22.75rem]">
+            취소된 모임입니다
+          </Button>
+        )}
+
+        {isHostAndActive && (
           <div className="flex flex-col gap-[1.25rem]">
             {actionButtons.map(({ label, variant, onClick }) => (
               <Button

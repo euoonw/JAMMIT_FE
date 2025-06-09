@@ -14,6 +14,9 @@ import { useGatheringParticipantsQuery } from '@/hooks/queries/gatherings/useGat
 import { useState } from 'react';
 import Button from '@/components/commons/Button';
 import ParticipationForm from './ParticipationForm';
+import { useParticipateGatheringMutation } from '@/hooks/queries/gatherings/useParticipateGatheringsMutation';
+import { SESSION_KR_TO_ENUM } from '@/constants/tagsMapping';
+import { useCancelParticipateGatheringMutation } from '@/hooks/queries/gatherings/useCancelParticipateGathering';
 
 export default function GroupPage() {
   const { activeTab } = useQueryTab<'recruit' | 'members'>('tab', 'recruit', [
@@ -37,6 +40,9 @@ export default function GroupPage() {
     error: participantsError,
   } = useGatheringParticipantsQuery(numericId);
 
+  const participateMutation = useParticipateGatheringMutation();
+  const cancelMutation = useCancelParticipateGatheringMutation();
+
   // TODO: 스켈레톤 적용
   if (isLoading || isParticipantsLoading) return <div>로딩 중...</div>;
   if (error || participantsError) return <div>에러 발생</div>;
@@ -44,6 +50,7 @@ export default function GroupPage() {
     return <div>모임 정보를 찾을 수 없습니다.</div>;
 
   const isHost = user?.id === gatheringDetailData.creator.id;
+  const isCanceled = gatheringDetailData.status === 'CANCELED';
 
   const participants = participantsData.participants;
   const approvedParticipants = participants.filter(
@@ -53,18 +60,61 @@ export default function GroupPage() {
     (participant) => participant.status === 'PENDING',
   );
 
-  const isParticipating = participants.some(
+  const isParticipating = pendingParticipants.some(
     (participant) => participant.userId === user?.id,
   );
 
-  // TODO: 참여 취소 로직 추가
+  const currentUserParticipation = pendingParticipants.find(
+    (participant) => participant.userId === user?.id,
+  );
+
+  const myParticipantId = currentUserParticipation?.participantId;
+
   const handleCanceleParticipation = () => {
-    console.log('참여 취소');
+    if (!myParticipantId) {
+      console.warn('참여 정보를 찾을 수 없습니다.');
+      return;
+    }
+    cancelMutation.mutate({
+      gatheringId: numericId,
+      participantId: myParticipantId,
+    });
+  };
+
+  const handleSubmitParticipation = ({
+    session,
+    introduction,
+  }: {
+    session: string;
+    introduction: string;
+  }) => {
+    const sessionEnum = SESSION_KR_TO_ENUM[session];
+
+    participateMutation.mutate({
+      id: numericId,
+      bandSession: sessionEnum,
+      introduction,
+    });
+
+    setShowParticipationForm(false);
   };
 
   const renderActionButtons = () => {
+    if (isCanceled) {
+      return (
+        <Button variant="solid" disabled className="w-[22.75rem]">
+          취소된 모임입니다
+        </Button>
+      );
+    }
+
     if (showParticipationForm) {
-      return <ParticipationForm gathering={gatheringDetailData} />;
+      return (
+        <ParticipationForm
+          gathering={gatheringDetailData}
+          onComplete={handleSubmitParticipation}
+        />
+      );
     }
 
     if (isHost) return null;
