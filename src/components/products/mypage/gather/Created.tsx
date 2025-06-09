@@ -1,13 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { Card } from '@/components/commons/Card';
 import { CARD_STATE } from '@/constants/card';
 import { GatheringCard } from '@/types/card';
 import InfinityScroll from '@/components/commons/InfinityScroll';
 import { GatheringsResponse } from '@/types/gather';
-import { StaticImageData } from 'next/image';
+import CardItem from '@/components/commons/Card/CardItem';
 
 // TODO: Recruit interface 변경이후 변경 필요
 export default function Created({
@@ -35,29 +33,10 @@ export default function Created({
     }
   };
 
-  const renderCard = (item: GatheringCard) => (
-    <Link key={item.id} href={`de/${item.id}`}>
-      <Card.Thumbnail
-        // 임시 추가
-        thumbnail={item.thumbnail as unknown as StaticImageData}
-        alt={item.name}
-      />
-      <Card.TagList tags={item.genres} />
-      <Card.TitleBlock title={item.name} author={item.creator.nickname} />
-      <Card.Footer
-        status={CARD_STATE.COMPLETED}
-        totalCurrent={item.totalCurrent}
-        totalRecruit={item.totalRecruit}
-        recruitDeadline={item.recruitDeadline}
-        member={item.sessions}
-      />
-    </Link>
-  );
-
   return (
     <InfinityScroll<GatheringCard>
       list={items}
-      item={renderCard}
+      item={(item) => <CardItem item={item} status={CARD_STATE.COMPLETED} />}
       emptyText="참여 중인 모집이 없습니다."
       onInView={handleInView}
       hasMore={hasMore}

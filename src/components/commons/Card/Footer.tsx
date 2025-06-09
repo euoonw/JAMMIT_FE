@@ -4,18 +4,19 @@ import { getRecruitStatus } from '@/utils/getRecruitStatus';
 import { deadline } from '@/utils/deadline';
 import { CardStatus } from '@/constants/card';
 import { SESSION_ENUM_TO_KR } from '@/constants/tagsMapping';
+import { useRouter } from 'next/navigation';
 
 interface FooterProps {
   status: CardStatus;
   totalCurrent: number;
   totalRecruit: number;
-  member: {
+  member?: {
     bandSession: string;
     recruitCount: number;
     currentCount: number;
   }[];
   recruitDeadline?: string;
-  onButtonClick?: () => void;
+  id?: number;
 }
 
 export default function Footer({
@@ -24,7 +25,7 @@ export default function Footer({
   totalRecruit,
   recruitDeadline,
   member,
-  //   onButtonClick,
+  id,
 }: FooterProps) {
   const text = `${totalCurrent}/${totalRecruit}`;
   const cardStatus = getRecruitStatus(
@@ -32,6 +33,13 @@ export default function Footer({
     totalCurrent,
     totalRecruit,
   );
+  const router = useRouter();
+  const handleButton = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    e.preventDefault();
+    router.push(`/group/${id}?tab=members`);
+  };
+
   const right = () => {
     switch (status) {
       case '모집중':
@@ -97,6 +105,9 @@ export default function Footer({
       </div>
       {status === '합주완료' && (
         <button
+          onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+            handleButton(e);
+          }}
           type="button"
           className="mt-5 h-[44px] w-full rounded-lg border border-[var(--purple-500)] bg-[#242429] text-center text-[var(--purple-500)]"
         >

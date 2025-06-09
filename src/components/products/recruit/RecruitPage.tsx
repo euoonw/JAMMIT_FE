@@ -1,9 +1,9 @@
 'use client';
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { getLiked } from '@/lib/wish/wish';
 import { BandSession, Genre } from '@/types/tags';
-import { makeWishQueryKey, RecruitPageProps } from '@/types/wish';
+import { RecruitPageProps } from '@/types/wish';
 import RecruitHeader from '@/components/commons/RecruitHeader';
 import InfinityScroll from '@/components/commons/InfinityScroll';
 import CardItem from '@/components/commons/Card/CardItem';
@@ -16,18 +16,13 @@ export default function RecruitPage({
   // 장르, 세션
   const [genres, setGenres] = useState<Genre[]>(defaultGenres);
   const [sessions, setSessions] = useState<BandSession[]>(defaultSessions);
-  const queryKey = useMemo(
-    () =>
-      makeWishQueryKey({
-        genres,
-        sessions,
-        includeCanceled: false,
-      }),
-    [genres, sessions],
-  );
   const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery({
-    queryKey: queryKey,
-    queryFn: ({ queryKey, pageParam = 0 }) => getLiked({ queryKey, pageParam }),
+    queryKey: ['list', { genres, sessions, includeCanceled: false }] as [
+      string,
+      { genres: Genre[]; sessions: BandSession[]; includeCanceled: false },
+    ],
+    queryFn: ({ queryKey, pageParam = 0 }) =>
+      getLiked({ queryKey, pageParam, size: 8 }),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
       return lastPage.currentPage + 1 < lastPage.totalPage

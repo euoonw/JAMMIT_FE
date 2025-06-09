@@ -1,4 +1,4 @@
-import { RecruitCardData } from './card';
+import { GatheringCard } from './card';
 import { BandSession, Genre } from './tags';
 
 export interface RecruitPageProps {
@@ -12,24 +12,8 @@ export interface Page {
 }
 
 export interface WishResponse {
-  gatherings: RecruitCardData[];
+  gatherings: GatheringCard[];
   currentPage: number;
   totalPage: number;
   totalElements: number;
-}
-export type WishQueryKey = readonly [
-  'wish',
-  {
-    genres: Genre[];
-    sessions: BandSession[];
-    includeCanceled: boolean;
-  },
-];
-
-export function makeWishQueryKey(params: {
-  genres: Genre[];
-  sessions: BandSession[];
-  includeCanceled: boolean;
-}): WishQueryKey {
-  return ['wish', params] as const;
 }

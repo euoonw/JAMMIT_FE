@@ -1,10 +1,10 @@
-import { RecruitCardData } from '@/types/card';
+import { GatheringCard } from '@/types/card';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 interface WishState {
-  items: RecruitCardData[];
-  toggle: (item: RecruitCardData) => void;
+  items: GatheringCard[];
+  toggle: (item: GatheringCard) => void;
   isLiked: (id: number) => boolean;
 }
 export const useWishStore = create<WishState>()(

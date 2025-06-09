@@ -38,3 +38,7 @@ export interface ReviewStatusPros {
   goodLearnerPercentage: number;
   keepingPromisesPercentage: number;
 }
+
+export interface ReviewListProps {
+  data: ReviewItem[];
+}

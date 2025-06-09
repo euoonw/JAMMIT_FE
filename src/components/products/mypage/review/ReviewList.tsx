@@ -1,24 +1,15 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { getReview } from '@/lib/review/received';
 import { REVIEW_METRICS } from '@/constants/review';
 import DefaultProfileImage from '@/assets/icons/ic_default_profile.svg';
-import { ReviewItem } from '@/types/review';
+import { ReviewItem, ReviewListProps } from '@/types/review';
 import { getDate } from '@/utils/date';
 
-export default function ReviewList() {
-  const { data, error, isFetching } = useSuspenseQuery({
-    queryKey: ['getReview'],
-    queryFn: getReview,
-  });
-  if (error && !isFetching) {
-    throw error;
-  }
+export default function ReviewList({ data }: ReviewListProps) {
   return (
     <ul className="flex flex-auto flex-col gap-5">
-      {data.length > 0 ? (
+      {data?.length > 0 ? (
         data.map((item: ReviewItem) => (
           <li
             className="rounded-lg bg-[#28282a] px-[3.75rem] py-[3.75rem]"

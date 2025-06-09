@@ -59,4 +59,3 @@ export type ParticipantStatus =
   | 'REJECTED'
   | 'COMPLETED'
   | 'CANCELED';
-

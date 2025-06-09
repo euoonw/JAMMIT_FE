@@ -2,11 +2,11 @@ import React from 'react';
 import Link from 'next/link';
 import { Card } from '.';
 import Like from '../Like';
-import { RecruitCardData } from '@/types/card';
+import { GatheringCard } from '@/types/card';
 import { CardStatus } from '@/constants/card';
 
 interface CardItemProps {
-  item: RecruitCardData;
+  item: GatheringCard;
   isLike?: boolean;
   status: CardStatus;
 }
@@ -31,6 +31,7 @@ export default function CardItem({
         totalRecruit={item.totalRecruit}
         recruitDeadline={item.recruitDeadline}
         member={item.sessions}
+        id={item.id}
       />
     </Link>
   );

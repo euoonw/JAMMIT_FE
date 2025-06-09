@@ -8,9 +8,11 @@ import UserCard from '@/components/products/mypage/UserCard';
 import Participating from './gather/Participating';
 import Created from './gather/Created';
 import ReviewsReceived from '@/components/products/mypage/review/ReviewsReceived';
-import ReviewsToWrite from '@/components/products/mypage/ReviewsToWrite';
+import ReviewsToWrite from '@/components/products/mypage/towrite/ReviewsToWrite';
 import { useGatherMeCreate } from '@/hooks/queries/gather/useGatherMeCreate';
 import { useGatherMeParticipants } from '@/hooks/queries/gather/useGatherMeParticipants';
+import { useReviewInfiniteQuery } from '@/hooks/queries/review/useReviewInfiniteQuery';
+import { useSuspenseReview } from '@/hooks/queries/review/useSuspenseReview';
 
 type TabKey =
   | 'participating'
@@ -36,7 +38,14 @@ export default function MyPage() {
     size: 8,
     includeCanceled: true,
   });
+  const { data: write } = useReviewInfiniteQuery({
+    size: 8,
+    includeCanceled: true,
+  });
+  const writeCount = write?.pages[0].totalElements ?? 0;
+  const { data: receivedReviews } = useSuspenseReview();
 
+  const receivedCount = receivedReviews?.length ?? 0;
   const tabList = useMemo(
     () => [
       {
@@ -68,17 +77,23 @@ export default function MyPage() {
       {
         key: 'reviews_received',
         label: '내가 받은 리뷰',
-        count: 2, // API 연결 시 수정
-        component: <ReviewsReceived />,
+        count: receivedCount, // API 연결 시 수정
+        component: <ReviewsReceived data={receivedReviews} />,
       },
       {
         key: 'reviews_towrite',
         label: '작성 가능한 리뷰',
-        count: 2, // API 연결 시 수정
+        count: writeCount, // API 연결 시 수정
         component: <ReviewsToWrite />,
       },
     ],
-    [participatingData, createdData],
+    [
+      participatingData,
+      createdData,
+      writeCount,
+      receivedCount,
+      receivedReviews,
+    ],
   );
 
   const tabClass = (isActive: boolean) =>

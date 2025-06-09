@@ -18,13 +18,11 @@ import { REVIEW_METRICS } from '@/constants/review';
 import clsx from 'clsx';
 
 export default function ReviewStatus() {
-  const { data, error, isFetching } = useSuspenseQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['getStatus'],
     queryFn: getStatus,
   });
-  if (error && !isFetching) {
-    throw error;
-  }
+
   // 차트 변환
   const max = Math.max(
     ...REVIEW_METRICS.map((item) => data[item.countKey] ?? 0),
