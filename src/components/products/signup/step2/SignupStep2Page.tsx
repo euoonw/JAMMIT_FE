@@ -34,7 +34,7 @@ export default function SignupStep2Page() {
       alert('이전 단계 정보를 확인할 수 없어, 다시 입력이 필요합니다.');
       router.replace('/signup/step1');
     }
-  }, [email, name, password, router]);
+  }, []);
 
   const methods = useForm<FormValues>({
     mode: 'all',
@@ -102,9 +102,10 @@ export default function SignupStep2Page() {
 
     await mutateAsync(fullData);
 
+    router.push('/login');
+
     useSignupStore.getState().resetSignupData();
     reset();
-    router.push('/login');
   };
 
   return (
