@@ -106,7 +106,7 @@ export default function ModalEdit({
           className="flex flex-col gap-[1.5rem]"
         >
           <ProfileImageUpload
-            imageFile={imageFile}
+            imageFile={imageFile instanceof File ? imageFile : null} // MEMO: 이미지 업로드 api 수정 후 imageFile={imageFile}로 수정
             onFileChange={handleFileChange}
           />
 
