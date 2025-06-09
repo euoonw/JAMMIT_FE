@@ -28,15 +28,18 @@ export const SESSION_OPTIONS = [
 const baseMock: RecruitCardData = {
   id: 0,
   name: '기본 제목',
-  author: '기본 작성자',
+  creator: {
+    id: 1,
+    nickname: '기본 작성자',
+  },
   genres: ['락', '팝'],
   thumbnail: ImgCard01,
   totalRecruit: 5,
   totalCurrent: 3,
   recruitDeadline: '2025-07-01T23:59:59.000Z',
-  member: [
-    { name: '보컬', personnel: 1, total: 1 },
-    { name: '기타', personnel: 1, total: 2 },
+  sessions: [
+    { bandSession: '보컬', currentCount: 1, recruitCount: 1 },
+    { bandSession: '기타', currentCount: 1, recruitCount: 2 },
   ],
 };
 

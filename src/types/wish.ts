@@ -20,29 +20,16 @@ export interface WishResponse {
 export type WishQueryKey = readonly [
   'wish',
   {
-    genres: string[];
-    sessions: string[];
+    genres: Genre[];
+    sessions: BandSession[];
     includeCanceled: boolean;
   },
 ];
 
 export function makeWishQueryKey(params: {
-  genres: string[];
-  sessions: string[];
+  genres: Genre[];
+  sessions: BandSession[];
   includeCanceled: boolean;
 }): WishQueryKey {
   return ['wish', params] as const;
 }
-
-export type FavoriteItem = Pick<
-  RecruitCardData,
-  | 'id'
-  | 'name'
-  | 'thumbnail'
-  | 'author'
-  | 'genres'
-  | 'recruitDeadline'
-  | 'totalCurrent'
-  | 'totalRecruit'
-  | 'member'
->;

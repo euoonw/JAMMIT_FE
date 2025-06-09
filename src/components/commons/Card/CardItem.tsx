@@ -1,39 +1,36 @@
-import Link from 'next/link';
 import React from 'react';
+import Link from 'next/link';
 import { Card } from '.';
+import Like from '../Like';
 import { RecruitCardData } from '@/types/card';
-import { CARD_STATE } from '@/constants/card';
+import { CardStatus } from '@/constants/card';
 
 interface CardItemProps {
   item: RecruitCardData;
+  isLike?: boolean;
+  status: CardStatus;
 }
 
-export default function CardItem({ item }: CardItemProps) {
+export default function CardItem({
+  item,
+  isLike = false,
+  status,
+}: CardItemProps) {
   return (
     <Link key={item.id} href={`/group/${item.id}`}>
-      <Card.Thumbnail
-        thumbnail={item.thumbnail}
-        alt={item.name}
-        favoriteItem={{
-          id: item.id,
-          name: item.name,
-          thumbnail: item.thumbnail,
-          author: item.author,
-          genres: item.genres,
-          recruitDeadline: item.recruitDeadline,
-          totalCurrent: item.totalCurrent,
-          totalRecruit: item.totalRecruit,
-          member: item.member,
-        }}
-      />
+      <div className="relative h-[12.5rem] overflow-hidden rounded-lg">
+        {isLike && <Like item={item} />}
+        <Card.Thumbnail thumbnail={item.thumbnail} alt={item.name} />
+      </div>
+
       <Card.TagList tags={item.genres} />
-      <Card.TitleBlock title={item.name} author={item.author} />
+      <Card.TitleBlock title={item.name} author={item.creator.nickname} />
       <Card.Footer
-        status={CARD_STATE.PROGRESS}
+        status={status}
         totalCurrent={item.totalCurrent}
         totalRecruit={item.totalRecruit}
         recruitDeadline={item.recruitDeadline}
-        member={item.member}
+        member={item.sessions}
       />
     </Link>
   );

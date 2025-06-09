@@ -4,7 +4,7 @@ import { useQueryTab } from '@/hooks/useQueryTab';
 import UserCard from '@/components/products/mypage/UserCard';
 import Participating from '@/components/products/mypage/Participating';
 import Created from '@/components/products/mypage/Created';
-import ReviewsReceived from '@/components/products/mypage/ReviewsReceived';
+import ReviewsReceived from '@/components/products/mypage/review/ReviewsReceived';
 import ReviewsToWrite from '@/components/products/mypage/ReviewsToWrite';
 import { useGatherMeCreate } from '@/hooks/queries/gather/useGatherMeCreate';
 import { useGatherMeParticipants } from '@/hooks/queries/gather/useGatherMeParticipants';

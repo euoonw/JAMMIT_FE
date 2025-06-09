@@ -1,10 +1,10 @@
+import { RecruitCardData } from '@/types/card';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { FavoriteItem } from '@/types/wish';
 
 interface WishState {
-  items: FavoriteItem[];
-  toggle: (item: FavoriteItem) => void;
+  items: RecruitCardData[];
+  toggle: (item: RecruitCardData) => void;
   isLiked: (id: number) => boolean;
 }
 export const useWishStore = create<WishState>()(

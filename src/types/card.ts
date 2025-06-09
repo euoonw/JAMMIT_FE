@@ -4,14 +4,24 @@ import { GenreType, BandSessionType, GatheringStatus } from './tags';
 export interface RecruitCardData {
   id: number;
   name: string;
+  place?: string;
   thumbnail: StaticImageData;
-
-  genres: string[];
-  author: string;
+  gatheringDateTime?: string;
   totalRecruit: number;
   totalCurrent: number;
+  viewCount?: number;
   recruitDeadline: string;
-  member: { name: string; personnel: number; total: number }[];
+  status?: string;
+  genres: string[];
+  creator: {
+    id: number;
+    nickname: string;
+  };
+  sessions: {
+    bandSession: string;
+    recruitCount: number;
+    currentCount: number;
+  }[];
 }
 
 // TODO: 진환님 다음과 같이 맞혀야될것 같아요

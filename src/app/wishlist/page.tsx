@@ -6,6 +6,7 @@ import { useWishStore } from '@/stores/useWishStore';
 import CardItem from '@/components/commons/Card/CardItem';
 import VirtualGrid from '@/components/commons/VirtualGrid';
 import { GENRE_OPTIONS } from '@/constants/checkbox';
+import { CARD_STATE } from '@/constants/card';
 
 export default function Page() {
   const [genres, setGenres] = useState<Genre[]>([]);
@@ -45,7 +46,9 @@ export default function Page() {
       />
       <VirtualGrid
         list={filteredData}
-        item={(item) => <CardItem key={item.id} item={item} />}
+        item={(item) => (
+          <CardItem key={item.id} item={item} status={CARD_STATE.PROGRESS} />
+        )}
         emptyText="찜한 항목이 없습니다."
       />
     </div>

@@ -2,11 +2,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import IconLove from '@/assets/icons/ic_love.svg';
-import { FavoriteItem } from '@/types/wish';
 import { useWishStore } from '@/stores/useWishStore';
+import { RecruitCardData } from '@/types/card';
 
 interface LikeProps {
-  item: FavoriteItem;
+  item: RecruitCardData;
 }
 
 export default function Like({ item }: LikeProps) {

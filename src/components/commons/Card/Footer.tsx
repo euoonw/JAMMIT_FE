@@ -1,14 +1,19 @@
 import React from 'react';
 import IcListCheck from '@/assets/icons/ic_list_check.svg';
 import { getRecruitStatus } from '@/utils/getRecruitStatus';
-import { getDate } from '@/utils/date';
+import { deadline } from '@/utils/deadline';
 import { CardStatus } from '@/constants/card';
+import { SESSION_ENUM_TO_KR } from '@/constants/tagsMapping';
 
 interface FooterProps {
   status: CardStatus;
   totalCurrent: number;
   totalRecruit: number;
-  member?: { name: string; personnel: number; total: number }[];
+  member: {
+    bandSession: string;
+    recruitCount: number;
+    currentCount: number;
+  }[];
   recruitDeadline?: string;
   onButtonClick?: () => void;
 }
@@ -32,17 +37,20 @@ export default function Footer({
       case '모집중':
         return (
           <div className="group relative">
-            <span className="text-[var(--primary)]">{text}</span> 명{cardStatus}
+            <span className="text-[var(--primary)]">{text}</span> 명{' '}
+            {cardStatus}
             <ul className="absolute right-[0px] bottom-[2.125rem] hidden rounded-lg bg-[var(--gray-100)] group-hover:block">
               {member &&
                 member.map((item) => (
                   <li
-                    key={item.name}
+                    key={item.bandSession}
                     className="flex w-[8.875rem] items-center border-b border-b-[#3B3B40] px-4 py-2.5 last:border-none"
                   >
-                    <p className="w-1/2">{item.name}</p>
-                    <span className="w-1/2">
-                      {item.personnel}/{item.total}
+                    <p className="w-3/5">
+                      {SESSION_ENUM_TO_KR[item.bandSession]}
+                    </p>
+                    <span className="w-2/5">
+                      {item.currentCount}/{item.recruitCount}
                     </span>
                   </li>
                 ))}
@@ -74,7 +82,7 @@ export default function Footer({
   };
   const left = () => {
     if (status === '모집중') {
-      return <span>{getDate(recruitDeadline as string)}</span>;
+      return <span>{deadline(recruitDeadline as string)}</span>;
     }
     return (
       <div>

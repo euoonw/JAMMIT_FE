@@ -1,6 +1,6 @@
-import { ReviewPros } from '@/types/review';
+import { ReviewItem } from '@/types/review';
 
-export const mockReviews: ReviewPros[] = Array.from({ length: 5 }).map(
+export const mockReviews: ReviewItem[] = Array.from({ length: 5 }).map(
   (_, i) => {
     const randomBool = () => Math.random() < 0.5;
     const nicknames = [
@@ -31,19 +31,18 @@ export const mockReviews: ReviewPros[] = Array.from({ length: 5 }).map(
       reviewerNickname: nicknames[i],
       revieweeId: 1,
       revieweeNickname: '리뷰당한넘',
-      score: 1,
       gatheringId: i + 200,
       gatheringName: gatherings[i],
       content: contents[i],
 
-      isPracticeHelped: true,
-      isGoodWithMusic: randomBool(),
-      isGoodWithOthers: randomBool(),
-      isSharesPracticeResources: randomBool(),
-      isManagingWell: randomBool(),
-      isHelpful: randomBool(),
-      isGoodLearner: randomBool(),
-      isKeepingPromises: randomBool(),
+      practiceHelped: true,
+      goodWithMusic: randomBool(),
+      goodWithOthers: randomBool(),
+      sharesPracticeResources: randomBool(),
+      managingWell: randomBool(),
+      helpful: randomBool(),
+      goodLearner: randomBool(),
+      keepingPromises: randomBool(),
 
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -52,77 +51,77 @@ export const mockReviews: ReviewPros[] = Array.from({ length: 5 }).map(
 );
 
 export const dummyReviewData = {
-  goodWithMusicCount: 15,
-  goodWithMusicPercentage: 75,
+  goodWithMusicCount: 0,
+  goodWithMusicPercentage: 0,
 
-  practiceHelpedCount: 11,
-  practiceHelpedPercentage: 55,
+  practiceHelpedCount: 0,
+  practiceHelpedPercentage: 0,
 
-  keepingPromisesCount: 8,
-  keepingPromisesPercentage: 40,
+  keepingPromisesCount: 0,
+  keepingPromisesPercentage: 0,
 
-  goodWithOthersCount: 5,
-  goodWithOthersPercentage: 25,
+  goodWithOthersCount: 0,
+  goodWithOthersPercentage: 0,
 
-  managingWellCount: 4,
-  managingWellPercentage: 20,
+  managingWellCount: 0,
+  managingWellPercentage: 0,
 
-  sharesPracticeResourcesCount: 3,
-  sharesPracticeResourcesPercentage: 15,
+  sharesPracticeResourcesCount: 0,
+  sharesPracticeResourcesPercentage: 0,
 
-  helpfulCount: 2,
-  helpfulPercentage: 10,
+  helpfulCount: 0,
+  helpfulPercentage: 0,
 
-  goodLearnerCount: 1,
-  goodLearnerPercentage: 5,
+  goodLearnerCount: 0,
+  goodLearnerPercentage: 0,
 };
 
 export const REVIEW_METRICS = [
   {
-    key: 'isPracticeHelped',
-    label: '연주',
+    key: 'practiceHelped',
+    label: '연주를 잘해요',
     name: '연주 실력이 좋아요',
     countKey: 'goodWithMusicCount',
   },
   {
-    key: 'isGoodWithMusic',
-    label: '준비',
+    key: 'goodWithMusic',
+    label: '준비가 철저해요',
     name: '곡 준비를 잘 해왔어요',
     countKey: 'practiceHelpedCount',
   },
   {
-    key: 'isKeepingPromises',
-    label: '약속',
+    key: 'keepingPromises',
+    label: '시간을 잘 지켜요',
     name: '합주 시간 약속을 잘 지켜요',
     countKey: 'keepingPromisesCount',
   },
   {
-    key: 'isGoodWithOthers',
-    label: '호흡',
+    key: 'goodWithOthers',
+    label: '호흡이 좋아요',
     name: '다른 파트와의 호흡이 잘 맞아요',
     countKey: 'goodWithOthersCount',
   },
   {
-    key: 'isManagingWell',
-    label: '팀워크',
+    key: 'managingWell',
+    label: '분위기메이커',
     name: '분위기를 잘 이끌어요',
     countKey: 'managingWellCount',
   },
   {
-    key: 'isSharesPracticeResources',
-    label: '자료 공유',
-    name: '악보나 연습 자료를 잘 공유해줬어요',
+    key: 'sharesPracticeResources',
+    label: '배려가 넘쳐요',
+    name: '볼륨이나 톤을 배려해줘요',
     countKey: 'sharesPracticeResourcesCount',
   },
   {
-    key: 'isHelpful',
-    label: '도움 됨',
+    key: 'helpful',
+    label: '팀워크가 좋아요',
     name: '팀워크가 좋고 함께 연주하기 편했어요',
     countKey: 'helpfulCount',
   },
   {
-    key: 'isGoodLearner',
-    label: '학습자',
+    key: 'goodLearner',
+    label: '빨리 배워요',
     name: '빨리 배워서 잘 따라해줘요',
     countKey: 'goodLearnerCount',
   },

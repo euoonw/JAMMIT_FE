@@ -6,9 +6,9 @@ import {
   QueryClient,
 } from '@tanstack/react-query';
 
-export default function Home() {
+export default async function Home() {
   const queryClient = new QueryClient();
-  const defaultGenres: Genre[] = [Genre.POP];
+  const defaultGenres: Genre[] = [];
   const defaultSessions: BandSession[] = [];
 
   return (
