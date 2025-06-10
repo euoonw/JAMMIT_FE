@@ -12,6 +12,12 @@ import {
   ImgBanner10,
   ImgBanner11,
   ImgBanner12,
+  ImgBanner13,
+  ImgBanner14,
+  ImgBanner15,
+  ImgBanner16,
+  ImgBanner17,
+  ImgBanner18,
   ImgCard01,
   ImgCard02,
   ImgCard03,
@@ -51,6 +57,12 @@ const imageMap: Record<string, StaticImageData> = {
   img_banner_10: ImgBanner10,
   img_banner_11: ImgBanner11,
   img_banner_12: ImgBanner12,
+  img_banner_13: ImgBanner13,
+  img_banner_14: ImgBanner14,
+  img_banner_15: ImgBanner15,
+  img_banner_16: ImgBanner16,
+  img_banner_17: ImgBanner17,
+  img_banner_18: ImgBanner18,
 };
 
 export const imgChange = (

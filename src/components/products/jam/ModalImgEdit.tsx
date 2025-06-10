@@ -4,9 +4,10 @@ import Image from 'next/image';
 import { memo, useRef, useState } from 'react';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import Button from '@/components/commons/Button';
-import bannerImages from '@/constants/bannerImages';
+import { imgChange } from '@/utils/imgChange';
 
 const FIRST_RENDERING = 12;
+const TOTAL_IMAGES = 18;
 
 interface ModalImgEditProps {
   /** "확인" 버튼 클릭 시 실행할 콜백 */
@@ -16,8 +17,20 @@ interface ModalImgEditProps {
 
 function ModalImgEdit({ onSubmit, onClose }: ModalImgEditProps) {
   const modalRef = useRef<HTMLDivElement>(null);
-  useClickOutside(modalRef, onClose);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [visibleCount, setVisibleCount] = useState(FIRST_RENDERING);
+
+  useClickOutside(modalRef, onClose);
+
+  // 배너 이미지 파일명 생성 함수
+  const getBannerFileName = (index: number): string => {
+    const num = (index + 1).toString().padStart(2, '0');
+    return `img_banner_${num}`;
+  };
+
+  const handleShowMore = () => {
+    setVisibleCount((prev) => Math.min(prev + 6, TOTAL_IMAGES));
+  };
 
   return (
     <>
@@ -27,7 +40,7 @@ function ModalImgEdit({ onSubmit, onClose }: ModalImgEditProps) {
       />
       <div
         ref={modalRef}
-        className="fixed top-1/2 left-1/2 z-50 h-[25.625rem] w-[57.75rem] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-3xl border-0 bg-[#242429] px-[3.25rem] py-[2.75rem]"
+        className="fixed top-1/2 left-1/2 z-50 h-auto w-[57.75rem] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-3xl border-0 bg-[#242429] px-[3.25rem] py-[2.75rem]"
       >
         <div className="flex flex-col items-center gap-[2rem]">
           <div className="flex flex-col items-center">
@@ -38,33 +51,40 @@ function ModalImgEdit({ onSubmit, onClose }: ModalImgEditProps) {
           </div>
 
           <div className="grid grid-cols-6 gap-[1.25rem]">
-            {[...Array(FIRST_RENDERING)].map((_, idx) => (
-              <div
-                key={idx}
-                className={`cursor-pointer rounded-lg border-2 ${
-                  selectedIndex === idx
-                    ? 'border-[#9900FF]'
-                    : 'border-transparent'
-                }`}
-                onClick={() => setSelectedIndex(idx)}
-              >
-                <Image
-                  src={bannerImages[idx].src}
-                  alt={`모임 배너 ${idx + 1}`}
-                  priority
-                  width={120}
-                  height={75}
-                />
-              </div>
-            ))}
-          </div>
+            {[...Array(visibleCount)].map((_, idx) => {
+              const fileName = getBannerFileName(idx);
+              const imageData = imgChange(fileName, 'banner');
 
-          <button
-            type="button"
-            className="text-sm font-semibold text-purple-600"
-          >
-            더보기
-          </button>
+              return (
+                <div
+                  key={idx}
+                  className={`cursor-pointer rounded-lg border-2 ${
+                    selectedIndex === idx
+                      ? 'border-[#9900FF]'
+                      : 'border-transparent'
+                  }`}
+                  onClick={() => setSelectedIndex(idx)}
+                >
+                  <Image
+                    src={imageData}
+                    alt={`모임 배너 ${idx + 1}`}
+                    priority
+                    width={120}
+                    height={75}
+                  />
+                </div>
+              );
+            })}
+          </div>
+          {visibleCount < TOTAL_IMAGES && (
+            <button
+              type="button"
+              className="text-sm font-semibold text-purple-600"
+              onClick={handleShowMore}
+            >
+              더보기
+            </button>
+          )}
         </div>
         <div className="absolute top-[3.25rem] right-[2.75rem]">
           <Button
@@ -73,7 +93,8 @@ function ModalImgEdit({ onSubmit, onClose }: ModalImgEditProps) {
             disabled={selectedIndex === null}
             onClick={() => {
               if (selectedIndex !== null) {
-                onSubmit(bannerImages[selectedIndex].fileName);
+                const fileName = getBannerFileName(selectedIndex);
+                onSubmit(fileName);
               }
             }}
           >
