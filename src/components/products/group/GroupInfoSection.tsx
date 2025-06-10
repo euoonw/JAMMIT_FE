@@ -31,6 +31,7 @@ export default function GroupInfoSection({
   const isCanceled = status === 'CANCELED';
   const isHostAndCanceled = isHost && isCanceled;
   const isHostAndActive = isHost && !isCanceled;
+  const isCompleted = status === 'COMPLETED';
 
   const deleteMutation = useDeleteGatheringMutation();
 
@@ -135,13 +136,13 @@ export default function GroupInfoSection({
       </section>
 
       <div className="ml-[1.25rem]">
-        {isHostAndCanceled && (
+        {!isCompleted && isHostAndCanceled && (
           <Button variant="solid" disabled className="w-[22.75rem]">
             취소된 모임입니다
           </Button>
         )}
 
-        {isHostAndActive && (
+        {!isCompleted && isHostAndActive && (
           <div className="flex flex-col gap-[1.25rem]">
             {actionButtons.map(({ label, variant, onClick }) => (
               <Button

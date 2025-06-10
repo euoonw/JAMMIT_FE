@@ -42,3 +42,17 @@ export interface ReviewStatusPros {
 export interface ReviewListProps {
   data: ReviewItem[];
 }
+
+export interface PostReviewRequest {
+  revieweeId: number;
+  gatheringId: number;
+  content: string;
+  isPracticeHelped: boolean;
+  isGoodWithMusic: boolean;
+  isGoodWithOthers: boolean;
+  isSharesPracticeResources: boolean;
+  isManagingWell: boolean;
+  isHelpful: boolean;
+  isGoodLearner: boolean;
+  isKeepingPromises: boolean;
+}

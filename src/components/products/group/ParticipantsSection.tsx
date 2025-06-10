@@ -5,6 +5,11 @@ import Button from '@/components/commons/Button';
 import { GatheringDetailResponse, Participant } from '@/types/gathering';
 import { SESSION_ENUM_TO_KR } from '@/constants/tagsMapping';
 import clsx from 'clsx';
+import { useState } from 'react';
+import ModalReview from '@/components/commons/Modal/ModalReview';
+import { ReviewField, tagToFieldMap } from '@/constants/review';
+import { usePostReviewMutation } from '@/hooks/queries/review/usePostReviewMutation';
+import { useUserStore } from '@/stores/useUserStore';
 
 interface ParticipantsSectionProps {
   gathering: GatheringDetailResponse;
@@ -15,8 +20,45 @@ export default function ParticipantsSection({
   gathering,
   participants,
 }: ParticipantsSectionProps) {
+  const user = useUserStore((state) => state.user);
+
   const profileImageUrl = null;
   const isCompleted = gathering.status === 'COMPLETED';
+  const [selectedParticipant, setSelectedParticipant] = useState<{
+    userId: number;
+    nickname: string;
+  } | null>(null);
+  const reviewMutation = usePostReviewMutation();
+
+  const handleOpenReviewModal = (userId: number, nickname: string) => {
+    setSelectedParticipant({ userId, nickname });
+  };
+
+  const handleCloseReviewModal = () => {
+    setSelectedParticipant(null);
+  };
+
+  const handleSubmitReview = (formData: { review: string; tags: string[] }) => {
+    if (!selectedParticipant) return;
+
+    const tagFields = Object.entries(tagToFieldMap).reduce(
+      (acc, [tag, field]) => {
+        acc[field] = formData.tags.includes(tag);
+        return acc;
+      },
+      {} as Record<ReviewField, boolean>,
+    );
+
+    const reviewData = {
+      revieweeId: selectedParticipant.userId,
+      gatheringId: gathering.id,
+      content: formData.review,
+      ...tagFields,
+    };
+
+    reviewMutation.mutate(reviewData);
+    handleCloseReviewModal();
+  };
 
   return (
     <section className="w-[60rem] rounded-[0.5rem] bg-[#202024] p-[2.5rem]">
@@ -29,8 +71,14 @@ export default function ParticipantsSection({
 
       {participants.map(
         // TODO: API 수정되면 프로필 이미지 설정 추가
-        ({ userId, userNickname, bandSession, introduction }) => (
-          <div key={userId}>
+        ({
+          participantId,
+          userNickname,
+          bandSession,
+          introduction,
+          userId,
+        }) => (
+          <div key={participantId}>
             <div className="my-[0.75rem] flex items-center gap-[1.25rem]">
               {profileImageUrl ? (
                 <Image
@@ -66,13 +114,25 @@ export default function ParticipantsSection({
               >
                 {introduction}
               </div>
-              {isCompleted && (
-                <Button className="w-[7.75rem]">리뷰 쓰기</Button>
+              {isCompleted && user?.id !== userId && (
+                <Button
+                  className="w-[124px]"
+                  onClick={() => handleOpenReviewModal(userId, userNickname)}
+                >
+                  리뷰 쓰기
+                </Button>
               )}
             </div>
             <div className="border-b-[0.0625rem] border-[#2D3035]" />
           </div>
         ),
+      )}
+      {selectedParticipant && (
+        <ModalReview
+          onCancel={handleCloseReviewModal}
+          onSubmit={handleSubmitReview}
+          revieweeNickname={selectedParticipant.nickname}
+        />
       )}
     </section>
   );

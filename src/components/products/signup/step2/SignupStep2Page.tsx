@@ -165,7 +165,7 @@ export default function SignupStep2Page() {
               type="submit"
               disabled={!isValid}
             >
-              확인
+              완료
             </Button>
           </form>
         </FormProvider>

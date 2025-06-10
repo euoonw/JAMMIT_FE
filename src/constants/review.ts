@@ -126,3 +126,39 @@ export const REVIEW_METRICS = [
     countKey: 'goodLearnerCount',
   },
 ] as const;
+
+export const REVIEW_FIELDS = [
+  'isGoodWithMusic',
+  'isPracticeHelped',
+  'isGoodWithOthers',
+  'isSharesPracticeResources',
+  'isManagingWell',
+  'isHelpful',
+  'isGoodLearner',
+  'isKeepingPromises',
+] as const;
+
+export type ReviewField = (typeof REVIEW_FIELDS)[number];
+
+export const REVIEW_TAGS = [
+  '연주 실력이 좋아요',
+  '곡 준비를 잘 해왔어요',
+  '다른 파트와의 호흡이 잘 맞아요',
+  '악보나 연습 자료를 잘 공유해줬어요',
+  '분위기를 잘 이끌어요',
+  '팀워크가 좋고 함께 연주하기 편했어요',
+  '볼륨이나 톤을 배려해줘요',
+  '합주 시간 약속을 잘 지켜요',
+] as const;
+
+export const tagToFieldMap: Record<(typeof REVIEW_TAGS)[number], ReviewField> =
+  {
+    '연주 실력이 좋아요': 'isGoodWithMusic',
+    '곡 준비를 잘 해왔어요': 'isPracticeHelped',
+    '다른 파트와의 호흡이 잘 맞아요': 'isGoodWithOthers',
+    '악보나 연습 자료를 잘 공유해줬어요': 'isSharesPracticeResources',
+    '분위기를 잘 이끌어요': 'isManagingWell',
+    '팀워크가 좋고 함께 연주하기 편했어요': 'isHelpful',
+    '볼륨이나 톤을 배려해줘요': 'isGoodLearner',
+    '합주 시간 약속을 잘 지켜요': 'isKeepingPromises',
+  };

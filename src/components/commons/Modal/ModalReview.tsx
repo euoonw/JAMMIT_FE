@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 import { useForm, FormProvider, Controller } from 'react-hook-form';
 import ModalWrapper from './ModalWrapper';
-import HeartRating from '../HeartRating';
 import TextArea from '../Textarea';
 import Button from '../Button';
 import { ReviewFormData } from '@/types/modal';
@@ -20,15 +19,19 @@ const REVIEW_TAGS = [
 
 interface ModalReviewProps {
   /** "리뷰등록" 버튼 클릭 시 실행할 콜백 */
-  onSubmit: (data: { review: string; tags: string[]; rating: number }) => void;
+  onSubmit: (data: { review: string; tags: string[] }) => void;
   /** "x"버튼 또는 "취소" 버튼 클릭 시 실행할 콜백 */
   onCancel: () => void;
+  revieweeNickname: string;
 }
 
-export default function ModalReview({ onCancel, onSubmit }: ModalReviewProps) {
+export default function ModalReview({
+  onCancel,
+  onSubmit,
+  revieweeNickname,
+}: ModalReviewProps) {
   const methods = useForm<ReviewFormData>({
     defaultValues: {
-      rating: 0,
       tags: [],
       review: '',
     },
@@ -36,8 +39,7 @@ export default function ModalReview({ onCancel, onSubmit }: ModalReviewProps) {
 
   const { handleSubmit, watch, control, setValue } = methods;
   const tags = watch('tags') || [];
-  const rating = watch('rating');
-  const isValid = tags.length > 0 && rating > 0;
+  const isValid = tags.length > 0;
 
   const handleTagChange = useCallback(
     (selected: string[]) => {
@@ -69,26 +71,11 @@ export default function ModalReview({ onCancel, onSubmit }: ModalReviewProps) {
         >
           <div className="flex flex-col gap-[2rem]">
             <div className="flex flex-col gap-[0.75rem]">
-              <p className="text-lg font-semibold">만족스러운 경험이었나요?</p>
-              <Controller
-                name="rating"
-                control={control}
-                render={({ field }) => (
-                  <HeartRating
-                    totalValue={5}
-                    value={field.value}
-                    onChange={field.onChange}
-                  />
-                )}
-              />
-            </div>
-
-            <div className="flex flex-col gap-[0.75rem]">
               <div className="flex flex-col gap-[0.5rem]">
                 {tagSections.map(({ key, tags, initialSelected, onChange }) => (
                   <TagSection
                     key={key}
-                    label={'##님과의 합주 경험은 어땠나요?'} // TODO: API 사용자 정보 불러와서 교체 필요
+                    label={`${revieweeNickname}님과의 합주 경험은 어땠나요?`}
                     tags={tags}
                     initialSelected={initialSelected}
                     onChange={onChange}

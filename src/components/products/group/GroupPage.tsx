@@ -51,6 +51,8 @@ export default function GroupPage() {
 
   const isHost = user?.id === gatheringDetailData.creator.id;
   const isCanceled = gatheringDetailData.status === 'CANCELED';
+  const isCompleted = gatheringDetailData.status === 'COMPLETED';
+  const isConfirmed = gatheringDetailData.status === 'CONFIRMED';
 
   const participants = participantsData.participants;
   const approvedParticipants = participants.filter(
@@ -58,6 +60,9 @@ export default function GroupPage() {
   );
   const pendingParticipants = participants.filter(
     (participant) => participant.status === 'PENDING',
+  );
+  const completedParticipants = participants.filter(
+    (participant) => participant.status === 'COMPLETED',
   );
 
   const isParticipating = pendingParticipants.some(
@@ -104,6 +109,14 @@ export default function GroupPage() {
       return (
         <Button variant="solid" disabled className="w-[22.75rem]">
           취소된 모임입니다
+        </Button>
+      );
+    }
+
+    if (isCompleted || isConfirmed) {
+      return (
+        <Button variant="solid" disabled className="w-[22.75rem]">
+          모집 마감
         </Button>
       );
     }
@@ -164,7 +177,7 @@ export default function GroupPage() {
     >
       {activeTab === 'recruit' ? (
         <GroupInfoSection gathering={gatheringDetailData} isHost={isHost} />
-      ) : isHost ? (
+      ) : isHost && !isCompleted ? (
         <MemberInfoSection
           gathering={gatheringDetailData}
           approvedParticipants={approvedParticipants}
@@ -173,7 +186,9 @@ export default function GroupPage() {
       ) : (
         <ParticipantsSection
           gathering={gatheringDetailData}
-          participants={approvedParticipants}
+          participants={
+            isCompleted ? completedParticipants : approvedParticipants
+          }
         />
       )}
     </GroupPageLayout>
