@@ -20,6 +20,9 @@ export const useApproveParticipantMutation = () => {
       queryClient.invalidateQueries({
         queryKey: ['gatheringDetail', gatheringId],
       });
+      queryClient.invalidateQueries({
+        queryKey: ['list'],
+      });
     },
     onError: (error) => {
       console.error('참가 승인 실패:', error);

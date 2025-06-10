@@ -1,10 +1,15 @@
 import { getGatheringParticipants } from '@/lib/gatherings/gatherings';
-import { useQuery } from '@tanstack/react-query';
+import { ParticipantsResponse } from '@/types/gathering';
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 
-export const useGatheringParticipantsQuery = (id: number) => {
+export const useGatheringParticipantsQuery = (
+  id: number,
+  options?: Partial<UseQueryOptions<ParticipantsResponse>>,
+) => {
   return useQuery({
     queryKey: ['gatheringParticipants', id],
     queryFn: () => getGatheringParticipants(id),
     enabled: !!id,
+    ...options,
   });
 };

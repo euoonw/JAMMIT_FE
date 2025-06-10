@@ -13,6 +13,9 @@ export const useDeleteGatheringMutation = () => {
         queryKey: ['gatheringParticipants', id],
       });
       queryClient.invalidateQueries({ queryKey: ['me', 'created'] });
+      queryClient.invalidateQueries({
+        queryKey: ['list'],
+      });
     },
     onError: (error) => {
       console.error('모임 취소 실패:', error);

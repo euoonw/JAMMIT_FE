@@ -6,19 +6,23 @@ import GroupPageLayout from '@/components/commons/GroupPageLayout';
 import { useQueryTab } from '@/hooks/useQueryTab';
 import MemberInfoSection from './MemberInfoSection';
 import ParticipantsSection from './ParticipantsSection';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import { useGatheringDetailQuery } from '@/hooks/queries/gatherings/useGatheringsDetailQuery';
 import { useUserStore } from '@/stores/useUserStore';
 import { useGatheringParticipantsQuery } from '@/hooks/queries/gatherings/useGatheringsParticipantsQuery';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from '@/components/commons/Button';
 import ParticipationForm from './ParticipationForm';
 import { useParticipateGatheringMutation } from '@/hooks/queries/gatherings/useParticipateGatheringsMutation';
 import { SESSION_KR_TO_ENUM } from '@/constants/tagsMapping';
 import { useCancelParticipateGatheringMutation } from '@/hooks/queries/gatherings/useCancelParticipateGathering';
 import { imgChange } from '@/utils/imgChange';
+import { useRouter } from 'next/navigation';
 
 export default function GroupPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const { activeTab } = useQueryTab<'recruit' | 'members'>('tab', 'recruit', [
     'recruit',
     'members',
@@ -27,6 +31,16 @@ export default function GroupPage() {
   const { groupId } = useParams();
   const numericId = Number(groupId);
   const [showParticipationForm, setShowParticipationForm] = useState(false);
+
+  useEffect(() => {
+    if (activeTab === 'members' && !user) {
+      alert('로그인 후 이용 가능한 기능입니다.');
+      router.push('/login');
+      const newParams = new URLSearchParams(searchParams.toString());
+      newParams.set('tab', 'recruit');
+      router.replace(`?${newParams.toString()}`);
+    }
+  }, [activeTab, user]);
 
   const {
     data: gatheringDetailData,
@@ -38,15 +52,21 @@ export default function GroupPage() {
     data: participantsData,
     isLoading: isParticipantsLoading,
     error: participantsError,
-  } = useGatheringParticipantsQuery(numericId);
+  } = useGatheringParticipantsQuery(numericId, {
+    enabled: activeTab === 'members' && !!user,
+  });
 
   const participateMutation = useParticipateGatheringMutation();
   const cancelMutation = useCancelParticipateGatheringMutation();
 
   // TODO: 스켈레톤 적용
-  if (isLoading || isParticipantsLoading) return <div>로딩 중...</div>;
-  if (error || participantsError) return <div>에러 발생</div>;
-  if (!gatheringDetailData || !participantsData)
+  if (isLoading) return <div>로딩 중...</div>;
+  if (error) return <div>에러 발생</div>;
+  if (!gatheringDetailData) return <div>모임 정보를 찾을 수 없습니다.</div>;
+
+  if (user && isParticipantsLoading) return <div>로딩 중...</div>;
+  if (user && participantsError) return <div>에러 발생</div>;
+  if (user && !participantsData)
     return <div>모임 정보를 찾을 수 없습니다.</div>;
 
   const isHost = user?.id === gatheringDetailData.creator.id;
@@ -54,7 +74,8 @@ export default function GroupPage() {
   const isCompleted = gatheringDetailData.status === 'COMPLETED';
   const isConfirmed = gatheringDetailData.status === 'CONFIRMED';
 
-  const participants = participantsData.participants;
+  const participants = participantsData?.participants ?? [];
+
   const approvedParticipants = participants.filter(
     (participant) => participant.status === 'APPROVED',
   );
@@ -138,6 +159,7 @@ export default function GroupPage() {
           variant="solid"
           className="w-[22.75rem]"
           onClick={() => setShowParticipationForm(true)}
+          disabled={!user}
         >
           함께하기
         </Button>
