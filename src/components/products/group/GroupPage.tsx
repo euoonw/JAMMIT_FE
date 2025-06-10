@@ -64,9 +64,9 @@ export default function GroupPage() {
   if (error) return <div>에러 발생</div>;
   if (!gatheringDetailData) return <div>모임 정보를 찾을 수 없습니다.</div>;
 
-  if (user && isParticipantsLoading) return <div>로딩 중...</div>;
-  if (user && participantsError) return <div>에러 발생</div>;
-  if (user && !participantsData)
+  if (!user && isParticipantsLoading) return <div>로딩 중...</div>;
+  if (!user && participantsError) return <div>에러 발생</div>;
+  if (!user && !participantsData)
     return <div>모임 정보를 찾을 수 없습니다.</div>;
 
   const isHost = user?.id === gatheringDetailData.creator.id;

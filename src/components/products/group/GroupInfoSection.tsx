@@ -6,6 +6,7 @@ import { GatheringDetailResponse } from '@/types/gathering';
 import { GENRE_ENUM_TO_KR, SESSION_ENUM_TO_KR } from '@/constants/tagsMapping';
 import { formatDateToKoreanStyle } from '@/utils/formatDate';
 import { useDeleteGatheringMutation } from '@/hooks/queries/gatherings/useDeleteGatheringMutation';
+import { useRouter } from 'next/navigation';
 
 interface GroupInfoSectionProps {
   gathering: GatheringDetailResponse;
@@ -16,6 +17,7 @@ export default function GroupInfoSection({
   gathering,
   isHost,
 }: GroupInfoSectionProps) {
+  const router = useRouter();
   const {
     name,
     place,
@@ -26,6 +28,7 @@ export default function GroupInfoSection({
     description,
     creator,
     status,
+    id,
   } = gathering;
 
   const isCanceled = status === 'CANCELED';
@@ -39,8 +42,7 @@ export default function GroupInfoSection({
       label: '수정하기',
       variant: 'solid',
       onClick: () => {
-        // TODO: 수정하기 로직
-        console.log('수정하기 클릭');
+        router.push(`/group/${id}/edit`);
       },
     },
     {
