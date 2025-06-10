@@ -21,8 +21,12 @@ export default function ParticipantsSection({
   participants,
 }: ParticipantsSectionProps) {
   const user = useUserStore((state) => state.user);
-
   const profileImageUrl = null;
+
+  const isParticipating = participants.some(
+    (participant) => participant.userId === user?.id,
+  );
+
   const isCompleted = gathering.status === 'COMPLETED';
   const [selectedParticipant, setSelectedParticipant] = useState<{
     userId: number;
@@ -114,7 +118,7 @@ export default function ParticipantsSection({
               >
                 {introduction}
               </div>
-              {isCompleted && user?.id !== userId && (
+              {isCompleted && user?.id !== userId && isParticipating && (
                 <Button
                   className="w-[124px]"
                   onClick={() => handleOpenReviewModal(userId, userNickname)}
