@@ -3,7 +3,7 @@ import Image from 'next/image';
 import MultiSelectDropdown from '@/components/commons/MultiSelectDropdown';
 import { GENRE_OPTIONS, SESSION_OPTIONS } from '@/constants/checkbox';
 import { BandSession, Genre } from '@/types/tags';
-import ImgMainBanner from '@/assets/images/img_main_banner.jpg';
+import ImgMainBanner from '@/assets/images/img_main_banner_01.jpg';
 import IcSort from '@/assets/icons/ic_sort.svg';
 import Link from 'next/link';
 
@@ -30,7 +30,7 @@ export default function RecruitHeader({
   return (
     <Fragment>
       <div className="relative h-[15rem] overflow-hidden rounded-lg">
-        <div className="absolute top-[5.875rem] left-[7.312rem]">
+        {/* <div className="absolute top-[5.875rem] left-[7.312rem]">
           <span
             className="text-2xl leading-6 font-semibold text-[#DAA3FF]"
             style={{ letterSpacing: '-4%' }}
@@ -43,7 +43,7 @@ export default function RecruitHeader({
           >
             지금 모임에 참여해보세요
           </p>
-        </div>
+        </div> */}
         <Image src={ImgMainBanner} alt="메인이미지" width={1344} height={250} />
       </div>
       <div className="mt-8 mb-9 flex items-center justify-between">
