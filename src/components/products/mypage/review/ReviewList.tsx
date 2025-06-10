@@ -2,7 +2,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { REVIEW_METRICS } from '@/constants/review';
+import { mockReviews, REVIEW_METRICS } from '@/constants/review';
 import { ReviewItem } from '@/types/review';
 import { getDate } from '@/utils/date';
 import InfinityScroll from '@/components/commons/InfinityScroll';
@@ -11,16 +11,17 @@ import DefaultProfileImage from '@/assets/icons/ic_default_profile.svg';
 import { imgChange } from '@/utils/imgChange';
 
 export default function ReviewList() {
-  const { data, fetchNextPage, hasNextPage, isFetching } =
-    useReviewInfiniteQuery({ size: 8 });
+  const { fetchNextPage, hasNextPage, isFetching } = useReviewInfiniteQuery({
+    size: 8,
+  });
 
-  const flatData = data?.pages.flatMap((page) => page.content) ?? [];
+  // const flatData = data?.pages.flatMap((page) => page.content) ?? [];
 
   return (
     <InfinityScroll
       className="flex flex-auto"
       variant="list"
-      list={flatData}
+      list={mockReviews}
       item={(item) => (
         <div
           className="mb-5 rounded-lg bg-[#28282a] px-[3.75rem] py-[3.75rem]"

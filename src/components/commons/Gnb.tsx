@@ -21,6 +21,7 @@ export default function Gnb() {
   const navItems = [
     { href: '/', label: '모임 찾기' },
     { href: '/wishlist', label: '찜한 모임' },
+    { href: '/mypage', label: '마이페이지' },
   ];
 
   const handleProfileSelect = (option: string) => {

@@ -68,26 +68,26 @@ export const mockReviews: ReviewItem[] = Array.from({ length: 5 }).map(
 );
 
 export const dummyReviewData = {
-  goodWithMusicCount: 0,
-  goodWithMusicPercentage: 0,
+  goodWithMusicCount: 1,
+  goodWithMusicPercentage: 1,
 
-  practiceHelpedCount: 0,
-  practiceHelpedPercentage: 0,
+  practiceHelpedCount: 10,
+  practiceHelpedPercentage: 10,
 
-  keepingPromisesCount: 0,
-  keepingPromisesPercentage: 0,
+  keepingPromisesCount: 8,
+  keepingPromisesPercentage: 8,
 
-  goodWithOthersCount: 0,
-  goodWithOthersPercentage: 0,
+  goodWithOthersCount: 60,
+  goodWithOthersPercentage: 60,
 
-  managingWellCount: 0,
-  managingWellPercentage: 0,
+  managingWellCount: 20,
+  managingWellPercentage: 20,
 
   sharesPracticeResourcesCount: 0,
   sharesPracticeResourcesPercentage: 0,
 
-  helpfulCount: 0,
-  helpfulPercentage: 0,
+  helpfulCount: 5,
+  helpfulPercentage: 5,
 
   goodLearnerCount: 0,
   goodLearnerPercentage: 0,
