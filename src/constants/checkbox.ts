@@ -1,4 +1,3 @@
-import { ImgCard01, ImgCard02, ImgCard03, ImgCard04 } from '@/assets/images';
 import { GatheringCard } from '@/types/card';
 import { BandSession, Genre } from '@/types/tags';
 
@@ -20,6 +19,7 @@ export const SESSION_OPTIONS = [
   { label: '일렉기타', value: BandSession.ELECTRIC_GUITAR },
   { label: '통기타', value: BandSession.ACOUSTIC_GUITAR },
   { label: '베이스', value: BandSession.BASS },
+  { label: '건반', value: BandSession.KEYBOARD },
   { label: '드럼', value: BandSession.DRUM },
   { label: '타악기', value: BandSession.PERCUSSION },
   { label: '현악기', value: BandSession.STRING_INSTRUMENT },
@@ -33,7 +33,7 @@ const baseMock: GatheringCard = {
     nickname: '기본 작성자',
   },
   genres: [Genre.ROCK, Genre.POP],
-  thumbnail: ImgCard01,
+  thumbnail: 'img_banner_01',
   totalRecruit: 5,
   totalCurrent: 3,
   recruitDeadline: '2025-07-01T23:59:59.000Z',
@@ -53,7 +53,20 @@ const baseMock: GatheringCard = {
 
 export const mockRecruits: GatheringCard[] = Array.from({ length: 40 }).map(
   (_, i) => {
-    const thumbnails = [ImgCard01, ImgCard02, ImgCard03, ImgCard04];
+    const thumbnails = [
+      'img_banner_01',
+      'img_banner_02',
+      'img_banner_03',
+      'img_banner_04',
+      'img_banner_05',
+      'img_banner_06',
+      'img_banner_07',
+      'img_banner_08',
+      'img_banner_09',
+      'img_banner_10',
+      'img_banner_11',
+      'img_banner_12',
+    ];
     const names = [
       '펑크 밴드 모집',
       '재즈 모임 구함',

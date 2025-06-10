@@ -1,13 +1,13 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { getReviewWrite } from '@/lib/review/towrite';
-import { Page } from '@/types/wish';
+import { RecruitResponse } from '@/types/recruit';
 
 interface ReivewProps {
   size: number;
   includeCanceled: boolean;
 }
 
-export const useReviewInfiniteQuery = ({
+export const useReviewToWriteInfiniteQuery = ({
   size,
   includeCanceled,
 }: ReivewProps) => {
@@ -19,7 +19,7 @@ export const useReviewInfiniteQuery = ({
     queryFn: ({ queryKey, pageParam = 0 }) =>
       getReviewWrite({ queryKey, pageParam, size }),
     initialPageParam: 0,
-    getNextPageParam: (lastPage: Page) =>
+    getNextPageParam: (lastPage: RecruitResponse) =>
       lastPage.currentPage + 1 < lastPage.totalPage
         ? lastPage.currentPage + 1
         : undefined,

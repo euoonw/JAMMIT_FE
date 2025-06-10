@@ -2,6 +2,7 @@
 
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import debounce from 'lodash.debounce';
+import { GENRE_ENUM_TO_KR } from '@/constants/tagsMapping';
 
 interface TagListProps {
   tags: string[];
@@ -69,7 +70,7 @@ export default function TagList({ tags }: TagListProps) {
           key={tag}
           className="rounded-lg bg-[var(--bg-34343A)] px-3 py-1.5 text-sm font-medium"
         >
-          {tag}
+          {GENRE_ENUM_TO_KR[tag]}
         </span>
       ))}
       {visibleTags.length > 0 && hiddenTags.length > 0 && (

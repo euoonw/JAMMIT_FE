@@ -1,11 +1,16 @@
+import { BandSession } from './tags';
+
 export interface ReviewItem {
   id: number;
   reviewerId: number;
   reviewerNickname: string;
+  reviewerBandSessions: BandSession[];
   revieweeId: number;
   revieweeNickname: string;
   gatheringId: number;
   gatheringName: string;
+  gatheringThumbnail: string;
+  gatheringHostNickname: string;
   content: string;
   createdAt: string;
   updatedAt: string;
@@ -39,8 +44,13 @@ export interface ReviewStatusPros {
   keepingPromisesPercentage: number;
 }
 
-export interface ReviewListProps {
-  data: ReviewItem[];
+export interface ReviewResponse {
+  content: ReviewItem[];
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+  last: boolean;
 }
 
 export interface PostReviewRequest {

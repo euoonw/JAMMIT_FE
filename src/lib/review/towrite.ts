@@ -1,4 +1,4 @@
-import { WishResponse } from '@/types/wish';
+import { RecruitResponse } from '@/types/recruit';
 import { apiClient } from '@/utils/apiClient';
 
 export async function getReviewWrite({
@@ -9,7 +9,7 @@ export async function getReviewWrite({
   queryKey: [string, { includeCanceled: boolean }];
   pageParam: number;
   size: number;
-}): Promise<WishResponse> {
+}): Promise<RecruitResponse> {
   const [, { includeCanceled }] = queryKey;
   const params = new URLSearchParams();
   params.append('includeCanceled', includeCanceled.toString());

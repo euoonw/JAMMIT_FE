@@ -6,12 +6,7 @@ export interface RecruitPageProps {
   defaultSessions: BandSession[];
 }
 
-export interface Page {
-  currentPage: number;
-  totalPage: number;
-}
-
-export interface WishResponse {
+export interface RecruitResponse {
   gatherings: GatheringCard[];
   currentPage: number;
   totalPage: number;

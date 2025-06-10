@@ -1,10 +1,20 @@
-import { ReviewItem, ReviewStatusPros } from '@/types/review';
+import { ReviewResponse, ReviewStatusPros } from '@/types/review';
 import { apiClient } from '@/utils/apiClient';
 
 export const getStatus = async () => {
   return await apiClient.get<ReviewStatusPros>('/review/received/statistics');
 };
 
-export const getReview = async () => {
-  return await apiClient.get<ReviewItem[]>('/review/received');
-};
+export async function getReview({
+  pageParam,
+  size,
+}: {
+  queryKey: string[];
+  pageParam: number;
+  size: number;
+}): Promise<ReviewResponse> {
+  const params = new URLSearchParams();
+  params.append('page', pageParam.toString());
+  params.append('size', size.toString());
+  return await apiClient.get(`/review/received?${params.toString()}`);
+}

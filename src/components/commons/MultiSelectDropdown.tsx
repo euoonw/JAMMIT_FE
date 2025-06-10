@@ -55,7 +55,7 @@ export default function MultiSelectDropdown<T>({
       </button>
       {isOpen && (
         <div
-          className="absolute z-10 w-full overflow-hidden rounded-lg border border-[#505057] shadow-[0_0_20px_-5px_rgba(0,0,0,0.6)]"
+          className="absolute top-11 z-10 w-full overflow-hidden rounded-lg border border-[#505057] shadow-[0_0_20px_-5px_rgba(0,0,0,0.6)]"
           ref={dropdownRef}
         >
           {options.map((item) => (

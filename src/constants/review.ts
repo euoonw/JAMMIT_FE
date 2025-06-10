@@ -1,4 +1,6 @@
+import { ImgCard01 } from '@/assets/images';
 import { ReviewItem } from '@/types/review';
+import { BandSession } from '@/types/tags';
 
 export const mockReviews: ReviewItem[] = Array.from({ length: 5 }).map(
   (_, i) => {
@@ -31,6 +33,9 @@ export const mockReviews: ReviewItem[] = Array.from({ length: 5 }).map(
       reviewerNickname: nicknames[i],
       revieweeId: 1,
       revieweeNickname: '리뷰당한넘',
+      reviewerBandSessions: [BandSession.BASS, BandSession.ELECTRIC_GUITAR],
+      gatheringThumbnail: ImgCard01,
+      gatheringHostNickname: '호스트',
       gatheringId: i + 200,
       gatheringName: gatherings[i],
       content: contents[i],

@@ -1,15 +1,19 @@
 import React from 'react';
-import Image, { StaticImageData } from 'next/image';
-import { ImgCard01 } from '@/assets/images';
+import Image from 'next/image';
+import { imgChange } from '@/utils/imgChange';
 
 interface ThumbnailProps {
-  thumbnail: StaticImageData;
+  thumbnail: string;
   alt: string;
 }
 
-export default function Thumbnail({
-  // thumbnail,
-  alt,
-}: ThumbnailProps) {
-  return <Image src={ImgCard01} alt={alt} width={320} height={200} />;
+export default function Thumbnail({ thumbnail, alt }: ThumbnailProps) {
+  return (
+    <Image
+      src={imgChange(thumbnail, 'card')}
+      alt={alt}
+      width={320}
+      height={200}
+    />
+  );
 }

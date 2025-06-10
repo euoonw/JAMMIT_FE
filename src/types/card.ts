@@ -1,4 +1,3 @@
-import { StaticImageData } from 'next/image';
 // 카드의 리팩토링 완료 후 다음으로 수정import { GenreType, BandSessionType, GatheringStatus } from './tags';
 import { GenreType, GatheringStatus } from './tags';
 
@@ -11,7 +10,7 @@ export interface GatheringCard {
   /** 모임 장소 */
   place: string;
   /** 썸네일 */
-  thumbnail: StaticImageData;
+  thumbnail: string;
   /** 모임 날짜 */
   gatheringDateTime: string;
   /** 전체 멤버수 */
