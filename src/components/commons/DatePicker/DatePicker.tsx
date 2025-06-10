@@ -53,8 +53,12 @@ export function DatePicker({ value, onChange }: DatePickerProps) {
     if (!date) {
       return;
     }
-    handleDateChange(date);
-  }, [date, handleDateChange]);
+    const newDate = combineDateAndTime(date, hour, minute, ampm);
+    if (newDate.getTime() !== date.getTime()) {
+      setDate(newDate);
+      onChange?.(newDate);
+    }
+  }, [hour, minute, ampm, date, onChange]);
 
   useEffect(() => {
     if (value) {

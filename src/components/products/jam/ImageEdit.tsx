@@ -1,30 +1,40 @@
-import Image, { StaticImageData } from 'next/image';
+import Image from 'next/image';
 import { useCallback, useState } from 'react';
 import Button from '@/components/commons/Button';
 import ModalImgEdit from './ModalImgEdit';
+import { useFormContext } from 'react-hook-form';
+import { RegisterGatheringsRequest } from '@/types/gather';
 import EmptyImageIcon from '@/assets/icons/ic_emptyimage.svg';
+import { imgChange } from '@/utils/imgChange';
 
 export default function ImageEdit() {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<StaticImageData | null>(
-    null,
-  );
+  const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
+  const { setValue } = useFormContext<RegisterGatheringsRequest>();
 
   const handleOpenModal = useCallback(() => {
     setIsOpen(true);
   }, []);
 
-  const handleSubmit = useCallback((image: StaticImageData) => {
-    setSelectedImage(image);
-    setIsOpen(false);
-  }, []);
+  const handleSubmit = useCallback(
+    (fileName: string) => {
+      setSelectedFileName(fileName);
+      setValue('thumbnail', fileName);
+      setIsOpen(false);
+    },
+    [setValue],
+  );
+
+  const selectedImageSrc = selectedFileName
+    ? imgChange(selectedFileName, 'banner')
+    : null;
 
   return (
     <div className="relative mx-auto flex h-[22rem] w-full max-w-[84rem] items-center justify-center overflow-hidden rounded-[0.5rem] bg-[#393A41]">
-      {selectedImage ? (
+      {selectedImageSrc ? (
         <>
           <Image
-            src={selectedImage}
+            src={selectedImageSrc}
             alt="선택된 이미지"
             fill
             style={{ objectFit: 'cover' }}

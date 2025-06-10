@@ -15,17 +15,32 @@ import { DatePicker } from '@/components/commons/DatePicker/DatePicker';
 import SearchInput from './SearchInput';
 import SessionSelector from './SessionSelector';
 import { GENRE_TAGS, SESSION_KEY_MAP } from '@/constants/tags';
-import { JamFormData } from '@/types/jam';
+import { GENRE_KR_TO_ENUM } from '@/constants/tagsMapping';
+import { RegisterGatheringsRequest } from '@/types/gather';
+import { GenreType } from '@/types/tags';
 
 const DIVIDER = 'mx-auto my-[2.5rem] w-[56rem] border-gray-800';
 
+const DATE_FIELDS = [
+  {
+    name: 'recruitDateTime' as const,
+    label: '모집 마감일',
+    htmlFor: 'end',
+  },
+  {
+    name: 'gatheringDateTime' as const,
+    label: '모임 날짜',
+    htmlFor: 'day',
+  },
+] as const;
+
 interface JamFormSectionProps {
   /** 폼 필드 제어 */
-  control: Control<JamFormData>;
+  control: Control<RegisterGatheringsRequest>;
   /** 필드 값 관찰 */
-  watch: UseFormWatch<JamFormData>;
+  watch: UseFormWatch<RegisterGatheringsRequest>;
   /** 필드 값을 외부에서 설정 */
-  setValue: UseFormSetValue<JamFormData>;
+  setValue: UseFormSetValue<RegisterGatheringsRequest>;
 }
 
 export default function JamFormSection({
@@ -37,6 +52,7 @@ export default function JamFormSection({
     { sortOption: '', count: 0 },
   ]);
   const place = watch('place') || '';
+
   // 빈 문자열 제외 이미 선택된 세션 옵션들을 계산
   const selectedSessions = sessionList
     .map((session) => session.sortOption)
@@ -64,33 +80,42 @@ export default function JamFormSection({
   const handleSortOptionChange = useCallback(
     (index: number, newSortOption: string) => {
       setSessionList((prev) =>
-        prev.map((sess, i) =>
-          i === index ? { ...sess, sortOption: newSortOption } : sess,
+        prev.map((session, idx) =>
+          idx === index ? { ...session, sortOption: newSortOption } : session,
         ),
       );
     },
     [],
   );
 
-  // 모집 세션 수 입력 변경 시
   const handleCountChange = useCallback(
     (index: number, newCount: number) => {
       setSessionList((prev) => {
         const newList = prev.map((sess, i) =>
           i === index ? { ...sess, count: newCount } : sess,
         );
-        const sessionKey = SESSION_KEY_MAP[newList[index].sortOption];
-        setValue(`session.${sessionKey}`, newCount);
+
+        setValue(
+          `gatheringSessions`,
+          newList
+            .filter((s) => s.sortOption !== '')
+            .map((s) => ({
+              bandSession: SESSION_KEY_MAP[s.sortOption],
+              recruitCount: s.count,
+            })),
+        );
         return newList;
       });
     },
     [setValue],
   );
 
-  // 장르 태그 선택 시
   const handleTagChange = useCallback(
     (selectedTags: string[]) => {
-      setValue('genre', selectedTags);
+      const convertedTags = selectedTags
+        .map((tag) => GENRE_KR_TO_ENUM[tag])
+        .filter(Boolean) as GenreType[];
+      setValue('genres', convertedTags);
     },
     [setValue],
   );
@@ -100,51 +125,47 @@ export default function JamFormSection({
       <div className="flex flex-col gap-[1.5rem]">
         {/** 모임 제목 */}
         <Input
-          name="jamName"
+          name="name"
           type="text"
           label="모임 제목"
           placeholder="모임 제목을 작성하세요."
-          rules={{ required: '모임 제목을 입력하세요.' }}
+          rules={{
+            required: '모임 제목을 입력하세요.',
+            maxLength: {
+              value: 30,
+              message: '모임 제목은 30자 이하로 입력해주세요.',
+            },
+          }}
         />
 
         {/** 모임 장소 */}
         <SearchInput value={place} onChange={handlePlaceChange} />
 
-        {/** TODO: 이 부분은 나중에 시간을 어떤 시간으로 받을지 정한 후 결정 */}
         {/** 모집 마감일 / 모임 날짜 */}
         <div className="flex gap-[1.25rem]">
-          <div className="flex flex-col gap-[0.5rem]">
-            <label htmlFor="end" className="font-semibold">
-              모집 마감일
-            </label>
-            <Controller
-              name="end"
-              control={control}
-              rules={{ required: '모집 마감일을 선택하세요.' }}
-              render={({ field }) => (
-                <DatePicker
-                  value={field.value ? new Date(field.value) : undefined}
-                  onChange={(date) => field.onChange(date?.toISOString() ?? '')}
-                />
-              )}
-            />
-          </div>
-          <div className="flex flex-col gap-[0.5rem]">
-            <label htmlFor="day" className="font-semibold">
-              모임 날짜
-            </label>
-            <Controller
-              name="day"
-              control={control}
-              rules={{ required: '모집 마감일을 선택하세요.' }}
-              render={({ field }) => (
-                <DatePicker
-                  value={field.value ? new Date(field.value) : undefined}
-                  onChange={(date) => field.onChange(date?.toISOString() ?? '')}
-                />
-              )}
-            />
-          </div>
+          {DATE_FIELDS.map(({ name, label, htmlFor }) => (
+            <div key={name} className="flex flex-col gap-[0.5rem]">
+              <label htmlFor={htmlFor} className="font-semibold">
+                {label}
+              </label>
+              <Controller
+                name={name}
+                control={control}
+                rules={{ required: `${label}을 선택하세요.` }}
+                render={({ field }) => (
+                  <DatePicker
+                    value={field.value ? new Date(field.value) : undefined}
+                    onChange={(date) => {
+                      if (!date) {
+                        return field.onChange('');
+                      }
+                      field.onChange(date.toISOString());
+                    }}
+                  />
+                )}
+              />
+            </div>
+          ))}
         </div>
       </div>
 
@@ -200,7 +221,7 @@ export default function JamFormSection({
         <div className="flex flex-col gap-[0.5rem]">
           <p className="text-lg font-semibold">소개글</p>
           <Controller
-            name="introduction"
+            name="description"
             control={control}
             rules={{ required: '소개글을 입력하세요.' }}
             render={({ field }) => (

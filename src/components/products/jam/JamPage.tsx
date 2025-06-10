@@ -5,17 +5,20 @@ import GroupPageLayout from '@/components/commons/GroupPageLayout';
 import Button from '@/components/commons/Button';
 import JamFormSection from '@/components/products/jam/JamFormSection';
 import { FormProvider, useForm } from 'react-hook-form';
-import { JamFormData } from '@/types/jam';
+import { RegisterGatheringsRequest } from '@/types/gather';
+import { useGatherRegister } from '@/hooks/queries/gather/useGatherRegister';
 
 export default function JamPage() {
-  const methods = useForm<JamFormData>({
+  const methods = useForm<RegisterGatheringsRequest>({
     defaultValues: {
-      jamName: '',
+      name: '',
+      thumbnail: '',
       place: '',
-      day: '',
-      end: '',
-      genre: [],
-      introduction: '',
+      description: '',
+      gatheringDateTime: '',
+      recruitDateTime: '',
+      genres: [],
+      gatheringSessions: [],
     },
     mode: 'onChange',
   });
@@ -28,9 +31,10 @@ export default function JamPage() {
     formState: { isValid },
   } = methods;
 
-  // API 연동
-  const onSubmit = (data: JamFormData) => {
-    console.log('폼 제출됨:', data);
+  const { mutate: registerGathering } = useGatherRegister();
+
+  const onSubmit = (data: RegisterGatheringsRequest) => {
+    registerGathering(data);
   };
 
   return (

@@ -1,6 +1,6 @@
 'use client';
 
-import Image, { StaticImageData } from 'next/image';
+import Image from 'next/image';
 import { memo, useRef, useState } from 'react';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import Button from '@/components/commons/Button';
@@ -10,7 +10,7 @@ const FIRST_RENDERING = 12;
 
 interface ModalImgEditProps {
   /** "확인" 버튼 클릭 시 실행할 콜백 */
-  onSubmit: (image: StaticImageData) => void;
+  onSubmit: (image: string) => void;
   onClose: () => void;
 }
 
@@ -49,7 +49,7 @@ function ModalImgEdit({ onSubmit, onClose }: ModalImgEditProps) {
                 onClick={() => setSelectedIndex(idx)}
               >
                 <Image
-                  src={bannerImages[idx]}
+                  src={bannerImages[idx].src}
                   alt={`모임 배너 ${idx + 1}`}
                   priority
                   width={120}
@@ -73,7 +73,7 @@ function ModalImgEdit({ onSubmit, onClose }: ModalImgEditProps) {
             disabled={selectedIndex === null}
             onClick={() => {
               if (selectedIndex !== null) {
-                onSubmit(bannerImages[selectedIndex]);
+                onSubmit(bannerImages[selectedIndex].fileName);
               }
             }}
           >

@@ -1,3 +1,5 @@
+import { BandSessionType } from '@/types/tags';
+
 export const GENRE_TAGS = [
   '락',
   '메탈',
@@ -23,15 +25,15 @@ export const SESSION_TAGS = [
   '현악기',
 ];
 
-export const SESSION_KEY_MAP: { [korean: string]: keyof InstrumentCount } = {
-  보컬: 'vocal',
-  일렉기타: 'electricGuitar',
-  통기타: 'acousticGuitar',
-  베이스: 'bass',
-  건반: 'keyboard',
-  드럼: 'drum',
-  타악기: 'percussion',
-  현악기: 'string',
+export const SESSION_KEY_MAP: { [korean: string]: BandSessionType } = {
+  보컬: 'VOCAL',
+  일렉기타: 'ELECTRIC_GUITAR',
+  통기타: 'ACOUSTIC_GUITAR',
+  베이스: 'BASS',
+  건반: 'KEYBOARD',
+  드럼: 'DRUM',
+  타악기: 'PERCUSSION',
+  현악기: 'STRING_INSTRUMENT',
 };
 
 export interface InstrumentCount {
