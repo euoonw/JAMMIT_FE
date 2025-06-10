@@ -1,4 +1,3 @@
-import { ImgCard01 } from '@/assets/images';
 import { ReviewItem } from '@/types/review';
 import { BandSession } from '@/types/tags';
 
@@ -26,7 +25,20 @@ export const mockReviews: ReviewItem[] = Array.from({ length: 5 }).map(
       '어쿠스틱 모임',
       '잼연습 정기모임',
     ];
-
+    const thumbnails = [
+      'img_banner_01',
+      'img_banner_02',
+      'img_banner_03',
+      'img_banner_04',
+      'img_banner_05',
+      'img_banner_06',
+      'img_banner_07',
+      'img_banner_08',
+      'img_banner_09',
+      'img_banner_10',
+      'img_banner_11',
+      'img_banner_12',
+    ];
     return {
       id: i + 1,
       reviewerId: i + 100,
@@ -34,7 +46,7 @@ export const mockReviews: ReviewItem[] = Array.from({ length: 5 }).map(
       revieweeId: 1,
       revieweeNickname: '리뷰당한넘',
       reviewerBandSessions: [BandSession.BASS, BandSession.ELECTRIC_GUITAR],
-      gatheringThumbnail: ImgCard01,
+      gatheringThumbnail: thumbnails[i % thumbnails.length],
       gatheringHostNickname: '호스트',
       gatheringId: i + 200,
       gatheringName: gatherings[i],
