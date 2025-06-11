@@ -49,7 +49,7 @@ export default function TagSelector({
         return newSelected;
       });
     },
-    [mode, onChange, disabledSet],
+    [mode, onChange, disabledSet, selectMode],
   );
 
   return (

@@ -40,7 +40,7 @@ export default function GroupPage() {
       newParams.set('tab', 'recruit');
       router.replace(`?${newParams.toString()}`);
     }
-  }, [activeTab, user]);
+  }, [activeTab, user, router, searchParams]);
 
   const {
     data: gatheringDetailData,

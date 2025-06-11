@@ -1,5 +1,5 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Controller,
@@ -28,13 +28,17 @@ export default function SignupStep2Page() {
   const router = useRouter();
   const { email, name, password } = useSignupStore();
 
+  const hasCheckedRef = useRef(false);
   useEffect(() => {
+    if (hasCheckedRef.current) return;
+    hasCheckedRef.current = true;
+
     if (!email || !name || !password) {
       // TODO: 모달 반영
       alert('이전 단계 정보를 확인할 수 없어, 다시 입력이 필요합니다.');
       router.replace('/signup/step1');
     }
-  }, []);
+  }, [email, name, password, router]);
 
   const methods = useForm<FormValues>({
     mode: 'all',
@@ -44,7 +48,6 @@ export default function SignupStep2Page() {
 
   const {
     formState: { isValid },
-    reset,
     setValue,
     control,
   } = methods;
@@ -105,7 +108,6 @@ export default function SignupStep2Page() {
     router.push('/login');
 
     useSignupStore.getState().resetSignupData();
-    reset();
   };
 
   return (
