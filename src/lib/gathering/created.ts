@@ -15,6 +15,5 @@ export const getUserCreatedGatherings = async ({
   const result = await apiClient.get<GatheringsResponse>(
     `/gatherings/my/created?${query}`,
   );
-  console.log('이건 Create', result);
   return result;
 };

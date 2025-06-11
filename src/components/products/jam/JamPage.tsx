@@ -1,16 +1,29 @@
 'use client';
 
+import { FormProvider, useForm } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
 import ImageEdit from '@/components/products/jam/ImageEdit';
 import GroupPageLayout from '@/components/commons/GroupPageLayout';
 import Button from '@/components/commons/Button';
 import JamFormSection from '@/components/products/jam/JamFormSection';
-import { FormProvider, useForm } from 'react-hook-form';
 import { RegisterGatheringsRequest } from '@/types/gather';
 import { useGatherRegister } from '@/hooks/queries/gather/useGatherRegister';
+import { useGatherModify } from '@/hooks/queries/gather/useGatherModify';
 
-export default function JamPage() {
+interface JamPageProps {
+  formType?: 'register' | 'edit';
+  groupId?: number;
+  initialData?: RegisterGatheringsRequest;
+}
+
+export default function JamPage({
+  formType = 'register',
+  groupId,
+  initialData,
+}: JamPageProps) {
+  const router = useRouter();
   const methods = useForm<RegisterGatheringsRequest>({
-    defaultValues: {
+    defaultValues: initialData ?? {
       name: '',
       thumbnail: '',
       place: '',
@@ -32,9 +45,29 @@ export default function JamPage() {
   } = methods;
 
   const { mutate: registerGathering } = useGatherRegister();
+  const { mutate: modifyGathering } = useGatherModify();
 
   const onSubmit = (data: RegisterGatheringsRequest) => {
-    registerGathering(data);
+    if (formType === 'edit' && groupId) {
+      modifyGathering({
+        id: groupId,
+        name: data.name,
+        thumbnail: data.thumbnail,
+        place: data.place,
+        gatheringDateTime: data.gatheringDateTime,
+        totalRecruitCount: data.gatheringSessions.reduce(
+          (sum, session) => sum + session.recruitCount,
+          0,
+        ),
+        recruitDeadline: data.recruitDateTime,
+        genres: data.genres,
+        description: data.description,
+        gatheringSessions: data.gatheringSessions,
+      });
+      router.push(`/group/${groupId}`);
+    } else {
+      registerGathering(data);
+    }
   };
 
   return (
@@ -49,12 +82,17 @@ export default function JamPage() {
               type="submit"
               disabled={!isValid}
             >
-              모임 만들기
+              {formType === 'edit' ? '모임 수정하기' : '모임 만들기'}
             </Button>
           }
           isTab={false}
         >
-          <JamFormSection control={control} watch={watch} setValue={setValue} />
+          <JamFormSection
+            control={control}
+            watch={watch}
+            setValue={setValue}
+            initialData={initialData}
+          />
         </GroupPageLayout>
       </form>
     </FormProvider>

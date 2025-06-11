@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Button from '@/components/commons/Button';
 import ModalImgEdit from './ModalImgEdit';
 import { useFormContext } from 'react-hook-form';
@@ -10,7 +10,7 @@ import { imgChange } from '@/utils/imgChange';
 export default function ImageEdit() {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
-  const { setValue } = useFormContext<RegisterGatheringsRequest>();
+  const { setValue, watch } = useFormContext<RegisterGatheringsRequest>();
 
   const handleOpenModal = useCallback(() => {
     setIsOpen(true);
@@ -24,6 +24,13 @@ export default function ImageEdit() {
     },
     [setValue],
   );
+
+  useEffect(() => {
+    const thumb = watch('thumbnail');
+    if (thumb) {
+      setSelectedFileName(thumb);
+    }
+  }, [watch]);
 
   const selectedImageSrc = selectedFileName
     ? imgChange(selectedFileName, 'banner')

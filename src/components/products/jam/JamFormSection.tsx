@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   Control,
   UseFormWatch,
@@ -15,9 +15,11 @@ import { DatePicker } from '@/components/commons/DatePicker/DatePicker';
 import SearchInput from './SearchInput';
 import SessionSelector from './SessionSelector';
 import { GENRE_TAGS, SESSION_KEY_MAP } from '@/constants/tags';
-import { GENRE_KR_TO_ENUM } from '@/constants/tagsMapping';
+import { GENRE_KR_TO_ENUM, SESSION_ENUM_TO_KR } from '@/constants/tagsMapping';
 import { RegisterGatheringsRequest } from '@/types/gather';
 import { GenreType } from '@/types/tags';
+import { formatDateToLocal } from '@/utils/formatDateToLocal';
+import { useWatch } from 'react-hook-form';
 
 const DIVIDER = 'mx-auto my-[2.5rem] w-[56rem] border-gray-800';
 
@@ -41,16 +43,26 @@ interface JamFormSectionProps {
   watch: UseFormWatch<RegisterGatheringsRequest>;
   /** 필드 값을 외부에서 설정 */
   setValue: UseFormSetValue<RegisterGatheringsRequest>;
+  /** 초기값 */
+  initialData?: RegisterGatheringsRequest;
 }
 
 export default function JamFormSection({
   control,
   watch,
   setValue,
+  initialData,
 }: JamFormSectionProps) {
-  const [sessionList, setSessionList] = useState([
-    { sortOption: '', count: 0 },
-  ]);
+  const [sessionList, setSessionList] = useState(() => {
+    if (initialData?.gatheringSessions?.length) {
+      return initialData.gatheringSessions.map((s) => ({
+        sortOption: SESSION_ENUM_TO_KR[s.bandSession] || '',
+        count: s.recruitCount,
+      }));
+    }
+    return [{ sortOption: '', count: 0 }];
+  });
+
   const place = watch('place') || '';
 
   // 빈 문자열 제외 이미 선택된 세션 옵션들을 계산
@@ -88,11 +100,12 @@ export default function JamFormSection({
     [],
   );
 
+  // 세션 드롭다운 인원 변경
   const handleCountChange = useCallback(
     (index: number, newCount: number) => {
       setSessionList((prev) => {
-        const newList = prev.map((sess, i) =>
-          i === index ? { ...sess, count: newCount } : sess,
+        const newList = prev.map((session, i) =>
+          i === index ? { ...session, count: newCount } : session,
         );
 
         setValue(
@@ -119,6 +132,19 @@ export default function JamFormSection({
     },
     [setValue],
   );
+
+  const gatheringSessions = useWatch({ name: 'gatheringSessions', control });
+
+  useEffect(() => {
+    if (gatheringSessions?.length) {
+      setSessionList(
+        gatheringSessions.map((s) => ({
+          sortOption: SESSION_ENUM_TO_KR[s.bandSession],
+          count: s.recruitCount,
+        })),
+      );
+    }
+  }, [gatheringSessions]);
 
   return (
     <div className="mt-[2.5rem] flex h-auto w-[61rem] flex-col bg-[#202024] p-[2.5rem]">
@@ -159,7 +185,7 @@ export default function JamFormSection({
                       if (!date) {
                         return field.onChange('');
                       }
-                      field.onChange(date.toISOString());
+                      field.onChange(formatDateToLocal(date));
                     }}
                   />
                 )}
@@ -212,6 +238,12 @@ export default function JamFormSection({
             mode="selectable"
             tags={GENRE_TAGS}
             onChange={handleTagChange}
+            initialSelected={(watch('genres') || []).map(
+              (enumVal) =>
+                Object.keys(GENRE_KR_TO_ENUM).find(
+                  (k) => GENRE_KR_TO_ENUM[k] === enumVal,
+                ) || '',
+            )}
           />
         </div>
 

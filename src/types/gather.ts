@@ -38,3 +38,39 @@ export interface RegisterGatheringsResponse {
   thumbnail: string;
   status: GatheringStatus;
 }
+
+export interface ModifiedGatheringsRequest {
+  name: string;
+  thumbnail: string;
+  place: string;
+  gatheringDateTime: string;
+  totalRecruitCount: number;
+  recruitDeadline: string;
+  genres: GenreType[];
+  description: string;
+  gatheringSessions: {
+    bandSession: BandSessionType;
+    recruitCount: number;
+  }[];
+}
+
+export interface ModifiedGatheringsResponse {
+  id: number;
+  name: string;
+  thumbnail: string;
+  place: string;
+  description: string;
+  gatheringDateTime: string;
+  recruitDeadline: string;
+  status: GatheringStatus;
+  genres: GenreType[];
+  sessions: {
+    bandSession: BandSessionType;
+    recruitCount: number;
+    currentCount: number;
+  }[];
+  creator: {
+    id: number;
+    nickname: string;
+  };
+}
