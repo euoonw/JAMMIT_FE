@@ -7,6 +7,11 @@ import { GENRE_ENUM_TO_KR, SESSION_ENUM_TO_KR } from '@/constants/tagsMapping';
 import { formatDateToKoreanStyle } from '@/utils/formatDate';
 import { useDeleteGatheringMutation } from '@/hooks/queries/gatherings/useDeleteGatheringMutation';
 import { useRouter } from 'next/navigation';
+import { GatheringCard } from '@/types/card';
+import Like from '@/components/commons/Like';
+import ShareIcon from '@/assets/icons/ic_share.svg';
+import ShareLinkModal from './ShareLinkModal';
+import { useState } from 'react';
 
 interface GroupInfoSectionProps {
   gathering: GatheringDetailResponse;
@@ -18,6 +23,7 @@ export default function GroupInfoSection({
   isHost,
 }: GroupInfoSectionProps) {
   const router = useRouter();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const {
     name,
     place,
@@ -59,12 +65,18 @@ export default function GroupInfoSection({
   return (
     <>
       <section className="w-[60rem] rounded-[0.5rem] bg-[#202024] p-[2.5rem]">
-        {/* TODO: 공유하기 버튼 추가 */}
-        {/* TODO: 하트 컴포넌트 추가 */}
-
         {/* 모임 제목, 주최자 */}
         <div className="flex h-[4.375rem] flex-col justify-between">
-          <h1 className="group-info-title">{name}</h1>
+          <div className="flex w-full justify-between">
+            <h1 className="group-info-title">{name}</h1>
+            <div className="relative">
+              <ShareIcon
+                className="absolute top-1.5 right-[2.5rem] w-7 cursor-pointer"
+                onClick={() => setIsModalOpen(true)}
+              />
+              <Like item={convertToCardItem(gathering)} />
+            </div>
+          </div>
           <p className="group-info-subtitle">{creator.nickname}</p>
         </div>
 
@@ -152,6 +164,30 @@ export default function GroupInfoSection({
           </div>
         )}
       </div>
+      {isModalOpen && (
+        <ShareLinkModal
+          inviteLink={`https://jammit-fe-six.vercel.app/group/${id}`}
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
     </>
   );
+}
+
+function convertToCardItem(detail: GatheringDetailResponse): GatheringCard {
+  return {
+    id: detail.id,
+    name: detail.name,
+    place: detail.place,
+    thumbnail: detail.thumbnail,
+    gatheringDateTime: detail.gatheringDateTime,
+    totalRecruit: detail.sessions.reduce((sum, s) => sum + s.recruitCount, 0),
+    totalCurrent: detail.sessions.reduce((sum, s) => sum + s.currentCount, 0),
+    viewCount: 0,
+    recruitDeadline: detail.recruitDeadline,
+    status: detail.status,
+    genres: detail.genres,
+    creator: detail.creator,
+    sessions: detail.sessions,
+  };
 }
