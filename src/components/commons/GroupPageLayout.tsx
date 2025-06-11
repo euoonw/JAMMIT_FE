@@ -2,6 +2,7 @@
 import clsx from 'clsx';
 import { ReactNode } from 'react';
 import { useQueryTab } from '@/hooks/useQueryTab';
+import { useUserStore } from '@/stores/useUserStore';
 
 interface GroupPageLayoutProps {
   banner: ReactNode;
@@ -18,6 +19,7 @@ export default function GroupPageLayout({
   isTab = true,
   participantsNumber,
 }: GroupPageLayoutProps) {
+  const isLoggedIn = useUserStore((state) => state.isLoggedIn);
   const { activeTab, setTab } = useQueryTab<'recruit' | 'members'>(
     'tab',
     'recruit',
@@ -54,16 +56,18 @@ export default function GroupPageLayout({
             >
               참여멤버
             </button>
-            <span
-              className={clsx(
-                'flex h-[1.25rem] w-[1.25rem] items-center justify-center rounded-full text-[0.75rem]',
-                activeTab === 'members'
-                  ? 'bg-purple-700 text-gray-100'
-                  : 'bg-[#6E00B8] text-gray-300',
-              )}
-            >
-              {participantsNumber}
-            </span>
+            {isLoggedIn && (
+              <span
+                className={clsx(
+                  'flex h-[1.25rem] w-[1.25rem] items-center justify-center rounded-full text-[0.75rem]',
+                  activeTab === 'members'
+                    ? 'bg-purple-700 text-gray-100'
+                    : 'bg-[#6E00B8] text-gray-300',
+                )}
+              >
+                {participantsNumber}
+              </span>
+            )}
           </div>
         </div>
       )}

@@ -53,7 +53,7 @@ export default function GroupPage() {
     isLoading: isParticipantsLoading,
     error: participantsError,
   } = useGatheringParticipantsQuery(numericId, {
-    enabled: activeTab === 'members' && !!user,
+    enabled: !!user,
   });
 
   const participateMutation = useParticipateGatheringMutation();
