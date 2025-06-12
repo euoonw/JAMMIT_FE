@@ -1,12 +1,12 @@
 'use client';
-import React, { useState } from 'react';
-import { BandSession, Genre } from '@/types/tags';
-import RecruitHeader from '@/components/commons/RecruitHeader';
-import { useWishStore } from '@/stores/useWishStore';
 import CardItem from '@/components/commons/Card/CardItem';
-import VirtualGrid from '@/components/commons/VirtualGrid';
+import RecruitHeader from '@/components/commons/RecruitHeader';
+import VirtualGrid from '@/components/products/wish/VirtualGrid';
 import { CARD_STATE } from '@/constants/card';
 import { GENRE_OPTIONS, SESSION_OPTIONS } from '@/constants/checkbox';
+import { useWishStore } from '@/stores/useWishStore';
+import { BandSession, Genre } from '@/types/tags';
+import { useState } from 'react';
 
 export default function Page() {
   const [genres, setGenres] = useState<Genre[]>([]);
@@ -33,8 +33,9 @@ export default function Page() {
     if (hasGenres) return genreMatched;
     if (hasSessions) return sessionMatched;
   });
+
   return (
-    <div className="pc:max-w-[84rem] mx-auto mt-8 pb-[5rem]">
+    <div className="pc:max-w-[84rem] pc:mt-8 pc:pb-[5rem] mx-auto max-w-full pb-[1.375rem]">
       <RecruitHeader
         genres={genres}
         setGenres={setGenres}

@@ -1,6 +1,5 @@
-import React from 'react';
-import Image from 'next/image';
 import { imgChange } from '@/utils/imgChange';
+import Image from 'next/image';
 
 interface ThumbnailProps {
   thumbnail: string;
@@ -12,8 +11,9 @@ export default function Thumbnail({ thumbnail, alt }: ThumbnailProps) {
     <Image
       src={imgChange(thumbnail, 'card')}
       alt={alt}
-      width={320}
-      height={200}
+      fill
+      className="pc:aspect-[8/5] tab:aspect-[87/25] aspect-[343/200] rounded-lg object-cover"
+      loading="eager"
     />
   );
 }

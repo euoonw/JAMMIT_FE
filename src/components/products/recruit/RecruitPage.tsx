@@ -1,13 +1,13 @@
 'use client';
-import React, { useState } from 'react';
-import { getRecruit } from '@/lib/recruit/recruit';
-import { BandSession, Genre } from '@/types/tags';
-import { RecruitPageProps } from '@/types/recruit';
-import RecruitHeader from '@/components/commons/RecruitHeader';
-import InfinityScroll from '@/components/commons/InfinityScroll';
 import CardItem from '@/components/commons/Card/CardItem';
+import InfinityScroll from '@/components/commons/InfinityScroll';
+import RecruitHeader from '@/components/commons/RecruitHeader';
 import { CARD_STATE } from '@/constants/card';
 import { useCommonInfiniteQuery } from '@/hooks/queries/recruit/useRecruit';
+import { getRecruit } from '@/lib/recruit/recruit';
+import { RecruitPageProps } from '@/types/recruit';
+import { BandSession, Genre } from '@/types/tags';
+import { useState } from 'react';
 
 export default function RecruitPage({
   defaultGenres,
@@ -28,8 +28,9 @@ export default function RecruitPage({
     });
 
   const flatData = data?.pages.flatMap((page) => page.gatherings) ?? [];
+
   return (
-    <div className="pc:max-w-[84rem] mx-auto mt-8 pb-[5rem]">
+    <div className="pc:max-w-[84rem] pc:mt-8 pc:pb-[5rem] mx-auto max-w-full pb-[1.375rem]">
       <RecruitHeader
         genres={genres}
         setGenres={setGenres}

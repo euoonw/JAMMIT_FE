@@ -18,7 +18,7 @@
 
 @theme {
   --breakpoint-pc: 84rem;
-  --breakpoint-tap: 46.5rem;
+  --breakpoint-tab: 46.5rem;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 

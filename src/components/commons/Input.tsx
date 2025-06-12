@@ -55,7 +55,6 @@ function Input({
   innerRef,
   size,
 }: InputProps) {
-  console.log(Invisibility);
   const {
     register,
     setValue,

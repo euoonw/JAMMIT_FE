@@ -1,27 +1,30 @@
 'use client';
-import React from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { mockReviews, REVIEW_METRICS } from '@/constants/review';
+import DefaultProfileImage from '@/assets/icons/ic_default_profile.svg';
+import InfinityScroll from '@/components/commons/InfinityScroll';
+import { REVIEW_METRICS } from '@/constants/review';
+import { useReviewInfiniteQuery } from '@/hooks/queries/review/useSuspenseReview';
 import { ReviewItem } from '@/types/review';
 import { getDate } from '@/utils/date';
-import InfinityScroll from '@/components/commons/InfinityScroll';
-import { useReviewInfiniteQuery } from '@/hooks/queries/review/useSuspenseReview';
-import DefaultProfileImage from '@/assets/icons/ic_default_profile.svg';
 import { imgChange } from '@/utils/imgChange';
+import Image from 'next/image';
+import Link from 'next/link';
+import SkeletonReviewList from './SkeletonReviewList';
 
 export default function ReviewList() {
-  const { fetchNextPage, hasNextPage, isFetching } = useReviewInfiniteQuery({
-    size: 8,
-  });
+  const { data, fetchNextPage, hasNextPage, isFetching } =
+    useReviewInfiniteQuery({
+      size: 8,
+    });
 
-  // const flatData = data?.pages.flatMap((page) => page.content) ?? [];
+  const flatData = data?.pages.flatMap((page) => page.content) ?? [];
 
   return (
     <InfinityScroll
+      skeletonItem={() => <SkeletonReviewList />}
+      skeletonCount={3}
       className="flex flex-auto"
       variant="list"
-      list={mockReviews}
+      list={flatData}
       item={(item) => (
         <div
           className="mb-5 rounded-lg bg-[#28282a] px-[3.75rem] py-[3.75rem]"
@@ -47,7 +50,7 @@ export default function ReviewList() {
           <p className="my-6">{item.content}</p>
           <p className="mb-[35px] opacity-60">{getDate(item.createdAt)}</p>
           <Link
-            href={`/group/${item.gatheringId}`}
+            href={`/group/${item.gatheringId}?tab=recruit`}
             className="flex w-full items-center justify-between rounded-lg border border-[#464141] py-3 pr-[13px] pl-[27px]"
           >
             {' '}

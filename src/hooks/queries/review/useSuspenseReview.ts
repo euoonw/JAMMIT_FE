@@ -1,13 +1,13 @@
 import { getReview } from '@/lib/review/received';
 import { ReviewResponse } from '@/types/review';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 
-interface ReivewProps {
+interface ReviewProps {
   size: number;
 }
 
-export const useReviewInfiniteQuery = ({ size }: ReivewProps) => {
-  return useInfiniteQuery({
+export const useReviewInfiniteQuery = ({ size }: ReviewProps) => {
+  return useSuspenseInfiniteQuery({
     queryKey: ['received-reviews'],
     queryFn: ({ queryKey, pageParam = 0 }) =>
       getReview({ queryKey, pageParam, size }),

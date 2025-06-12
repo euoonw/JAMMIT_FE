@@ -1,5 +1,4 @@
 'use client';
-import React from 'react';
 import { StaticImageData } from 'next/image';
 // import { useSuspenseQuery } from '@tanstack/react-query';
 // import { getStatus } from '@/lib/review/received';
@@ -14,22 +13,24 @@ import {
   ImgTag08,
   ImgTag09,
 } from '@/assets/images/received';
-import { dummyReviewData, REVIEW_METRICS } from '@/constants/review';
+import { REVIEW_METRICS } from '@/constants/review';
+import { getStatus } from '@/lib/review/received';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import clsx from 'clsx';
 
 export default function ReviewStatus() {
-  // const { data } = useSuspenseQuery({
-  //   queryKey: ['getStatus'],
-  //   queryFn: getStatus,
-  // });
+  const { data } = useSuspenseQuery({
+    queryKey: ['getStatus'],
+    queryFn: getStatus,
+  });
 
   // 차트 변환
   const max = Math.max(
-    ...REVIEW_METRICS.map((item) => dummyReviewData[item.countKey] ?? 0),
+    ...REVIEW_METRICS.map((item) => data[item.countKey] ?? 0),
   );
 
   const chartData = REVIEW_METRICS.map((item) => {
-    const count = dummyReviewData[item.countKey] ?? 0;
+    const count = data[item.countKey] ?? 0;
     return {
       label: item.label,
       name: item.name,

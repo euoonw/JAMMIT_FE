@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import debounce from 'lodash.debounce';
 import { GENRE_ENUM_TO_KR } from '@/constants/tagsMapping';
+import debounce from 'lodash.debounce';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 interface TagListProps {
   tags: string[];
@@ -64,7 +64,10 @@ export default function TagList({ tags }: TagListProps) {
     };
   }, [tags]);
   return (
-    <div className="mt-[1.12rem] flex flex-wrap gap-[0.37rem]" ref={wrapperRef}>
+    <div
+      className="mt-[1.25rem] flex flex-wrap gap-[0.375rem]"
+      ref={wrapperRef}
+    >
       {(visibleTags.length ? visibleTags : tags).map((tag) => (
         <span
           key={tag}

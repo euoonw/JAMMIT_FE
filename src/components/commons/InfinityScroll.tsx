@@ -70,9 +70,12 @@ export default function InfinityScroll<T>({
       </div>
     );
   }
+
   const DynamicGridList = createGridList(
-    className ?? 'pc:grid-cols-4 grid grid-cols-1 gap-x-5 gap-y-10',
+    className ??
+      'pc:grid-cols-4 grid grid-cols-1 pc:gap-x-5 gap-y-10 pc:px-0 tab:px-6 px-4',
   );
+
   if (variant === 'list') {
     return (
       <Fragment>

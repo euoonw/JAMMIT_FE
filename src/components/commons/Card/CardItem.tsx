@@ -1,9 +1,8 @@
-import React from 'react';
+import { CardStatus } from '@/constants/card';
+import { GatheringCard } from '@/types/card';
 import Link from 'next/link';
 import { Card } from '.';
-import Like from '../Like';
-import { GatheringCard } from '@/types/card';
-import { CardStatus } from '@/constants/card';
+import Like from './Like';
 
 interface CardItemProps {
   item: GatheringCard;
@@ -17,8 +16,8 @@ export default function CardItem({
   status,
 }: CardItemProps) {
   return (
-    <Link key={item.id} href={`/group/${item.id}`}>
-      <div className="relative h-[12.5rem] overflow-hidden rounded-lg">
+    <Link key={item.id} href={`/group/${item.id}?tab=recruit`}>
+      <div className="pc:aspect-[8/5] tab:aspect-[87/25] relative aspect-[343/200] overflow-hidden rounded-lg">
         {isLike && <Like item={item} />}
         <Card.Thumbnail thumbnail={item.thumbnail} alt={item.name} />
       </div>

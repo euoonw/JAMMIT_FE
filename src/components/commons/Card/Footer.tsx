@@ -1,10 +1,10 @@
-import React from 'react';
 import IcListCheck from '@/assets/icons/ic_list_check.svg';
-import { getRecruitStatus } from '@/utils/getRecruitStatus';
-import { deadline } from '@/utils/deadline';
 import { CardStatus } from '@/constants/card';
 import { SESSION_ENUM_TO_KR } from '@/constants/tagsMapping';
+import { deadline } from '@/utils/deadline';
+import { getRecruitStatus } from '@/utils/getRecruitStatus';
 import { useRouter } from 'next/navigation';
+import React from 'react';
 
 interface FooterProps {
   status: CardStatus;
@@ -27,7 +27,7 @@ export default function Footer({
   member,
   id,
 }: FooterProps) {
-  const text = `${totalCurrent}/${totalRecruit}`;
+  const text = `${totalRecruit}/${totalCurrent}`;
   const cardStatus = getRecruitStatus(
     recruitDeadline as string,
     totalCurrent,
@@ -90,7 +90,11 @@ export default function Footer({
   };
   const left = () => {
     if (status === '모집중') {
-      return <span>{deadline(recruitDeadline as string)}</span>;
+      return (
+        <span className="pc:block hidden">
+          {deadline(recruitDeadline as string)}
+        </span>
+      );
     }
     return (
       <div>
