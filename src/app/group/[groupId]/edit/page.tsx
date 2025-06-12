@@ -38,9 +38,11 @@ export default function EditPage() {
   const numericId = Number(groupId);
   const { data: gatherDetailData } = useGatheringDetailQuery(numericId);
 
-  const initialData = gatherDetailData
-    ? transformDetailToFormData(gatherDetailData)
-    : undefined;
+  if (!gatherDetailData) {
+    return null;
+  }
+
+  const initialData = transformDetailToFormData(gatherDetailData);
 
   return (
     <Suspense fallback={'Loading...'}>

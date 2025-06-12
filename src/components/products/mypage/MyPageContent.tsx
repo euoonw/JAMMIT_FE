@@ -1,18 +1,15 @@
-// MEMO: 서버컴포넌트로 변경 예정
 'use client';
 
 import clsx from 'clsx';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useQueryTab } from '@/hooks/useQueryTab';
 import UserCard from '@/components/products/mypage/UserCard';
-import Participating from './gather/Participating';
-import Created from './gather/Created';
 import ReviewsReceived from '@/components/products/mypage/review/ReviewsReceived';
 import ReviewsToWrite from '@/components/products/mypage/towrite/ReviewsToWrite';
-import { useGatherMeCreate } from '@/hooks/queries/gather/useGatherMeCreate';
-import { useGatherMeParticipants } from '@/hooks/queries/gather/useGatherMeParticipants';
 import { useReviewToWriteInfiniteQuery } from '@/hooks/queries/review/useReviewInfiniteQuery';
 import { useReviewInfiniteQuery } from '@/hooks/queries/review/useSuspenseReview';
+import ParticipatingList from './gather/ParticipatingList';
+import CreatedList from './gather/CreatedList';
 
 type TabKey =
   | 'participating'
@@ -28,21 +25,15 @@ export default function MyPage() {
     'reviews_towrite',
   ]);
 
-  const { data: participatingData } = useGatherMeParticipants({
-    page: 0,
-    size: 8,
-    includeCanceled: true,
-  });
-  const { data: createdData } = useGatherMeCreate({
-    page: 0,
-    size: 8,
-    includeCanceled: true,
-  });
+  const [participatingCount, setParticipatingCount] = useState(0);
+  const [createdCount, setCreatedCount] = useState(0);
+
   const { data: write } = useReviewToWriteInfiniteQuery({
     size: 8,
     includeCanceled: true,
   });
   const writeCount = write?.pages[0].totalElements ?? 0;
+
   const { data: review } = useReviewInfiniteQuery({ size: 8 });
   const reviewCount = review?.pages[0].totalElements ?? 0;
 
@@ -51,43 +42,29 @@ export default function MyPage() {
       {
         key: 'participating',
         label: '참여 모임',
-        count: participatingData?.totalElements ?? 0,
-        component: (
-          <Participating
-            gatherings={participatingData?.gatherings ?? []}
-            currentPage={participatingData?.currentPage ?? 0}
-            totalPage={participatingData?.totalPage ?? 1}
-            totalElements={participatingData?.totalElements ?? 0}
-          />
-        ),
+        count: participatingCount,
+        component: <ParticipatingList onCountChange={setParticipatingCount} />,
       },
       {
         key: 'created',
         label: '내가 만든 모임',
-        count: createdData?.totalElements ?? 0,
-        component: (
-          <Created
-            gatherings={createdData?.gatherings ?? []}
-            currentPage={createdData?.currentPage ?? 0}
-            totalPage={createdData?.totalPage ?? 1}
-            totalElements={createdData?.totalElements ?? 0}
-          />
-        ),
+        count: createdCount,
+        component: <CreatedList onCountChange={setCreatedCount} />,
       },
       {
         key: 'reviews_received',
         label: '내가 받은 리뷰',
-        count: reviewCount, // API 연결 시 수정
+        count: reviewCount,
         component: <ReviewsReceived />,
       },
       {
         key: 'reviews_towrite',
         label: '작성 가능한 리뷰',
-        count: writeCount, // API 연결 시 수정
+        count: writeCount,
         component: <ReviewsToWrite />,
       },
     ],
-    [participatingData, createdData, writeCount, reviewCount],
+    [participatingCount, createdCount, reviewCount, writeCount],
   );
 
   const tabClass = (isActive: boolean) =>
