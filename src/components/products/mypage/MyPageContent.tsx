@@ -4,12 +4,13 @@ import clsx from 'clsx';
 import { useMemo, useState } from 'react';
 import { useQueryTab } from '@/hooks/useQueryTab';
 import UserCard from '@/components/products/mypage/UserCard';
+import ParticipatingList from '@/components/products/mypage/gather/ParticipatingList';
+import CreatedList from '@/components/products/mypage/gather/CreatedList';
 import ReviewsReceived from '@/components/products/mypage/review/ReviewsReceived';
 import ReviewsToWrite from '@/components/products/mypage/towrite/ReviewsToWrite';
 import { useReviewToWriteInfiniteQuery } from '@/hooks/queries/review/useReviewInfiniteQuery';
 import { useReviewInfiniteQuery } from '@/hooks/queries/review/useSuspenseReview';
-import ParticipatingList from './gather/ParticipatingList';
-import CreatedList from './gather/CreatedList';
+import { useCreatedCount } from '@/hooks/queries/gather/useGatherMeCreate';
 
 type TabKey =
   | 'participating'
@@ -26,7 +27,7 @@ export default function MyPage() {
   ]);
 
   const [participatingCount, setParticipatingCount] = useState(0);
-  const [createdCount, setCreatedCount] = useState(0);
+  const createdCount = useCreatedCount();
 
   const { data: write } = useReviewToWriteInfiniteQuery({
     size: 8,
@@ -49,7 +50,7 @@ export default function MyPage() {
         key: 'created',
         label: '내가 만든 모임',
         count: createdCount,
-        component: <CreatedList onCountChange={setCreatedCount} />,
+        component: <CreatedList />,
       },
       {
         key: 'reviews_received',

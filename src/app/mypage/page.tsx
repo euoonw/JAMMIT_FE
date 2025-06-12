@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import MyPageContent from '@/components/products/mypage/MyPageContent';
 
-export default function MyPage() {
+export default async function MyPage() {
   return (
     <Suspense fallback={'Loading...'}>
       <MyPageContent />
