@@ -37,11 +37,7 @@ class ApiClient {
     }
 
     if (response.status === 403) {
-      alert('로그인 후 다시 시도해주세요.');
-      if (typeof window !== 'undefined') {
-        window.location.href = '/login';
-      }
-      throw new Error('403 Forbidden');
+      throw new Error('로그인이 필요한 서비스입니다.');
     }
 
     const data = await response.json();

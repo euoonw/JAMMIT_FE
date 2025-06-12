@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Controller,
@@ -16,6 +16,8 @@ import { useSignupStore } from '@/stores/useSignupStore';
 import { useSignupMutation } from '@/hooks/queries/user/useSignupMutation';
 import { GENRE_KR_TO_ENUM, SESSION_KR_TO_ENUM } from '@/constants/tagsMapping';
 import { GENRE_TAGS, SESSION_TAGS } from '@/constants/tags';
+import { useToastStore } from '@/stores/useToastStore';
+import ModalInteraction from '@/components/commons/Modal/ModalInteraction';
 
 interface FormValues {
   image: File;
@@ -27,16 +29,15 @@ interface FormValues {
 export default function SignupStep2Page() {
   const router = useRouter();
   const { email, name, password } = useSignupStore();
+  const [missingInfoModalOpen, setMissingInfoModalOpen] = useState(false);
 
   const hasCheckedRef = useRef(false);
+
   useEffect(() => {
     if (hasCheckedRef.current) return;
     hasCheckedRef.current = true;
-
     if (!email || !name || !password) {
-      // TODO: 모달 반영
-      alert('이전 단계 정보를 확인할 수 없어, 다시 입력이 필요합니다.');
-      router.replace('/signup/step1');
+      setMissingInfoModalOpen(true);
     }
   }, [email, name, password, router]);
 
@@ -80,11 +81,7 @@ export default function SignupStep2Page() {
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     if (!email || !name || !password) {
-      // TODO: 모달 반영
-      alert(
-        '이메일, 이름, 비밀번호 정보가 유실되었습니다.\n다시 회원가입을 진행해주세요.',
-      );
-      router.replace('/signup/step1');
+      setMissingInfoModalOpen(true);
       return;
     }
 
@@ -104,74 +101,90 @@ export default function SignupStep2Page() {
     };
 
     await mutateAsync(fullData);
-
+    useToastStore.getState().show('회원가입이 완료되었습니다!');
     router.push('/login');
 
     useSignupStore.getState().resetSignupData();
   };
 
   return (
-    <AuthCard title="프로필 만들기">
-      <div className="flex w-[25.125rem] flex-col items-center">
-        <FormProvider {...methods}>
-          <form
-            onSubmit={methods.handleSubmit(onSubmit)}
-            noValidate
-            className="flex w-full flex-col gap-[1.5rem]"
-          >
-            <div className="mx-auto">
-              <Controller
-                name="image"
-                control={control}
-                render={({ field }) => (
-                  <ProfileImageUpload
-                    imageFile={field.value}
-                    onFileChange={field.onChange}
-                    profileSize={128}
-                    editIconSize={41}
-                    offsetX={80}
-                    offsetY={40}
-                  />
-                )}
-              />
-            </div>
-
-            <Input
-              name="nickname"
-              type="text"
-              label="닉네임"
-              placeholder="닉네임을 입력해주세요."
-              rules={{
-                required: '닉네임은 필수 입력입니다.',
-              }}
-            />
-
-            <div className="flex flex-col gap-4">
-              {tagSections.map(
-                ({ key, label, tags, initialSelected, onChange }) => (
-                  <TagSection
-                    key={key}
-                    label={label}
-                    tags={tags}
-                    initialSelected={initialSelected}
-                    onChange={onChange}
-                  />
-                ),
-              )}
-            </div>
-
-            <Button
-              variant="solid"
-              size="large"
-              className="w-full"
-              type="submit"
-              disabled={!isValid}
+    <>
+      <AuthCard title="프로필 만들기">
+        <div className="flex w-[25.125rem] flex-col items-center">
+          <FormProvider {...methods}>
+            <form
+              onSubmit={methods.handleSubmit(onSubmit)}
+              noValidate
+              className="flex w-full flex-col gap-[1.5rem]"
             >
-              완료
-            </Button>
-          </form>
-        </FormProvider>
-      </div>
-    </AuthCard>
+              <div className="mx-auto">
+                <Controller
+                  name="image"
+                  control={control}
+                  render={({ field }) => (
+                    <ProfileImageUpload
+                      imageFile={field.value}
+                      onFileChange={field.onChange}
+                      profileSize={128}
+                      editIconSize={41}
+                      offsetX={80}
+                      offsetY={40}
+                    />
+                  )}
+                />
+              </div>
+
+              <Input
+                name="nickname"
+                type="text"
+                label="닉네임"
+                placeholder="닉네임을 입력해주세요."
+                rules={{
+                  required: '닉네임은 필수 입력입니다.',
+                }}
+              />
+
+              <div className="flex flex-col gap-4">
+                {tagSections.map(
+                  ({ key, label, tags, initialSelected, onChange }) => (
+                    <TagSection
+                      key={key}
+                      label={label}
+                      tags={tags}
+                      initialSelected={initialSelected}
+                      onChange={onChange}
+                    />
+                  ),
+                )}
+              </div>
+
+              <Button
+                variant="solid"
+                size="large"
+                className="w-full"
+                type="submit"
+                disabled={!isValid}
+              >
+                완료
+              </Button>
+            </form>
+          </FormProvider>
+        </div>
+      </AuthCard>
+      {missingInfoModalOpen && (
+        <ModalInteraction
+          message={`이전 단계 정보를 확인할 수 없어\n다시 입력이 필요합니다.`}
+          onClose={() => {
+            setMissingInfoModalOpen(false);
+            router.replace('/signup/step1');
+          }}
+          onConfirm={() => {
+            setMissingInfoModalOpen(false);
+            router.replace('/signup/step1');
+          }}
+          isShowCancel={false}
+        />
+      )}
+    </>
   );
 }

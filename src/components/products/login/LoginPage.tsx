@@ -5,6 +5,7 @@ import AuthCard from '@/components/commons/AuthCard';
 import Input from '@/components/commons/Input';
 import Button from '@/components/commons/Button';
 import { useLoginMutation } from '@/hooks/queries/auth/useLoginMutaion';
+import { useToastStore } from '@/stores/useToastStore';
 
 interface FormValues {
   email: string;
@@ -27,6 +28,7 @@ export default function LoginPage() {
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     await mutateAsync(data);
+    useToastStore.getState().show('로그인 성공!');
     router.push('/');
     reset();
   };
