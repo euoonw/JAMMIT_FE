@@ -8,7 +8,7 @@ import { formatDateToKoreanStyle } from '@/utils/formatDate';
 import { useDeleteGatheringMutation } from '@/hooks/queries/gatherings/useDeleteGatheringMutation';
 import { useRouter } from 'next/navigation';
 import { GatheringCard } from '@/types/card';
-import Like from '@/components/commons/Like';
+import Like from '@/components/commons/Card/Like';
 import ShareIcon from '@/assets/icons/ic_share.svg';
 import ShareLinkModal from './ShareLinkModal';
 import { useState } from 'react';
