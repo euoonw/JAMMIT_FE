@@ -4,7 +4,7 @@ import DefaultProfile from '@/assets/icons/ic_default_profile.svg';
 import EditIcon from '@/assets/icons/ic_edit.svg';
 
 interface ProfileImageUploadProps {
-  imageFile?: File | null;
+  imageFile?: File | string | null;
   onFileChange: (file: File) => void;
   className?: string;
   profileSize?: number;
@@ -25,14 +25,20 @@ export default function ProfileImageUpload({
   const [preview, setPreview] = useState<string | null>(null);
 
   useEffect(() => {
-    if (imageFile) {
-      const objectUrl = URL.createObjectURL(imageFile);
-      setPreview(objectUrl);
-
-      return () => URL.revokeObjectURL(objectUrl);
-    } else {
+    if (!imageFile) {
       setPreview(null);
+      return;
     }
+
+    if (typeof imageFile === 'string') {
+      setPreview(imageFile);
+      return;
+    }
+
+    const objectUrl = URL.createObjectURL(imageFile);
+    setPreview(objectUrl);
+
+    return () => URL.revokeObjectURL(objectUrl);
   }, [imageFile]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {

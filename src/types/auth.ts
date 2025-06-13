@@ -6,6 +6,7 @@ export interface SignupRequest {
   username: string;
   password: string;
   nickname: string;
+  profileImagePath: string;
   preferredGenres: Genre[];
   preferredBandSessions: BandSession[];
 }

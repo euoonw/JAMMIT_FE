@@ -81,7 +81,7 @@ export default function MemberList({
               nickname={member.userNickname}
               session={member.bandSession}
               introduction={member.introduction}
-              // profileImage={member.profileImage}
+              profileImage={member.profileImagePath}
               selected={selectedIds.includes(member.participantId)}
               onSelectChange={handleSelectChange}
               isSelectable={isSelectable}

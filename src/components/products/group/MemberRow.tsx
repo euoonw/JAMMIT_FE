@@ -1,11 +1,9 @@
 'use client';
-import Image from 'next/image';
 
 import Checkbox from '@/assets/icons/ic_checkbox.svg';
 import CheckboxEmpty from '@/assets/icons/ic_checkbox_empty.svg';
-import DefaultProfile from '@/assets/icons/ic_default_profile.svg';
-import { useMemo } from 'react';
 import { SESSION_ENUM_TO_KR } from '@/constants/tagsMapping';
+import ProfileImage from '@/components/commons/ProfileImage';
 
 interface MemberRowProps {
   id: number;
@@ -14,7 +12,7 @@ interface MemberRowProps {
   nickname: string;
   session: string;
   introduction: string;
-  profileImage?: File | null;
+  profileImage?: string | null;
   isSelectable?: boolean;
 }
 
@@ -28,10 +26,7 @@ export default function MemberRow({
   profileImage = null,
   isSelectable = true,
 }: MemberRowProps) {
-  const profileImageUrl = useMemo(() => {
-    return profileImage ? URL.createObjectURL(profileImage) : null;
-  }, [profileImage]);
-
+  console.log(`memberow id: ${id} profileimg: ${profileImage}`);
   return (
     <div>
       <div className="my-[0.75rem] flex items-center gap-[1.25rem] px-[1.0625rem]">
@@ -42,16 +37,7 @@ export default function MemberRow({
         ) : (
           <div className="w-[1rem]" />
         )}
-        {profileImageUrl ? (
-          <Image
-            src={profileImageUrl}
-            alt="프로필 사진"
-            width={48}
-            height={48}
-          />
-        ) : (
-          <DefaultProfile alt="기본 프로필 사진" width="3rem" height="3rem" />
-        )}
+        <ProfileImage src={profileImage} size={3} />
 
         <div className="w-[8.6875rem] underline underline-offset-2">
           {nickname}

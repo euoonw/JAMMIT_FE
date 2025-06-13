@@ -24,7 +24,6 @@ export const signup = async (signupRequest: SignupRequest): Promise<void> => {
 export const logout = async (): Promise<void> => {
   useUserStore.getState().clearUser();
   tokenService.clearAllTokens();
-  queryClient.invalidateQueries({ queryKey: ['me'] });
 };
 
 export const refreshAccessToken = async (): Promise<void> => {

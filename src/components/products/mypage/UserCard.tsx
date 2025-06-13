@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import DefaultProfileImage from '@/assets/icons/ic_default_profile.svg';
 import EditIcon from '@/assets/icons/ic_edit.svg';
 import ModalEdit from '@/components/commons/Modal/ModalEdit';
 import { useUpdateProfile } from '@/hooks/queries/user/useUpdateProfile';
@@ -10,10 +9,14 @@ import { useUserStore } from '@/stores/useUserStore';
 import { EditFormData } from '@/types/modal';
 import { BandSession, Genre } from '@/types/tags';
 import { SESSION_ENUM_TO_KR, GENRE_ENUM_TO_KR } from '@/constants/tagsMapping';
+import ProfileImage from '@/components/commons/ProfileImage';
+import { useUpdateProfileImage } from '@/hooks/queries/user/useUpdateProfileImage';
+import { useToastStore } from '@/stores/useToastStore';
 
 export default function UserCard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const updateProfile = useUpdateProfile();
+  const updateProfileImage = useUpdateProfileImage();
   const { data: user, isLoading } = useUserMeQuery();
   const { user: storeUser, setUser } = useUserStore();
 
@@ -36,9 +39,24 @@ export default function UserCard() {
     setIsModalOpen(false);
   };
 
-  const handleModalSubmit = (data: EditFormData) => {
+  const handleModalSubmit = async (data: EditFormData) => {
+    const imageUrl =
+      typeof data.image === 'string' ? data.image : user.profileImagePath;
+
     updateProfile.mutate(data, {
       onSuccess: () => {
+        updateProfileImage.mutate(
+          {
+            orgFileName: 'profile.jpg',
+            profileImagePath: imageUrl,
+          },
+          {
+            onSuccess: () => {
+              useToastStore.getState().show('프로필 수정이 완료되었습니다!');
+            },
+          },
+        );
+
         const updatedUser = {
           ...displayUser,
           username: data.username,
@@ -55,7 +73,7 @@ export default function UserCard() {
     <>
       <div className="flex h-[15.625rem] w-[full] items-center justify-center gap-[3.3125rem] bg-[#36114E]">
         <div>
-          <DefaultProfileImage width={128} height={128} />
+          <ProfileImage src={user.profileImagePath} size={8} />
         </div>
         <div className="flex flex-col text-gray-100">
           <div className="flex items-center gap-[0.625rem]">
@@ -105,10 +123,11 @@ export default function UserCard() {
             email: displayUser.email,
             password: null,
             username: displayUser.username,
-            // image: displayUser.profileImagePath,
+            image: displayUser.profileImagePath,
             preferredBandSessions: displayUser.preferredBandSessions,
             preferredGenres: displayUser.preferredGenres,
           }}
+          userId={displayUser.id}
         />
       )}
     </>

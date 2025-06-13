@@ -1,6 +1,5 @@
 'use client';
-import Image from 'next/image';
-import DefaultProfile from '@/assets/icons/ic_default_profile.svg';
+
 import Button from '@/components/commons/Button';
 import { GatheringDetailResponse, Participant } from '@/types/gathering';
 import { SESSION_ENUM_TO_KR } from '@/constants/tagsMapping';
@@ -10,6 +9,7 @@ import ModalReview from '@/components/commons/Modal/ModalReview';
 import { ReviewField, tagToFieldMap } from '@/constants/review';
 import { usePostReviewMutation } from '@/hooks/queries/review/usePostReviewMutation';
 import { useUserStore } from '@/stores/useUserStore';
+import ProfileImage from '@/components/commons/ProfileImage';
 
 interface ParticipantsSectionProps {
   gathering: GatheringDetailResponse;
@@ -21,7 +21,6 @@ export default function ParticipantsSection({
   participants,
 }: ParticipantsSectionProps) {
   const user = useUserStore((state) => state.user);
-  const profileImageUrl = null;
 
   const isParticipating = participants.some(
     (participant) => participant.userId === user?.id,
@@ -81,24 +80,11 @@ export default function ParticipantsSection({
           bandSession,
           introduction,
           userId,
+          profileImagePath,
         }) => (
           <div key={participantId}>
             <div className="my-[0.75rem] flex items-center gap-[1.25rem]">
-              {profileImageUrl ? (
-                <Image
-                  src={profileImageUrl}
-                  alt="프로필 사진"
-                  width={48}
-                  height={48}
-                  className="rounded-full"
-                />
-              ) : (
-                <DefaultProfile
-                  alt="기본 프로필 사진"
-                  width="3rem"
-                  height="3rem"
-                />
-              )}
+              <ProfileImage src={profileImagePath} size={3} />
 
               <div className="w-[8.6875rem] underline underline-offset-2">
                 {userNickname}

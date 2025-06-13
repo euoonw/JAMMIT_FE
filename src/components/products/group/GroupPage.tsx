@@ -88,10 +88,11 @@ export default function GroupPage() {
     (participant) => participant.status === 'COMPLETED',
   );
 
-  const isParticipating = pendingParticipants.some(
-    (participant) => participant.userId === user?.id,
-  );
-
+  const isParticipating =
+    pendingParticipants.some(
+      (participant) => participant.userId === user?.id,
+    ) ||
+    approvedParticipants.some((participant) => participant.userId === user?.id);
   const currentUserParticipation = pendingParticipants.find(
     (participant) => participant.userId === user?.id,
   );
@@ -185,7 +186,9 @@ export default function GroupPage() {
 
   return (
     <GroupPageLayout
-      participantsNumber={approvedParticipants.length}
+      participantsNumber={
+        isCompleted ? completedParticipants.length : approvedParticipants.length
+      }
       banner={
         <div className="relative h-[22rem] w-full overflow-hidden rounded-[0.5rem]">
           <Image

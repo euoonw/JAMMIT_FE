@@ -39,6 +39,7 @@ export interface Participant {
   status: ParticipantStatus;
   createdAt: string;
   introduction: string;
+  profileImagePath: string;
 }
 
 export interface ParticipantsResponse {
