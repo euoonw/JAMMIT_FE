@@ -8,7 +8,6 @@ import { getDate } from '@/utils/date';
 import { imgChange } from '@/utils/imgChange';
 import Image from 'next/image';
 import Link from 'next/link';
-import SkeletonReviewList from './SkeletonReviewList';
 
 export default function ReviewList() {
   const { data, fetchNextPage, hasNextPage, isFetching } =
@@ -20,8 +19,6 @@ export default function ReviewList() {
 
   return (
     <InfinityScroll
-      skeletonItem={() => <SkeletonReviewList />}
-      skeletonCount={3}
       className="flex flex-auto"
       variant="list"
       list={flatData}
