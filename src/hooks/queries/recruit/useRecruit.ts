@@ -1,5 +1,5 @@
 import { RecruitResponse } from '@/types/recruit';
-import { QueryClient, useSuspenseInfiniteQuery } from '@tanstack/react-query';
+import { QueryClient, useInfiniteQuery } from '@tanstack/react-query';
 
 interface CommonQueryParams<T> {
   key: string;
@@ -23,7 +23,7 @@ export const useCommonInfiniteQuery = <T>({
   fetchFn,
   sort,
 }: CommonQueryParams<T>) => {
-  return useSuspenseInfiniteQuery({
+  return useInfiniteQuery({
     queryKey: [key, { ...variables, includeCanceled }] as [
       string,
       T & { includeCanceled: boolean },

@@ -16,5 +16,7 @@ export async function getReview({
   const params = new URLSearchParams();
   params.append('page', pageParam.toString());
   params.append('size', size.toString());
-  return await apiClient.get(`/review/received?${params.toString()}`);
+  return await apiClient.get<ReviewResponse>(
+    `/review/received?${params.toString()}`,
+  );
 }

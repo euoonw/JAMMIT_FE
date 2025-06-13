@@ -15,15 +15,16 @@ import {
 } from '@/assets/images/received';
 import { REVIEW_METRICS } from '@/constants/review';
 import { getStatus } from '@/lib/review/received';
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import clsx from 'clsx';
+import SkeletonStatus from './SkeletonStatus';
 
 export default function ReviewStatus() {
-  const { data } = useSuspenseQuery({
+  const { data } = useQuery({
     queryKey: ['getStatus'],
     queryFn: getStatus,
   });
-
+  if (!data) return <SkeletonStatus />;
   // 차트 변환
   const max = Math.max(
     ...REVIEW_METRICS.map((item) => data[item.countKey] ?? 0),

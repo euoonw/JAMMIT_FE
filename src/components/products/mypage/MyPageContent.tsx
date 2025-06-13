@@ -1,16 +1,16 @@
 'use client';
 
-import clsx from 'clsx';
-import { useMemo, useState } from 'react';
-import { useQueryTab } from '@/hooks/useQueryTab';
 import UserCard from '@/components/products/mypage/UserCard';
-import ParticipatingList from '@/components/products/mypage/gather/ParticipatingList';
 import CreatedList from '@/components/products/mypage/gather/CreatedList';
+import ParticipatingList from '@/components/products/mypage/gather/ParticipatingList';
 import ReviewsReceived from '@/components/products/mypage/review/ReviewsReceived';
 import ReviewsToWrite from '@/components/products/mypage/towrite/ReviewsToWrite';
+import { useCreatedCount } from '@/hooks/queries/gather/useGatherMeCreate';
 import { useReviewToWriteInfiniteQuery } from '@/hooks/queries/review/useReviewInfiniteQuery';
 import { useReviewInfiniteQuery } from '@/hooks/queries/review/useSuspenseReview';
-import { useCreatedCount } from '@/hooks/queries/gather/useGatherMeCreate';
+import { useQueryTab } from '@/hooks/useQueryTab';
+import clsx from 'clsx';
+import { useMemo, useState } from 'react';
 
 type TabKey =
   | 'participating'
@@ -65,14 +65,14 @@ export default function MyPage() {
         component: <ReviewsToWrite />,
       },
     ],
-    [participatingCount, createdCount, reviewCount, writeCount],
+    [participatingCount, createdCount, writeCount, reviewCount],
   );
 
   const tabClass = (isActive: boolean) =>
     clsx(
       'text-[1rem]',
       isActive
-        ? 'text-gray-100 underline decoration-purple-700 decoration-[3px] underline-offset-[6px]'
+        ? 'relative after:absolute after:left-0 after:-bottom-[8px] after:h-[2px] after:w-full after:bg-[var(--purple-500)]'
         : 'text-gray-400 cursor-pointer',
     );
 
@@ -88,7 +88,7 @@ export default function MyPage() {
         className={clsx(
           'flex items-center gap-[0.25rem]',
           tabClass(isActive),
-          isActive ? 'text-purple-500' : 'text-gray-400',
+          isActive ? 'text-[var(--purple-500)]' : 'text-gray-400',
         )}
       >{`${label} ${count}`}</button>
     </div>
@@ -97,7 +97,7 @@ export default function MyPage() {
   return (
     <main className="min-h-screen bg-[#212121] pb-[3.75rem]">
       <UserCard />
-      <div className="mx-auto flex h-[4.625rem] w-[84rem] gap-[1.25rem]">
+      <div className="mx-auto my-10 flex w-[84rem] gap-[1.25rem]">
         {tabList.map(({ key, label, count }) =>
           renderTabButton(key as TabKey, label, count, activeTab === key),
         )}

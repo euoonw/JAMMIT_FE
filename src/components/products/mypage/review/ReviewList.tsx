@@ -8,13 +8,14 @@ import { getDate } from '@/utils/date';
 import { imgChange } from '@/utils/imgChange';
 import Image from 'next/image';
 import Link from 'next/link';
+import SkeletonReviewList from './SkeletonReviewList';
 
 export default function ReviewList() {
   const { data, fetchNextPage, hasNextPage, isFetching } =
     useReviewInfiniteQuery({
       size: 8,
     });
-
+  if (!data) return <SkeletonReviewList />;
   const flatData = data?.pages.flatMap((page) => page.content) ?? [];
 
   return (

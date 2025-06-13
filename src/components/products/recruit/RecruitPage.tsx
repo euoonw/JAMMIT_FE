@@ -1,7 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import CardItem from '@/components/commons/Card/CardItem';
 import InfinityScroll from '@/components/commons/InfinityScroll';
 import RecruitHeader from '@/components/commons/RecruitHeader';
@@ -11,6 +9,8 @@ import { useCommonInfiniteQuery } from '@/hooks/queries/recruit/useRecruit';
 import { getRecruit } from '@/lib/recruit/recruit';
 import { RecruitPageProps } from '@/types/recruit';
 import { BandSession, Genre } from '@/types/tags';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function RecruitPage({
   defaultGenres,

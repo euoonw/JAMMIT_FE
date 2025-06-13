@@ -15,7 +15,7 @@ export async function getReviewWrite({
   params.append('includeCanceled', includeCanceled.toString());
   params.append('page', pageParam.toString());
   params.append('size', size.toString());
-  return await apiClient.get(
+  return await apiClient.get<RecruitResponse>(
     `/gatherings/{gatheringId}/participants/my?${params.toString()}`,
   );
 }

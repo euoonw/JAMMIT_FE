@@ -100,7 +100,7 @@ export default function InfinityScroll<T>({
         }}
         itemContent={(index) => item(list[index])}
       />
-      {hasMore && <div ref={observerRef} className="h-10 w-full" />}
+      {hasMore ? <div ref={observerRef} className="h-10 w-full" /> : null}
     </Fragment>
   );
 }
