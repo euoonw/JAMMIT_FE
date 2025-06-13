@@ -4,6 +4,8 @@ import { BandSession, Genre } from './tags';
 export interface RecruitPageProps {
   defaultGenres: Genre[];
   defaultSessions: BandSession[];
+  showShareModal?: boolean;
+  shareGroupId?: string;
 }
 
 export interface RecruitResponse {

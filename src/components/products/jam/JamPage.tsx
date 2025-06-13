@@ -66,7 +66,11 @@ export default function JamPage({
       });
       router.push(`/group/${groupId}`);
     } else {
-      registerGathering(data);
+      registerGathering(data, {
+        onSuccess: (response) => {
+          router.push(`/?showShareModal=true&groupId=${response.id}`);
+        },
+      });
     }
   };
 

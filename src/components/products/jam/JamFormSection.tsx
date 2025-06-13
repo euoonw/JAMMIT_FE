@@ -125,10 +125,12 @@ export default function JamFormSection({
 
   const handleTagChange = useCallback(
     (selectedTags: string[]) => {
-      const convertedTags = selectedTags
-        .map((tag) => GENRE_KR_TO_ENUM[tag])
-        .filter(Boolean) as GenreType[];
-      setValue('genres', convertedTags);
+      setTimeout(() => {
+        const convertedTags = selectedTags
+          .map((tag) => GENRE_KR_TO_ENUM[tag])
+          .filter(Boolean) as GenreType[];
+        setValue('genres', convertedTags);
+      }, 0);
     },
     [setValue],
   );
