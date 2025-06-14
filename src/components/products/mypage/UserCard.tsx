@@ -80,7 +80,11 @@ export default function UserCard() {
             <p className="text-[1.5rem] leading-[2.4rem] font-bold">
               {displayUser.username}
             </p>
-            <button type="submit" onClick={handleProfileEdit}>
+            <button
+              type="submit"
+              onClick={handleProfileEdit}
+              aria-label="수정 버튼"
+            >
               <EditIcon width={18} height={18} />
             </button>
           </div>

@@ -5,6 +5,7 @@ import {
   RegisterGatheringsRequest,
   RegisterGatheringsResponse,
 } from '@/types/gather';
+import { useToastStore } from '@/stores/useToastStore';
 
 export const useGatherRegister = () => {
   return useMutation<
@@ -14,7 +15,7 @@ export const useGatherRegister = () => {
   >({
     mutationFn: postRegisterGatherings,
     onSuccess: () => {
-      alert('모임이 성공적으로 생성되었습니다.');
+      useToastStore.getState().show('모임이 성공적으로 생성되었습니다.');
     },
     onError: (error) => {
       handleAuthApiError(error, '모임생성에 실패했습니다.');

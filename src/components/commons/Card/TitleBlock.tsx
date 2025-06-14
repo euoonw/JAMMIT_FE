@@ -11,9 +11,7 @@ export default function TitleBlock({ title, author }: TitleBlockProps) {
       <div className="mt-5 truncate text-lg leading-none font-semibold">
         {title}
       </div>
-      <div className="mt-5 leading-none text-[color:var(--gray-50)]">
-        {author}
-      </div>
+      <div className="mt-5 leading-none text-gray-300">{author}</div>
     </>
   );
 }

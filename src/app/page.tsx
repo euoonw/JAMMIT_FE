@@ -7,6 +7,13 @@ import {
   HydrationBoundary,
   QueryClient,
 } from '@tanstack/react-query';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'JAMMIT - 밴드 모임 플랫폼 | 홈',
+  description:
+    'JAMMIT에서 밴드원을 찾고, 모임을 만들고, 음악을 공유하세요. 다양한 밴드 모임을 둘러보고 참여해보세요.',
+};
 
 interface HomeProps {
   searchParams: Promise<{
