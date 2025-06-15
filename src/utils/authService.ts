@@ -34,7 +34,8 @@ export const refreshAccessToken = async (): Promise<void> => {
   try {
     const refreshToken = tokenService.getRefreshToken();
     if (!refreshToken) {
-      throw new Error('No refresh token');
+      store.clearUser();
+      tokenService.clearAllTokens();
     }
 
     const { accessToken } = await apiClient.post<{ accessToken: string }>(
