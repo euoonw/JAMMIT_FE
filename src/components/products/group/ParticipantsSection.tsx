@@ -10,17 +10,23 @@ import { ReviewField, tagToFieldMap } from '@/constants/review';
 import { usePostReviewMutation } from '@/hooks/queries/review/usePostReviewMutation';
 import { useUserStore } from '@/stores/useUserStore';
 import ProfileImage from '@/components/commons/ProfileImage';
+import { ReviewItem } from '@/types/review';
+import ModalInteraction from '@/components/commons/Modal/ModalInteraction';
 
 interface ParticipantsSectionProps {
   gathering: GatheringDetailResponse;
   participants: Participant[];
+  writtenReviews: ReviewItem[] | undefined;
 }
 
 export default function ParticipantsSection({
   gathering,
   participants,
+  writtenReviews,
 }: ParticipantsSectionProps) {
+  const [successModalOpen, setSuccessModalOpen] = useState(false);
   const user = useUserStore((state) => state.user);
+  const isHost = user?.id === gathering.creator.id;
 
   const isParticipating = participants.some(
     (participant) => participant.userId === user?.id,
@@ -59,7 +65,12 @@ export default function ParticipantsSection({
       ...tagFields,
     };
 
-    reviewMutation.mutate(reviewData);
+    reviewMutation.mutate(reviewData, {
+      onSuccess: () => {
+        handleCloseReviewModal();
+        setSuccessModalOpen(true);
+      },
+    });
     handleCloseReviewModal();
   };
 
@@ -71,9 +82,7 @@ export default function ParticipantsSection({
       </div>
 
       <div className="group-info-divider-line" />
-
       {participants.map(
-        // TODO: API 수정되면 프로필 이미지 설정 추가
         ({
           participantId,
           userNickname,
@@ -81,47 +90,73 @@ export default function ParticipantsSection({
           introduction,
           userId,
           profileImagePath,
-        }) => (
-          <div key={participantId}>
-            <div className="my-[0.75rem] flex items-center gap-[1.25rem]">
-              <ProfileImage src={profileImagePath} size={3} />
+        }) => {
+          const hasWrittenReview = writtenReviews?.some(
+            (review) =>
+              review.revieweeId === userId &&
+              review.gatheringId === gathering.id,
+          );
 
-              <div className="w-[8.6875rem] underline underline-offset-2">
-                {userNickname}
-              </div>
+          return (
+            <div key={participantId}>
+              <div className="my-[0.75rem] flex items-center gap-[1.25rem]">
+                <ProfileImage src={profileImagePath} size={3} />
 
-              <div className="flex w-[10.4375rem] gap-[0.25rem]">
-                <div className="rounded-[0.5rem] bg-[#34343A] px-[0.75rem] py-[0.375rem] text-gray-100">
-                  {SESSION_ENUM_TO_KR[bandSession]}
+                <div className="w-[8.6875rem] underline underline-offset-2">
+                  {userNickname}
                 </div>
-              </div>
 
-              <div
-                className={clsx(
-                  'line-clamp-2 overflow-hidden text-ellipsis',
-                  isCompleted ? 'w-[20.375rem]' : 'w-[29.375rem]',
-                )}
-              >
-                {introduction}
-              </div>
-              {isCompleted && user?.id !== userId && isParticipating && (
-                <Button
-                  className="w-[124px]"
-                  onClick={() => handleOpenReviewModal(userId, userNickname)}
+                <div className="flex w-[10.4375rem] gap-[0.25rem]">
+                  <div className="rounded-[0.5rem] bg-[#34343A] px-[0.75rem] py-[0.375rem] text-gray-100">
+                    {SESSION_ENUM_TO_KR[bandSession]}
+                  </div>
+                </div>
+
+                <div
+                  className={clsx(
+                    'line-clamp-2 overflow-hidden text-ellipsis',
+                    isCompleted ? 'w-[20.375rem]' : 'w-[29.375rem]',
+                  )}
                 >
-                  리뷰 쓰기
-                </Button>
-              )}
+                  {introduction}
+                </div>
+
+                {isCompleted &&
+                  user?.id !== userId &&
+                  (isParticipating || isHost) &&
+                  (hasWrittenReview ? (
+                    <Button disabled className="w-[124px]">
+                      리뷰 작성 완료
+                    </Button>
+                  ) : (
+                    <Button
+                      className="w-[124px]"
+                      onClick={() =>
+                        handleOpenReviewModal(userId, userNickname)
+                      }
+                    >
+                      리뷰 쓰기
+                    </Button>
+                  ))}
+              </div>
+              <div className="border-b-[0.0625rem] border-[#2D3035]" />
             </div>
-            <div className="border-b-[0.0625rem] border-[#2D3035]" />
-          </div>
-        ),
+          );
+        },
       )}
       {selectedParticipant && (
         <ModalReview
           onCancel={handleCloseReviewModal}
           onSubmit={handleSubmitReview}
           revieweeNickname={selectedParticipant.nickname}
+        />
+      )}
+      {successModalOpen && (
+        <ModalInteraction
+          message="리뷰가 작성되었습니다!"
+          onConfirm={() => setSuccessModalOpen(false)}
+          onClose={() => setSuccessModalOpen(false)}
+          isShowCancel={false}
         />
       )}
     </section>

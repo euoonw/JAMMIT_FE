@@ -20,6 +20,7 @@ export default function MemberInfoSection({
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const approveMutation = useApproveParticipantMutation();
   const rejectMutation = useRejectParticipantMutation();
+  const isRecruiting = gathering.status === 'RECRUITING';
 
   const handleAccept = async () => {
     await Promise.all(
@@ -69,24 +70,26 @@ export default function MemberInfoSection({
         />
       </section>
 
-      <div className="ml-[1.25rem] flex flex-col gap-[1.25rem]">
-        <Button
-          variant="solid"
-          className="w-[22.75rem]"
-          onClick={handleAccept}
-          disabled={selectedIds.length === 0}
-        >
-          {selectedIds.length}명 수락
-        </Button>
-        <Button
-          variant="outline"
-          className="w-[22.75rem]"
-          onClick={handleReject}
-          disabled={selectedIds.length === 0}
-        >
-          {selectedIds.length}명 거절
-        </Button>
-      </div>
+      {isRecruiting && (
+        <div className="ml-[1.25rem] flex flex-col gap-[1.25rem]">
+          <Button
+            variant="solid"
+            className="w-[22.75rem]"
+            onClick={handleAccept}
+            disabled={selectedIds.length === 0}
+          >
+            {selectedIds.length}명 수락
+          </Button>
+          <Button
+            variant="outline"
+            className="w-[22.75rem]"
+            onClick={handleReject}
+            disabled={selectedIds.length === 0}
+          >
+            {selectedIds.length}명 거절
+          </Button>
+        </div>
+      )}
     </>
   );
 }

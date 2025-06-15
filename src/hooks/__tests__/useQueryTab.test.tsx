@@ -8,11 +8,11 @@ jest.mock('next/navigation', () => ({
 }));
 
 describe('useQueryTab 훅 테스트', () => {
-  const push = jest.fn();
+  const replace = jest.fn();
 
   beforeEach(() => {
-    (useRouter as jest.Mock).mockReturnValue({ push });
-    push.mockClear();
+    (useRouter as jest.Mock).mockReturnValue({ replace });
+    replace.mockClear();
   });
 
   test('기본값을 반환해야 한다 (쿼리 없음)', () => {
@@ -68,6 +68,6 @@ describe('useQueryTab 훅 테스트', () => {
       result.current.setTab('profile');
     });
 
-    expect(push).toHaveBeenCalledWith('?tab=profile');
+    expect(replace).toHaveBeenCalledWith('?tab=profile');
   });
 });

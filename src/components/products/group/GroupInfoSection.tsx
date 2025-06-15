@@ -37,9 +37,7 @@ export default function GroupInfoSection({
     id,
   } = gathering;
 
-  const isCanceled = status === 'CANCELED';
-  const isHostAndActive = isHost && !isCanceled;
-  const isCompleted = status === 'COMPLETED';
+  const isRecruiting = status == 'RECRUITING';
 
   const deleteMutation = useDeleteGatheringMutation();
 
@@ -149,7 +147,7 @@ export default function GroupInfoSection({
       </section>
 
       <div className="ml-[1.25rem]">
-        {!isCompleted && isHostAndActive && (
+        {isRecruiting && isHost && (
           <div className="flex flex-col gap-[1.25rem]">
             {actionButtons.map(({ label, variant, onClick }) => (
               <Button

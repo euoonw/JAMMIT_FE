@@ -5,6 +5,7 @@ import { postSignup } from '@/lib/auth/signup';
 import { queryClient } from '@/lib/react-query';
 import { apiClient } from './apiClient';
 import { useUserStore } from '@/stores/useUserStore';
+import { useErrorModalStore } from '@/stores/useErrorModalStore';
 
 export const login = async (loginRequest: LoginRequest): Promise<void> => {
   const result = await postLogin(loginRequest);
@@ -27,14 +28,29 @@ export const logout = async (): Promise<void> => {
 };
 
 export const refreshAccessToken = async (): Promise<void> => {
-  const refreshToken = tokenService.getRefreshToken();
-  if (!refreshToken) return;
+  const store = useUserStore.getState();
+  store.startRefresh();
 
-  const { accessToken } = await apiClient.post<{ accessToken: string }>(
-    '/auth/refresh',
-    { refreshToken },
-  );
+  try {
+    const refreshToken = tokenService.getRefreshToken();
+    if (!refreshToken) {
+      throw new Error('No refresh token');
+    }
 
-  tokenService.setAccessToken(accessToken);
-  queryClient.invalidateQueries({ queryKey: ['me'] });
+    const { accessToken } = await apiClient.post<{ accessToken: string }>(
+      '/auth/refresh',
+      { refreshToken },
+    );
+
+    tokenService.setAccessToken(accessToken);
+    queryClient.invalidateQueries({ queryKey: ['me'] });
+  } catch {
+    useErrorModalStore
+      .getState()
+      .open('세션이 만료되었습니다. 다시 로그인 해주세요.');
+    tokenService.clearAllTokens();
+    store.clearUser();
+  } finally {
+    store.endRefresh();
+  }
 };

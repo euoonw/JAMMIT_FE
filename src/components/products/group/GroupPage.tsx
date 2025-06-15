@@ -18,6 +18,8 @@ import { SESSION_KR_TO_ENUM } from '@/constants/tagsMapping';
 import { useCancelParticipateGatheringMutation } from '@/hooks/queries/gatherings/useCancelParticipateGathering';
 import { imgChange } from '@/utils/imgChange';
 import { useRouter } from 'next/navigation';
+import { useWrittenReviewsQuery } from '@/hooks/queries/review/useWrittenReviewsQuery';
+import ModalInteraction from '@/components/commons/Modal/ModalInteraction';
 
 export default function GroupPage() {
   const router = useRouter();
@@ -27,20 +29,22 @@ export default function GroupPage() {
     'recruit',
     'members',
   ]);
-  const user = useUserStore((state) => state.user);
+  const { user, isLoaded, isRefreshing } = useUserStore();
+  const isGatheringParticipantsQueryReady = isLoaded && !isRefreshing && !!user;
+
   const { groupId } = useParams();
   const numericId = Number(groupId);
   const [showParticipationForm, setShowParticipationForm] = useState(false);
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
 
   useEffect(() => {
-    if (activeTab === 'members' && !user) {
-      alert('로그인 후 이용 가능한 기능입니다.');
-      router.push('/login');
-      const newParams = new URLSearchParams(searchParams.toString());
-      newParams.set('tab', 'recruit');
-      router.replace(`?${newParams.toString()}`);
+    if (!isLoaded) {
+      return;
     }
-  }, [activeTab, user, router, searchParams]);
+    if (activeTab === 'members' && !user) {
+      setLoginModalOpen(true);
+    }
+  }, [activeTab, user, router, searchParams, isLoaded]);
 
   const {
     data: gatheringDetailData,
@@ -53,7 +57,17 @@ export default function GroupPage() {
     isLoading: isParticipantsLoading,
     error: participantsError,
   } = useGatheringParticipantsQuery(numericId, {
-    enabled: !!user,
+    enabled: isGatheringParticipantsQueryReady,
+  });
+
+  const isWrittenReviewsQueryReady = isGatheringParticipantsQueryReady;
+
+  const {
+    data: writtenReviewsData,
+    isLoading: isWrittenReviewLoading,
+    error: wittenReviewError,
+  } = useWrittenReviewsQuery({
+    enabled: isWrittenReviewsQueryReady,
   });
 
   const participateMutation = useParticipateGatheringMutation();
@@ -64,19 +78,37 @@ export default function GroupPage() {
   if (error) return <div>에러 발생</div>;
   if (!gatheringDetailData) return <div>모임 정보를 찾을 수 없습니다.</div>;
 
-  if (activeTab === 'members' && user && isParticipantsLoading)
-    return <div>로딩 중...</div>;
-  if (activeTab === 'members' && user && participantsError)
-    return <div>에러 발생</div>;
-  if (activeTab === 'members' && user && !participantsData)
-    return <div>모임 정보를 찾을 수 없습니다.</div>;
+  if (activeTab === 'members') {
+    if (!user) {
+    } else {
+      if (isParticipantsLoading || isWrittenReviewLoading)
+        return <div>로딩 중...</div>;
+
+      if (participantsError || wittenReviewError) return <div>에러 발생</div>;
+
+      if (!participantsData)
+        return <div>모임 참가자 정보를 찾을 수 없습니다.</div>;
+    }
+  }
 
   const isHost = user?.id === gatheringDetailData.creator.id;
+
+  const isRecruiting = gatheringDetailData.status === 'RECRUITING';
   const isCanceled = gatheringDetailData.status === 'CANCELED';
   const isCompleted = gatheringDetailData.status === 'COMPLETED';
   const isConfirmed = gatheringDetailData.status === 'CONFIRMED';
 
   const participants = participantsData?.participants ?? [];
+
+  const myParticipant = participants.find(
+    (participant) => participant.userId === user?.id,
+  );
+  const myParticipantStatus = myParticipant?.status ?? null;
+  const isMyParticipantPending = myParticipantStatus === 'PENDING';
+  const isMyParticipantApproved = myParticipantStatus === 'APPROVED';
+  const isMyParticipantRejected = myParticipantStatus === 'REJECTED';
+  const myParticipantId = myParticipant?.participantId;
+  console.log('my status: ', myParticipantStatus);
 
   const approvedParticipants = participants.filter(
     (participant) => participant.status === 'APPROVED',
@@ -93,11 +125,6 @@ export default function GroupPage() {
       (participant) => participant.userId === user?.id,
     ) ||
     approvedParticipants.some((participant) => participant.userId === user?.id);
-  const currentUserParticipation = pendingParticipants.find(
-    (participant) => participant.userId === user?.id,
-  );
-
-  const myParticipantId = currentUserParticipation?.participantId;
 
   const handleCanceleParticipation = () => {
     if (!myParticipantId) {
@@ -128,96 +155,185 @@ export default function GroupPage() {
     setShowParticipationForm(false);
   };
 
+  type ButtonState =
+    | 'CANCELED'
+    | 'COMPLETED'
+    | 'CONFIRMED_REJECTED'
+    | 'CONFIRMED_APPROVED'
+    | 'CONFIRMED_HOST'
+    | 'CONFIRMED_DEFAULT'
+    | 'RECRUITING_HOST'
+    | 'RECRUITING_PARTICIPATING'
+    | 'RECRUITING_FORM'
+    | 'RECRUITING_JOIN'
+    | 'RECRUITING_REJECTED';
+
+  let buttonState: ButtonState;
+
+  if (isCanceled) {
+    buttonState = 'CANCELED';
+  } else if (isCompleted) {
+    buttonState = 'COMPLETED';
+  } else if (isConfirmed) {
+    if (isMyParticipantRejected || isMyParticipantPending) {
+      buttonState = 'CONFIRMED_REJECTED';
+    } else if (isMyParticipantApproved) {
+      buttonState = 'CONFIRMED_APPROVED';
+    } else if (isHost) {
+      buttonState = 'CONFIRMED_HOST';
+    } else {
+      buttonState = 'CONFIRMED_DEFAULT';
+    }
+  } else if (isRecruiting) {
+    if (isHost) {
+      buttonState = 'RECRUITING_HOST';
+    } else if (isMyParticipantRejected) {
+      buttonState = 'RECRUITING_REJECTED';
+    } else if (isParticipating) {
+      buttonState = 'RECRUITING_PARTICIPATING';
+    } else if (showParticipationForm) {
+      buttonState = 'RECRUITING_FORM';
+    } else {
+      buttonState = 'RECRUITING_JOIN';
+    }
+  }
+
   const renderActionButtons = () => {
-    if (isCanceled) {
-      return (
-        <Button variant="solid" disabled className="w-[22.75rem]">
-          취소된 모임입니다
-        </Button>
-      );
+    switch (buttonState) {
+      case 'CANCELED':
+        return (
+          <Button disabled className="w-[22.75rem]">
+            취소된 모임입니다
+          </Button>
+        );
+      case 'COMPLETED':
+        return (
+          <Button disabled className="w-[22.75rem]">
+            완료된 모임입니다
+          </Button>
+        );
+      case 'CONFIRMED_REJECTED':
+        return (
+          <Button disabled className="w-[22.75rem]">
+            신청 거절된 모임입니다
+          </Button>
+        );
+      case 'CONFIRMED_APPROVED':
+        return (
+          <Button disabled className="w-[22.75rem]">
+            참여 예정인 모임입니다
+          </Button>
+        );
+      case 'CONFIRMED_HOST':
+        return (
+          <Button disabled className="w-[22.75rem]">
+            개설 확정된 모임입니다
+          </Button>
+        );
+      case 'CONFIRMED_DEFAULT':
+        return (
+          <Button disabled className="w-[22.75rem]">
+            모집 마감된 모임입니다
+          </Button>
+        );
+      case 'RECRUITING_PARTICIPATING':
+        return (
+          <div>
+            <Button disabled className="w-[22.75rem]">
+              참여 완료
+            </Button>
+            <button
+              className="mt-[1.125rem] w-full text-center text-[0.9375rem] font-medium text-[#BF5EFF] underline underline-offset-2"
+              onClick={handleCanceleParticipation}
+            >
+              참여 취소
+            </button>
+          </div>
+        );
+      case 'RECRUITING_REJECTED':
+        return (
+          <Button disabled className="w-[22.75rem]">
+            신청 거절된 모임입니다
+          </Button>
+        );
+      case 'RECRUITING_FORM':
+        return (
+          <ParticipationForm
+            gathering={gatheringDetailData}
+            onComplete={handleSubmitParticipation}
+          />
+        );
+      case 'RECRUITING_JOIN':
+        return (
+          <Button
+            variant="solid"
+            className="w-[22.75rem]"
+            onClick={() => setShowParticipationForm(true)}
+            disabled={!user}
+          >
+            함께하기
+          </Button>
+        );
+      default:
+        return null;
     }
+  };
 
-    if (isCompleted || isConfirmed) {
-      return (
-        <Button variant="solid" disabled className="w-[22.75rem]">
-          모집 마감
-        </Button>
-      );
-    }
-
-    if (showParticipationForm) {
-      return (
-        <ParticipationForm
-          gathering={gatheringDetailData}
-          onComplete={handleSubmitParticipation}
-        />
-      );
-    }
-
-    if (isHost) return null;
-
-    if (!isParticipating) {
-      return (
-        <Button
-          variant="solid"
-          className="w-[22.75rem]"
-          onClick={() => setShowParticipationForm(true)}
-          disabled={!user}
-        >
-          함께하기
-        </Button>
-      );
-    }
-
-    return (
-      <div>
-        <Button variant="solid" disabled className="w-[22.75rem]">
-          참여 완료
-        </Button>
-        <button
-          className="mt-[1.125rem] w-full text-center text-[0.9375rem] font-medium text-[#BF5EFF] underline underline-offset-2"
-          onClick={handleCanceleParticipation}
-        >
-          참여 취소
-        </button>
-      </div>
-    );
+  const handleLoginModalClose = () => {
+    setLoginModalOpen(false);
+    router.push('/login');
+    const newParams = new URLSearchParams(searchParams.toString());
+    newParams.set('tab', 'recruit');
+    router.replace(`?${newParams.toString()}`);
   };
 
   return (
-    <GroupPageLayout
-      participantsNumber={
-        isCompleted ? completedParticipants.length : approvedParticipants.length
-      }
-      banner={
-        <div className="relative h-[22rem] w-full overflow-hidden rounded-[0.5rem]">
-          <Image
-            src={imgChange(gatheringDetailData.thumbnail, 'banner')}
-            alt="모임 배너"
-            layout="fill"
-            objectFit="cover"
-            priority
+    <>
+      <GroupPageLayout
+        participantsNumber={
+          isCompleted
+            ? completedParticipants.length
+            : approvedParticipants.length
+        }
+        banner={
+          <div className="relative h-[22rem] w-full overflow-hidden rounded-[0.5rem]">
+            <Image
+              src={imgChange(gatheringDetailData.thumbnail, 'banner')}
+              alt="모임 배너"
+              layout="fill"
+              objectFit="cover"
+              priority
+            />
+          </div>
+        }
+        actionButtons={renderActionButtons()}
+      >
+        {activeTab === 'recruit' ? (
+          <GroupInfoSection gathering={gatheringDetailData} isHost={isHost} />
+        ) : isHost && !isCompleted ? (
+          <MemberInfoSection
+            gathering={gatheringDetailData}
+            approvedParticipants={approvedParticipants}
+            pendingParticipants={pendingParticipants}
           />
-        </div>
-      }
-      actionButtons={renderActionButtons()}
-    >
-      {activeTab === 'recruit' ? (
-        <GroupInfoSection gathering={gatheringDetailData} isHost={isHost} />
-      ) : isHost && !isCompleted ? (
-        <MemberInfoSection
-          gathering={gatheringDetailData}
-          approvedParticipants={approvedParticipants}
-          pendingParticipants={pendingParticipants}
-        />
-      ) : (
-        <ParticipantsSection
-          gathering={gatheringDetailData}
-          participants={
-            isCompleted ? completedParticipants : approvedParticipants
-          }
+        ) : (
+          <ParticipantsSection
+            writtenReviews={writtenReviewsData}
+            gathering={gatheringDetailData}
+            participants={
+              isCompleted ? completedParticipants : approvedParticipants
+            }
+          />
+        )}
+      </GroupPageLayout>
+      {loginModalOpen && (
+        <ModalInteraction
+          message="로그인 후 이용 가능한 기능입니다."
+          onConfirm={handleLoginModalClose}
+          onClose={handleLoginModalClose}
+          isShowCancel={false}
         />
       )}
-    </GroupPageLayout>
+    </>
   );
 }
