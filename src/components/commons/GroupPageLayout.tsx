@@ -35,7 +35,7 @@ export default function GroupPageLayout({
     );
 
   return (
-    <div className="mx-auto w-[84rem] pt-[1.5rem]">
+    <div className="mx-auto w-full max-w-[84rem] pt-[1.5rem]">
       {/* 상단 베너 */}
       {banner}
 
@@ -48,15 +48,15 @@ export default function GroupPageLayout({
           >
             모집글
           </button>
+          {isLoggedIn && (
+            <div className="flex items-center gap-[0.2rem]">
+              <button
+                onClick={() => setTab('members')}
+                className={tabClass(activeTab === 'members')}
+              >
+                참여멤버
+              </button>
 
-          <div className="flex items-center gap-[0.2rem]">
-            <button
-              onClick={() => setTab('members')}
-              className={tabClass(activeTab === 'members')}
-            >
-              참여멤버
-            </button>
-            {isLoggedIn && (
               <span
                 className={clsx(
                   'flex h-[1.25rem] w-[1.25rem] items-center justify-center rounded-full text-[0.75rem]',
@@ -67,12 +67,12 @@ export default function GroupPageLayout({
               >
                 {participantsNumber}
               </span>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       )}
 
-      <div className="flex justify-between pb-[3.875rem]">
+      <div className="pc:flex-row pc:px-0 pc:gap-0 mx-auto flex w-full max-w-[84rem] flex-col justify-between gap-[14px] px-5 pb-[3.875rem]">
         {/* 메인 본문 */}
         {children}
 

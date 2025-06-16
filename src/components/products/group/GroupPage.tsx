@@ -202,44 +202,44 @@ export default function GroupPage() {
     switch (buttonState) {
       case 'CANCELED':
         return (
-          <Button disabled className="w-[22.75rem]">
+          <Button disabled className="pc:w-[22.75rem] w-full">
             취소된 모임입니다
           </Button>
         );
       case 'COMPLETED':
         return (
-          <Button disabled className="w-[22.75rem]">
+          <Button disabled className="pc:w-[22.75rem] w-full">
             완료된 모임입니다
           </Button>
         );
       case 'CONFIRMED_REJECTED':
         return (
-          <Button disabled className="w-[22.75rem]">
+          <Button disabled className="pc:w-[22.75rem] w-full">
             신청 거절된 모임입니다
           </Button>
         );
       case 'CONFIRMED_APPROVED':
         return (
-          <Button disabled className="w-[22.75rem]">
+          <Button disabled className="pc:w-[22.75rem] w-full">
             참여 예정인 모임입니다
           </Button>
         );
       case 'CONFIRMED_HOST':
         return (
-          <Button disabled className="w-[22.75rem]">
+          <Button disabled className="pc:w-[22.75rem] w-full">
             개설 확정된 모임입니다
           </Button>
         );
       case 'CONFIRMED_DEFAULT':
         return (
-          <Button disabled className="w-[22.75rem]">
+          <Button disabled className="pc:w-[22.75rem] w-full">
             모집 마감된 모임입니다
           </Button>
         );
       case 'RECRUITING_PARTICIPATING':
         return (
-          <div>
-            <Button disabled className="w-[22.75rem]">
+          <div className="pc:w-[22.75rem] w-full">
+            <Button disabled className="w-full">
               참여 완료
             </Button>
             <button
@@ -252,7 +252,7 @@ export default function GroupPage() {
         );
       case 'RECRUITING_REJECTED':
         return (
-          <Button disabled className="w-[22.75rem]">
+          <Button disabled className="pc:w-[22.75rem] w-full">
             신청 거절된 모임입니다
           </Button>
         );
@@ -267,7 +267,7 @@ export default function GroupPage() {
         return (
           <Button
             variant="solid"
-            className="w-[22.75rem]"
+            className="pc:w-[22.75rem] w-full"
             onClick={() => setShowParticipationForm(true)}
             disabled={!user}
           >
@@ -296,7 +296,7 @@ export default function GroupPage() {
             : approvedParticipants.length
         }
         banner={
-          <div className="relative h-[22rem] w-full overflow-hidden rounded-[0.5rem]">
+          <div className="pc:rounded-[0.5rem] relative h-[22rem] w-full overflow-hidden">
             <Image
               src={imgChange(gatheringDetailData.thumbnail, 'banner')}
               alt="모임 배너"

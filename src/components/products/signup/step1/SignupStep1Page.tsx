@@ -88,7 +88,7 @@ export default function SignUpStep1Page() {
 
   return (
     <AuthCard title="회원가입" linkTo="login">
-      <div className="flex w-[25.125rem] flex-col items-center">
+      <div className="tab:w-[25.125rem] flex w-[19.4375rem] flex-col items-center">
         <FormProvider {...methods}>
           <form
             onSubmit={methods.handleSubmit(onSubmit)}

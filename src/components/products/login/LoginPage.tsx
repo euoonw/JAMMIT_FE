@@ -35,7 +35,7 @@ export default function LoginPage() {
 
   return (
     <AuthCard title="로그인" linkTo="signup">
-      <div className="flex w-[25.125rem] flex-col items-center">
+      <div className="tab:w-[25.125rem] flex w-[19.4375rem] flex-col items-center">
         <FormProvider {...methods}>
           <form
             onSubmit={methods.handleSubmit(onSubmit)}

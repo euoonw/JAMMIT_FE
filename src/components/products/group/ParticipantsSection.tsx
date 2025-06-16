@@ -12,6 +12,8 @@ import { useUserStore } from '@/stores/useUserStore';
 import ProfileImage from '@/components/commons/ProfileImage';
 import { ReviewItem } from '@/types/review';
 import ModalInteraction from '@/components/commons/Modal/ModalInteraction';
+import CharacterImage from '../../../../public/images/img_character01.png';
+import Image from 'next/image';
 
 interface ParticipantsSectionProps {
   gathering: GatheringDetailResponse;
@@ -82,6 +84,19 @@ export default function ParticipantsSection({
       </div>
 
       <div className="group-info-divider-line" />
+      {participants.length === 0 && (
+        <div className="flex w-full flex-col items-center justify-center">
+          <Image
+            src={CharacterImage}
+            alt="링크 공유 캐릭터 이미지"
+            width={128}
+            height={128}
+          />
+          <div className="h-[1.5rem] w-full pt-[8px] text-center text-gray-400">
+            아직 참여 멤버가 없어요~
+          </div>
+        </div>
+      )}
       {participants.map(
         ({
           participantId,

@@ -2,6 +2,8 @@ import Checkbox from '@/assets/icons/ic_checkbox.svg';
 import CheckboxEmpty from '@/assets/icons/ic_checkbox_empty.svg';
 import MemberRow from './MemberRow';
 import { Participant } from '@/types/gathering';
+import Image from 'next/image';
+import CharacterImage from '../../../../public/images/img_character01.png';
 
 interface MemberListProps {
   title: string;
@@ -57,8 +59,17 @@ export default function MemberList({
         )}
       </div>
       {members.length === 0 ? (
-        <div className="h-[24px] w-full pt-[8px] text-center text-gray-400">
-          {emptyMessage}
+        <div className="flex w-full flex-col items-center justify-center">
+          <Image
+            src={CharacterImage}
+            alt="링크 공유 캐릭터 이미지"
+            width={128}
+            height={128}
+          />
+          <div className="h-[24px] w-full pt-[8px] text-center text-gray-400">
+            {emptyMessage}
+          </div>
+          <div className="mt-[40px] w-full border-b-[0.0625rem] border-[#2D3035]" />
         </div>
       ) : (
         <>

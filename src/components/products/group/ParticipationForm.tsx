@@ -57,7 +57,7 @@ export default function ParticipationForm({
   };
 
   return (
-    <div className="w-[22.625rem]">
+    <div className="pc:w-[22.625rem] w-full">
       <form
         onSubmit={handleSubmit(handleFormSubmit)}
         className="flex flex-col gap-[1.25rem]"
@@ -99,7 +99,7 @@ export default function ParticipationForm({
           type="submit"
           variant="solid"
           disabled={!isValid}
-          className="w-[22.75rem]"
+          className="pc:w-[22.75rem] w-full"
         >
           신청 완료
         </Button>

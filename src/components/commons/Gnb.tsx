@@ -39,20 +39,20 @@ export default function Gnb() {
     <header className="fixed top-0 left-0 z-50 w-full">
       <div className="flex h-[3.75rem] w-full items-center justify-center bg-[#151515] px-[1.75rem]">
         <div className="flex w-full max-w-[84rem] items-center justify-between text-white">
-          <nav className="flex gap-[1.5rem]">
+          <nav className="pc:gap-[1.5rem] flex gap-[0.75rem]">
             <Link
               href="/"
               data-active={pathname === '/'}
               aria-label="JAMMIT 홈으로 이동"
             >
-              <JammitLogo />
+              <JammitLogo width={113} height={20} />
             </Link>
             {navItems.map(({ href, label }) => (
               <Link
                 key={href}
                 href={href}
                 data-active={pathname === href}
-                className="font-semibold text-gray-300 data-[active=true]:font-bold data-[active=true]:text-gray-100"
+                className="pc:text-[1rem] text-[0.875rem] font-semibold text-gray-300 data-[active=true]:font-bold data-[active=true]:text-gray-100"
                 aria-label={`${label} 페이지로 이동`}
               >
                 {label}
@@ -70,7 +70,7 @@ export default function Gnb() {
             ) : (
               <Link
                 data-active={pathname === '/login'}
-                className="font-semibold opacity-80 data-[active=true]:font-bold data-[active=true]:opacity-100"
+                className="pc:text-[1rem] text-[0.875rem] font-semibold opacity-80 data-[active=true]:font-bold data-[active=true]:opacity-100"
                 href="/login"
                 aria-label="로그인 페이지로 이동"
               >

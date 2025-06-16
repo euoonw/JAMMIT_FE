@@ -62,7 +62,7 @@ export default function GroupInfoSection({
 
   return (
     <>
-      <section className="w-[60rem] rounded-[0.5rem] bg-[#202024] p-[2.5rem]">
+      <section className="pc:max-w-[60rem] w-full rounded-[0.5rem] bg-[#202024] p-[2.5rem]">
         {/* 모임 제목, 주최자 */}
         <div className="flex h-[4.375rem] flex-col justify-between">
           <div className="flex w-full justify-between">
@@ -81,12 +81,12 @@ export default function GroupInfoSection({
         <div className="group-info-divider-line" />
 
         {/* 모임 장소, 날짜, 모집 종료일 */}
-        <div className="flex flex-col gap-2 text-sm">
+        <div className="pc:gap-2 flex flex-col text-sm">
           <div className="group-info-text">
             <span className="group-info-subtitle mr-[0.5rem]">모임 장소 </span>
             {place}
           </div>
-          <div className="mt-[1.25rem] flex gap-[2.5rem]">
+          <div className="pc:flex-row pc:gap-[2.5rem] mt-[1.25rem] flex flex-col gap-[1.25rem]">
             {[
               {
                 label: '모임 날짜',
@@ -108,7 +108,7 @@ export default function GroupInfoSection({
         <div className="group-info-divider-line" />
 
         {/* 모집 현황 */}
-        <div className="flex gap-[1.25rem]">
+        <div className="pc:flex-row flex flex-col gap-[1.25rem]">
           <div>
             <p className="group-info-subtitle mb-[1.25rem]">모집 현황</p>
             <div className="grid w-[18.813rem] grid-cols-2 gap-x-[2rem] gap-y-[0.5rem]">
@@ -129,7 +129,7 @@ export default function GroupInfoSection({
           </div>
 
           {/* 모임 장르 */}
-          <div className="w-[32.438rem]">
+          <div className="pc:w-[32.438rem] w-full">
             <p className="group-info-subtitle mb-[1.25rem]">모임 장르</p>
             <TagSelector
               tags={GENRE_TAGS}
