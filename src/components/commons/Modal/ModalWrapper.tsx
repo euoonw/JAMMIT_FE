@@ -1,6 +1,7 @@
 'use client';
 
-import { memo, ReactNode, useRef } from 'react';
+import { memo, ReactNode, useRef, useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { usePreventScroll } from '@/hooks/usePreventScroll';
 import CancelIcon from '@/assets/icons/ic_x.svg';
@@ -23,10 +24,17 @@ function ModalWrapper({
   className,
 }: ModalWrapperProps) {
   const modalRef = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(false);
+
   useClickOutside(modalRef, onClose);
   usePreventScroll();
 
-  return (
+  useEffect(() => {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
+
+  const modalContent = (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50">
       <div ref={modalRef} className={className}>
         <button
@@ -44,6 +52,15 @@ function ModalWrapper({
         {children}
       </div>
     </div>
+  );
+
+  if (!mounted) {
+    return null;
+  }
+
+  return createPortal(
+    modalContent,
+    document.getElementById('modal-root') as HTMLElement,
   );
 }
 

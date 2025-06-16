@@ -14,6 +14,16 @@ describe('ModalInteraction 렌더링 테스트', () => {
   beforeEach(() => {
     onConfirmMock.mockClear();
     onCloseMock.mockClear();
+    const modalRoot = document.createElement('div');
+    modalRoot.setAttribute('id', 'modal-root');
+    document.body.appendChild(modalRoot);
+  });
+
+  afterEach(() => {
+    const modalRoot = document.getElementById('modal-root');
+    if (modalRoot) {
+      document.body.removeChild(modalRoot);
+    }
   });
 
   test('메세지와 버튼 렌더링 되는지?', () => {

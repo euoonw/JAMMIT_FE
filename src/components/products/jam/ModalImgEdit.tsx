@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { memo, useRef, useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import Button from '@/components/commons/Button';
 import { imgChange } from '@/utils/imgChange';
@@ -20,17 +21,15 @@ function ModalImgEdit({ onSubmit, onClose }: ModalImgEditProps) {
   const modalRef = useRef<HTMLDivElement>(null);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [visibleCount, setVisibleCount] = useState(FIRST_RENDERING);
+  const [mounted, setMounted] = useState(false);
 
+  useClickOutside(modalRef, onClose);
   usePreventScroll();
 
   useEffect(() => {
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
+    setMounted(true);
+    return () => setMounted(false);
   }, []);
-
-  useClickOutside(modalRef, onClose);
 
   // 배너 이미지 파일명 생성 함수
   const getBannerFileName = (index: number): string => {
@@ -42,7 +41,7 @@ function ModalImgEdit({ onSubmit, onClose }: ModalImgEditProps) {
     setVisibleCount((prev) => Math.min(prev + 6, TOTAL_IMAGES));
   };
 
-  return (
+  const modalContent = (
     <>
       <div
         className="fixed top-0 left-0 z-40 h-screen w-screen bg-transparent backdrop-blur-sm"
@@ -113,6 +112,15 @@ function ModalImgEdit({ onSubmit, onClose }: ModalImgEditProps) {
         </div>
       </div>
     </>
+  );
+
+  if (!mounted) {
+    return null;
+  }
+
+  return createPortal(
+    modalContent,
+    document.getElementById('modal-root') as HTMLElement,
   );
 }
 

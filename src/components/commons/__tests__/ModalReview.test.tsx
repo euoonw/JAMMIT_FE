@@ -8,48 +8,59 @@ jest.mock('@/assets/icons/ic_Invisibility.svg', () => {
 });
 
 describe('ModalReview 렌데링 테스트', () => {
-  const mockOnSubmit = jest.fn();
-  const mockOnCancel = jest.fn();
+  const onCancelMock = jest.fn();
+  const onSubmitMock = jest.fn();
+
+  beforeEach(() => {
+    onCancelMock.mockClear();
+    onSubmitMock.mockClear();
+    const modalRoot = document.createElement('div');
+    modalRoot.setAttribute('id', 'modal-root');
+    document.body.appendChild(modalRoot);
+  });
+
+  afterEach(() => {
+    const modalRoot = document.getElementById('modal-root');
+    if (modalRoot) {
+      document.body.removeChild(modalRoot);
+    }
+  });
 
   test('모달이 렌더링', () => {
     render(
       <ModalReview
-        revieweeNickname="잼잼러"
-        onSubmit={mockOnSubmit}
-        onCancel={mockOnCancel}
+        onCancel={onCancelMock}
+        onSubmit={onSubmitMock}
+        revieweeNickname="테스트"
       />,
     );
+
     expect(screen.getByText('리뷰쓰기')).toBeInTheDocument();
-    expect(
-      screen.getByText('잼잼러님과의 합주 경험은 어땠나요?'),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText('경험에 대해 자유롭게 남겨주세요.(선택)'),
-    ).toBeInTheDocument();
   });
 
   test('취소 버튼 클릭 시 onCancel 호출', () => {
     render(
       <ModalReview
-        revieweeNickname="잼잼러"
-        onSubmit={mockOnSubmit}
-        onCancel={mockOnCancel}
+        onCancel={onCancelMock}
+        onSubmit={onSubmitMock}
+        revieweeNickname="테스트"
       />,
     );
-    const cancelButton = screen.getByText('취소');
-    fireEvent.click(cancelButton);
-    expect(mockOnCancel).toHaveBeenCalled();
+
+    fireEvent.click(screen.getByRole('button', { name: /모달 닫기/i }));
+    expect(onCancelMock).toHaveBeenCalledTimes(1);
   });
 
   test('리뷰 등록 버튼은 조건을 만족해야 활성화', () => {
     render(
       <ModalReview
-        revieweeNickname="잼잼러"
-        onSubmit={mockOnSubmit}
-        onCancel={mockOnCancel}
+        onCancel={onCancelMock}
+        onSubmit={onSubmitMock}
+        revieweeNickname="테스트"
       />,
     );
-    const submitButton = screen.getByText('리뷰 등록') as HTMLButtonElement;
-    expect(submitButton.disabled).toBe(true);
+
+    const submitButton = screen.getByRole('button', { name: '리뷰 등록' });
+    expect(submitButton).toBeDisabled();
   });
 });

@@ -40,11 +40,13 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
-        <GlobalErrorModalProvider />
-        <Toast />
-        <Providers>
-          <Layout>{children}</Layout>
-        </Providers>
+        <div id="modal-root">
+          <GlobalErrorModalProvider />
+          <Toast />
+          <Providers>
+            <Layout>{children}</Layout>
+          </Providers>
+        </div>
       </body>
     </html>
   );

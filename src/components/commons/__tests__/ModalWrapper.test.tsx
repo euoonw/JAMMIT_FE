@@ -12,6 +12,16 @@ describe('ModalWrapper 렌더링 테스트', () => {
 
   beforeEach(() => {
     onCloseMock.mockClear();
+    const modalRoot = document.createElement('div');
+    modalRoot.setAttribute('id', 'modal-root');
+    document.body.appendChild(modalRoot);
+  });
+
+  afterEach(() => {
+    const modalRoot = document.getElementById('modal-root');
+    if (modalRoot) {
+      document.body.removeChild(modalRoot);
+    }
   });
 
   test('제목과 내용이 잘 렌더링 되는지?', () => {
