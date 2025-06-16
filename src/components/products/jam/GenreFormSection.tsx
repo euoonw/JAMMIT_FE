@@ -35,7 +35,7 @@ export default function GenreFormSection({
 
   return (
     <div className="flex flex-col gap-[0.5rem]">
-      <p className="text-lg font-semibold">모임 장르</p>
+      <p className="text-sm font-semibold">모임 장르</p>
       <TagSelector
         mode="selectable"
         tags={GENRE_TAGS}

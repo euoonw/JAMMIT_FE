@@ -25,7 +25,7 @@ export default function DateFormSection({ control }: DateFormSectionProps) {
     <div className="flex gap-[1.25rem]">
       {DATE_FIELDS.map(({ name, label, htmlFor }) => (
         <div key={name} className="flex flex-col gap-[0.5rem]">
-          <label htmlFor={htmlFor} className="font-semibold">
+          <label htmlFor={htmlFor} className="text-sm font-semibold">
             {label}
           </label>
           <Controller

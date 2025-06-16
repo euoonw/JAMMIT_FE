@@ -18,9 +18,8 @@ export default function UserCard() {
   const updateProfile = useUpdateProfile();
   const updateProfileImage = useUpdateProfileImage();
   const { data: user, isLoading } = useUserMeQuery();
-  const { user: storeUser, setUser } = useUserStore();
+  const { setUser } = useUserStore();
 
-  // TODO: 토큰 로직 리팩토링 이후 작업 시작
   if (isLoading || !user) {
     return (
       <div className="flex h-[15.625rem] w-[full] items-center justify-center gap-[3.3125rem] bg-[#36114E]">
@@ -28,8 +27,6 @@ export default function UserCard() {
       </div>
     );
   }
-
-  const displayUser = storeUser || user;
 
   const handleProfileEdit = () => {
     setIsModalOpen(true);
@@ -58,7 +55,7 @@ export default function UserCard() {
         );
 
         const updatedUser = {
-          ...displayUser,
+          ...user,
           username: data.username,
           preferredGenres: data.preferredGenres,
           preferredBandSessions: data.preferredBandSessions,
@@ -78,7 +75,7 @@ export default function UserCard() {
         <div className="flex flex-col text-gray-100">
           <div className="flex items-center gap-[0.625rem]">
             <p className="text-[1.5rem] leading-[2.4rem] font-bold">
-              {displayUser.username}
+              {user.username}
             </p>
             <button
               type="submit"
@@ -90,7 +87,7 @@ export default function UserCard() {
           </div>
           <div className="flex items-center gap-[0.5rem] text-sm font-medium">
             <p>담당 세션</p>
-            {displayUser.preferredBandSessions.map((session: BandSession) => (
+            {user.preferredBandSessions.map((session: BandSession) => (
               <div
                 key={session}
                 className="h-[2rem] rounded-lg bg-[#34343A] px-[0.75rem] py-[0.375rem]"
@@ -100,7 +97,7 @@ export default function UserCard() {
             ))}
             <div className="h-[1.25rem] w-[0.0938rem] bg-gray-500" />
             <p>선호 장르</p>
-            {displayUser.preferredGenres.map((genre: Genre) => (
+            {user.preferredGenres.map((genre: Genre) => (
               <div
                 key={genre}
                 className="h-[2rem] rounded-lg bg-[#34343A] px-[0.75rem] py-[0.375rem]"
@@ -122,16 +119,15 @@ export default function UserCard() {
         <ModalEdit
           onCancel={handleModalCancel}
           onSubmit={handleModalSubmit}
-          // TODO: GET API 가져오기
           initialData={{
-            email: displayUser.email,
+            email: user.email,
             password: null,
-            username: displayUser.username,
-            image: displayUser.profileImagePath,
-            preferredBandSessions: displayUser.preferredBandSessions,
-            preferredGenres: displayUser.preferredGenres,
+            username: user.username,
+            image: user.profileImagePath,
+            preferredBandSessions: user.preferredBandSessions,
+            preferredGenres: user.preferredGenres,
           }}
-          userId={displayUser.id}
+          userId={user.id}
         />
       )}
     </>

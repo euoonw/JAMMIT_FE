@@ -82,7 +82,7 @@ export function DatePicker({ value, onChange }: DatePickerProps) {
           className={clsx(
             'flex h-[2.75rem] w-[13.0625rem] items-center justify-center gap-[0.625rem] rounded-[0.5rem] bg-[#34343a] px-[1rem] text-[1rem] text-gray-100',
             isOpen ? 'border border-[#505057]' : 'border-none',
-            !date && 'cursor-pointer text-gray-500',
+            !date && 'cursor-pointer text-gray-400',
           )}
         >
           {displayValue}

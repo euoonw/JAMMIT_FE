@@ -87,7 +87,7 @@ export default function SessionFormSection({
 
   return (
     <div className="flex flex-col gap-[0.5rem]">
-      <p className="text-lg font-semibold">모집 세션</p>
+      <p className="text-sm font-semibold">모집 세션</p>
       <div className="flex flex-row justify-between">
         <div className="flex flex-col gap-[0.75rem]">
           {sessionList.map(({ sortOption, count }, index) => (
@@ -104,7 +104,12 @@ export default function SessionFormSection({
           ))}
         </div>
         <div className="flex gap-[0.75rem]">
-          <Button variant="outline" size="small" onClick={handleAddSession}>
+          <Button
+            variant="outline"
+            size="small"
+            onClick={handleAddSession}
+            className="text-gray-100 hover:text-white"
+          >
             추가
           </Button>
           <Button
@@ -112,6 +117,7 @@ export default function SessionFormSection({
             size="small"
             onClick={() => handleDeleteSession(sessionList.length - 1)}
             disabled={sessionList.length === 1}
+            className="text-gray-100 hover:text-white"
           >
             삭제
           </Button>

@@ -11,7 +11,7 @@ export default function DescriptionFormSection({
 }: DescriptionFormSectionProps) {
   return (
     <div className="flex flex-col gap-[0.5rem]">
-      <p className="text-lg font-semibold">소개글</p>
+      <p className="text-sm font-semibold">소개글</p>
       <Controller
         name="description"
         control={control}

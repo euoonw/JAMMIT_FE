@@ -74,6 +74,7 @@ export default function Dropdown({
           onClick={handleDropdownMenu}
           className={`flex items-center justify-between gap-[0.625rem] rounded-lg border-0 bg-[#34343A] text-gray-100 ${sizeClass} ${isProfile ? 'h-auto w-auto border-none bg-transparent p-0' : 'px-[1rem] py-[0.625rem]'}`}
           type="button"
+          aria-label="드롭다운 이미지 버튼"
         >
           {isProfile ? (
             singleIcon
