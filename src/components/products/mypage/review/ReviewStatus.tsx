@@ -1,7 +1,4 @@
 'use client';
-import { StaticImageData } from 'next/image';
-// import { useSuspenseQuery } from '@tanstack/react-query';
-// import { getStatus } from '@/lib/review/received';
 import {
   ImgTag01,
   ImgTag02,
@@ -12,11 +9,12 @@ import {
   ImgTag07,
   ImgTag08,
   ImgTag09,
-} from '@/assets/images/received';
+} from '@/assets/received';
 import { REVIEW_METRICS } from '@/constants/review';
 import { getStatus } from '@/lib/review/received';
 import { useQuery } from '@tanstack/react-query';
 import clsx from 'clsx';
+import { StaticImageData } from 'next/image';
 import SkeletonStatus from './SkeletonStatus';
 
 export default function ReviewStatus() {

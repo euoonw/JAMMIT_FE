@@ -78,12 +78,19 @@ export default function Footer({
             합주확정
           </p>
         );
+      case '합주취소':
+        return (
+          <p className="rounded-lg bg-[var(--bg-34343A)] px-3 py-1.5 text-sm font-medium text-[var(--gray-400)]">
+            합주취소
+          </p>
+        );
       case '합주완료':
         return (
           <p className="rounded-lg bg-[var(--bg-34343A)] px-3 py-1.5 text-sm font-medium text-[var(--gray-400)]">
             합주완료
           </p>
         );
+
       default:
         return null;
     }

@@ -1,6 +1,6 @@
-'use client';
-import { DeviceType } from '@/utils/imgChange';
 import { useEffect, useState } from 'react';
+
+export type DeviceType = 'pc' | 'tab' | 'mob';
 
 export const useDeviceType = (): DeviceType => {
   const [device, setDevice] = useState<DeviceType>('pc');

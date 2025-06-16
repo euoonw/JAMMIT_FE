@@ -3,6 +3,7 @@ import DefaultProfileImage from '@/assets/icons/ic_default_profile.svg';
 import InfinityScroll from '@/components/commons/InfinityScroll';
 import { REVIEW_METRICS } from '@/constants/review';
 import { useReviewInfiniteQuery } from '@/hooks/queries/review/useSuspenseReview';
+import { useUserStore } from '@/stores/useUserStore';
 import { ReviewItem } from '@/types/review';
 import { getDate } from '@/utils/date';
 import { imgChange } from '@/utils/imgChange';
@@ -11,9 +12,12 @@ import Link from 'next/link';
 import SkeletonReviewList from './SkeletonReviewList';
 
 export default function ReviewList() {
+  const { user } = useUserStore();
+
   const { data, fetchNextPage, hasNextPage, isFetching } =
     useReviewInfiniteQuery({
       size: 8,
+      id: user?.id as number,
     });
   if (!data) return <SkeletonReviewList />;
   const flatData = data?.pages.flatMap((page) => page.content) ?? [];

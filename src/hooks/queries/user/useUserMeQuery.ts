@@ -5,10 +5,10 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 
 export const useUserMeQuery = () => {
-  const setUser = useUserStore((state) => state.setUser);
+  const { setUser, user } = useUserStore((state) => state);
 
   const query = useQuery<UserResponse>({
-    queryKey: ['me'],
+    queryKey: ['me', user?.id],
     queryFn: getUserMe,
     retry: true,
   });

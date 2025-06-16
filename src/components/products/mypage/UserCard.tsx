@@ -1,17 +1,17 @@
 'use client';
 
-import { useState } from 'react';
 import EditIcon from '@/assets/icons/ic_edit.svg';
 import ModalEdit from '@/components/commons/Modal/ModalEdit';
+import ProfileImage from '@/components/commons/ProfileImage';
+import { GENRE_ENUM_TO_KR, SESSION_ENUM_TO_KR } from '@/constants/tagsMapping';
 import { useUpdateProfile } from '@/hooks/queries/user/useUpdateProfile';
+import { useUpdateProfileImage } from '@/hooks/queries/user/useUpdateProfileImage';
 import { useUserMeQuery } from '@/hooks/queries/user/useUserMeQuery';
+import { useToastStore } from '@/stores/useToastStore';
 import { useUserStore } from '@/stores/useUserStore';
 import { EditFormData } from '@/types/modal';
 import { BandSession, Genre } from '@/types/tags';
-import { SESSION_ENUM_TO_KR, GENRE_ENUM_TO_KR } from '@/constants/tagsMapping';
-import ProfileImage from '@/components/commons/ProfileImage';
-import { useUpdateProfileImage } from '@/hooks/queries/user/useUpdateProfileImage';
-import { useToastStore } from '@/stores/useToastStore';
+import { useState } from 'react';
 
 export default function UserCard() {
   const [isModalOpen, setIsModalOpen] = useState(false);

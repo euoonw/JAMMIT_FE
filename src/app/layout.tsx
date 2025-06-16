@@ -1,10 +1,9 @@
-import 'pretendard/dist/web/variable/pretendardvariable.css';
 import Layout from '@/components/commons/Layout';
-import '@/styles/globals.css';
-import Providers from './providers';
 import GlobalErrorModalProvider from '@/components/commons/Modal/GlobalErrorModalProvider';
 import Toast from '@/components/commons/Toast';
+import '@/styles/globals.css';
 import { Metadata } from 'next';
+import Providers from './providers';
 
 export const metadata: Metadata = {
   title: 'JAMMIT - 밴드 모임 플랫폼',
@@ -25,8 +24,12 @@ export const metadata: Metadata = {
     description:
       'JAMMIT은 밴드 모임을 위한 플랫폼입니다. 밴드원을 찾고, 모임을 만들고, 음악을 공유하세요.',
   },
-  viewport: 'width=device-width, initial-scale=1',
   robots: 'index, follow',
+};
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
 };
 
 export default function RootLayout({

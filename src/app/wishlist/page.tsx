@@ -12,8 +12,6 @@ export default function Page() {
   const [genres, setGenres] = useState<Genre[]>([]);
   const [sessions, setSessions] = useState<BandSession[]>([]);
   const data = useWishStore((s) => s.items);
-  console.log(data);
-
   const filteredData = data.filter((item) => {
     const hasGenres = genres.length > 0;
     const hasSessions = sessions.length > 0;

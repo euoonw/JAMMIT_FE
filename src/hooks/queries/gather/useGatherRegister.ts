@@ -1,11 +1,11 @@
-import { useMutation } from '@tanstack/react-query';
 import { postRegisterGatherings } from '@/lib/gathering/register';
-import { handleAuthApiError } from '@/utils/authApiError';
+import { useToastStore } from '@/stores/useToastStore';
 import {
   RegisterGatheringsRequest,
   RegisterGatheringsResponse,
 } from '@/types/gather';
-import { useToastStore } from '@/stores/useToastStore';
+import { handleAuthApiError } from '@/utils/authApiError';
+import { useMutation } from '@tanstack/react-query';
 
 export const useGatherRegister = () => {
   return useMutation<

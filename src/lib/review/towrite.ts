@@ -2,15 +2,14 @@ import { RecruitResponse } from '@/types/recruit';
 import { apiClient } from '@/utils/apiClient';
 
 export async function getReviewWrite({
-  queryKey,
   pageParam,
   size,
+  includeCanceled,
 }: {
-  queryKey: [string, { includeCanceled: boolean }];
   pageParam: number;
   size: number;
+  includeCanceled: boolean;
 }): Promise<RecruitResponse> {
-  const [, { includeCanceled }] = queryKey;
   const params = new URLSearchParams();
   params.append('includeCanceled', includeCanceled.toString());
   params.append('page', pageParam.toString());

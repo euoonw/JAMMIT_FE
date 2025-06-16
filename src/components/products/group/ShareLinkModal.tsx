@@ -1,6 +1,4 @@
 'use client';
-
-import ShareCharacterImage from '@/assets/images/img_character01.png';
 import Button from '@/components/commons/Button';
 import ModalWrapper from '@/components/commons/Modal/ModalWrapper';
 import Image from 'next/image';
@@ -29,7 +27,7 @@ export default function ShareLinkModal({
     >
       <div className="flex flex-col items-center">
         <Image
-          src={ShareCharacterImage}
+          src="/images/img_character01.png"
           alt="링크 공유 캐릭터 이미지"
           width={128}
           height={128}

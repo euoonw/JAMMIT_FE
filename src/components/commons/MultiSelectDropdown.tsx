@@ -75,7 +75,10 @@ export default function MultiSelectDropdown<T>({
           onClick={() => setIsOpen(false)}
         />
       )}
-      <div className="pc:h-10 pc:w-36 relative h-[2.25rem] w-[7.5rem] rounded-xl bg-[var(--gray-100)]">
+      <div
+        className="pc:h-10 pc:w-36 relative h-[2.25rem] w-[7.5rem] rounded-xl bg-[var(--gray-100)]"
+        ref={dropdownRef}
+      >
         <button
           onClick={() => setIsOpen((prev) => !prev)}
           className="flex h-full w-full items-center justify-between px-3 py-2 text-sm font-medium"
@@ -84,10 +87,7 @@ export default function MultiSelectDropdown<T>({
           <IcSeletedArrow />
         </button>
         {isOpen && (
-          <div
-            className="pc:absolute pc:top-11 pc:left-0 pc:-translate-x-0 pc:-translate-y-0 pc:w-full fixed top-1/2 left-1/2 z-20 w-60 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-lg border border-[#505057] shadow-[0_0_20px_-5px_rgba(0,0,0,0.6)]"
-            ref={dropdownRef}
-          >
+          <div className="pc:absolute pc:top-11 pc:left-0 pc:-translate-x-0 pc:-translate-y-0 pc:w-full fixed top-1/2 left-1/2 z-20 w-60 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-lg border border-[#505057] shadow-[0_0_20px_-5px_rgba(0,0,0,0.6)]">
             {options.map((item) => (
               <label
                 htmlFor={String(item.value)}

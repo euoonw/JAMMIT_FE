@@ -1,5 +1,6 @@
 'use client';
 
+import { GatheringCard } from '@/types/card';
 import { forwardRef, Fragment, ReactNode, useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { Virtuoso, VirtuosoGrid } from 'react-virtuoso';
@@ -23,7 +24,7 @@ interface InfinityScrollProps<T> {
   /** 렌더링할 데이터 리스트 */
   list?: T[];
   /** 각 아이템을 렌더링하는 함수 */
-  item: (itemData: T) => ReactNode;
+  item: (itemData: T, index: number) => ReactNode;
   /** 데이터가 없을 때 사용할 문구 */
   emptyText: string;
   /** 무한스크롤 감지 */
@@ -34,6 +35,7 @@ interface InfinityScrollProps<T> {
   className?: string;
   // 스크롤 타입
   variant?: InfinityScrollVariant;
+  isInitialLoading?: boolean;
 }
 
 export default function InfinityScroll<T>({
@@ -75,14 +77,18 @@ export default function InfinityScroll<T>({
     className ??
       'pc:grid-cols-4 grid grid-cols-1 pc:gap-x-5 gap-y-10 pc:px-0 tab:px-6 px-4',
   );
-
   if (variant === 'list') {
     return (
       <Fragment>
         <Virtuoso
           useWindowScroll
+          overscan={1600}
+          increaseViewportBy={{ top: 800, bottom: 800 }}
+          computeItemKey={(index) =>
+            (list[index] as GatheringCard)?.id ?? index
+          }
           totalCount={list.length}
-          itemContent={(index) => item(list[index])}
+          itemContent={(index) => item(list[index], index)}
           className={className}
         />
         {hasMore && <div ref={observerRef} className="h-10 w-full" />}
@@ -94,11 +100,14 @@ export default function InfinityScroll<T>({
       <VirtuosoGrid
         totalCount={list.length}
         useWindowScroll
+        overscan={1600}
+        increaseViewportBy={{ top: 800, bottom: 800 }}
+        computeItemKey={(index) => (list[index] as GatheringCard)?.id ?? index}
         components={{
           List: DynamicGridList,
           Item: ({ children, ...props }) => <div {...props}>{children}</div>,
         }}
-        itemContent={(index) => item(list[index])}
+        itemContent={(index) => item(list[index], index)}
       />
       {hasMore ? <div ref={observerRef} className="h-10 w-full" /> : null}
     </Fragment>

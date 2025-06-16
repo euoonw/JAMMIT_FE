@@ -1,13 +1,10 @@
 'use client';
 import IcSort from '@/assets/icons/ic_sort.svg';
-import ImgMainMobBanner from '@/assets/images/main/img_main_banner_mob.jpg';
-import ImgMainPcBanner from '@/assets/images/main/img_main_banner_pc.jpg';
-import ImgMainTabBanner from '@/assets/images/main/img_main_banner_tab.jpg';
 import MultiSelectDropdown from '@/components/commons/MultiSelectDropdown';
 import { GENRE_OPTIONS, SESSION_OPTIONS } from '@/constants/checkbox';
 import { useDeviceType } from '@/hooks/useDeviceType';
 import { BandSession, Genre } from '@/types/tags';
-import Image, { StaticImageData } from 'next/image';
+import Image from 'next/image';
 import Link from 'next/link';
 import React, { Fragment, useCallback, useEffect, useState } from 'react';
 
@@ -18,6 +15,7 @@ interface FilterHeaderProps {
   setSessions: React.Dispatch<React.SetStateAction<BandSession[]>>;
   setSort?: React.Dispatch<React.SetStateAction<string>>;
   page?: string;
+  sort?: string;
 }
 
 export default function RecruitHeader({
@@ -27,24 +25,29 @@ export default function RecruitHeader({
   setSessions,
   setSort,
   page = 'main',
+  sort,
 }: FilterHeaderProps) {
   // 반응형 이미지
-  const [src, setSrc] = useState<StaticImageData | null>(null);
+  const [src, setSrc] = useState<string | null>(null);
   const device = useDeviceType();
   useEffect(() => {
-    if (device === 'mob') setSrc(ImgMainMobBanner);
-    else if (device === 'tab') setSrc(ImgMainTabBanner);
-    else setSrc(ImgMainPcBanner);
+    if (device === 'mob') setSrc('/images/main/img_main_banner_mob.jpg');
+    else if (device === 'tab') setSrc('/images/main/img_main_banner_tab.jpg');
+    else setSrc('/images/main/img_main_banner_pc.jpg');
   }, [device]);
-  // 반응형
-  const handleSort = useCallback(() => {
-    setSort?.('recruitDeadline,asc');
-  }, [setSort]);
 
+  const handleSort = useCallback(() => {
+    setSort?.((prev) =>
+      prev === 'recruitDeadline,asc'
+        ? 'recruitDeadline,desc'
+        : 'recruitDeadline,asc',
+    );
+  }, [setSort]);
+  const sortLabel = sort === 'recruitDeadline,asc' ? '마감임박' : '최신순';
   if (!src) return null;
   return (
     <Fragment>
-      <div className="pc:aspect-[1344/250] tab:aspect-[186/49] relative aspect-[375/199] overflow-hidden rounded-lg">
+      <div className="pc:aspect-[1344/250] tab:aspect-[186/49] relative aspect-[375/199] min-h-[200px] overflow-hidden rounded-lg">
         {(device === 'tab' || device === 'mob') && (
           <div className="tab:left-[3.75rem] tab:-translate-x-0 absolute top-1/2 left-1/2 z-5 block -translate-x-1/2 -translate-y-1/2">
             <p className="tab:text-[1.25rem] tab:tracking-[-0.04em] text-base leading-[1.5rem] text-[#DAA3FF]">
@@ -86,7 +89,7 @@ export default function RecruitHeader({
               className="pc:h-10 pc:w-[6.875rem] pc:gap-1 pc:rounded-lg pc:text-sm flex h-9 w-9 items-center justify-center gap-0 rounded-xl bg-[var(--gray-100)] text-[0px]"
             >
               <IcSort />
-              마감임박
+              {sortLabel}
             </button>
           )}
         </div>
@@ -95,7 +98,7 @@ export default function RecruitHeader({
             href="/jam"
             className="pc:static pc:w-[9.25rem] tab:w-[calc(100%-48px)] fixed bottom-[1.375rem] z-30 h-11 w-[calc(100%-32px)] rounded-lg bg-[var(--purple-700)] text-center leading-11 font-semibold text-white"
           >
-            모임만들기
+            모임 만들기
           </Link>
         )}
       </div>

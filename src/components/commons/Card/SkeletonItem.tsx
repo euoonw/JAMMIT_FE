@@ -1,6 +1,6 @@
 import ShimmerSkeleton from '../ShimmerSkeleton';
 
-export default function CardSkeleton() {
+export default function SkeletonItem() {
   return (
     <div>
       <ShimmerSkeleton className="pc:aspect-[8/5] tab:aspect-[87/25] aspect-[343/200] rounded-lg" />

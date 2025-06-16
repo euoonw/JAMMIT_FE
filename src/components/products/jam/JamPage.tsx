@@ -1,17 +1,18 @@
 'use client';
 
-import { FormProvider, useForm } from 'react-hook-form';
+import Button from '@/components/commons/Button';
+import GroupPageLayout from '@/components/commons/GroupPageLayout';
+import ModalInteraction from '@/components/commons/Modal/ModalInteraction';
+import ImageEdit from '@/components/products/jam/ImageEdit';
+import JamFormSection from '@/components/products/jam/JamFormSection';
+import { useGatherModify } from '@/hooks/queries/gather/useGatherModify';
+import { useGatherRegister } from '@/hooks/queries/gather/useGatherRegister';
+import { useUserStore } from '@/stores/useUserStore';
+import { RegisterGatheringsRequest } from '@/types/gather';
+import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import ImageEdit from '@/components/products/jam/ImageEdit';
-import GroupPageLayout from '@/components/commons/GroupPageLayout';
-import Button from '@/components/commons/Button';
-import JamFormSection from '@/components/products/jam/JamFormSection';
-import { RegisterGatheringsRequest } from '@/types/gather';
-import { useGatherRegister } from '@/hooks/queries/gather/useGatherRegister';
-import { useGatherModify } from '@/hooks/queries/gather/useGatherModify';
-import { useUserStore } from '@/stores/useUserStore';
-import ModalInteraction from '@/components/commons/Modal/ModalInteraction';
+import { FormProvider, useForm } from 'react-hook-form';
 
 interface JamPageProps {
   formType?: 'register' | 'edit';
@@ -24,6 +25,7 @@ export default function JamPage({
   groupId,
   initialData,
 }: JamPageProps) {
+  const queryClient = useQueryClient();
   const router = useRouter();
   const isLoggedIn = useUserStore((state) => state.isLoggedIn);
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -85,6 +87,9 @@ export default function JamPage({
     } else {
       registerGathering(data, {
         onSuccess: (response) => {
+          queryClient.refetchQueries({
+            queryKey: ['list'],
+          });
           router.push(`/?showShareModal=true&groupId=${response.id}`);
         },
       });

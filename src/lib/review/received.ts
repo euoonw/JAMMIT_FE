@@ -9,7 +9,6 @@ export async function getReview({
   pageParam,
   size,
 }: {
-  queryKey: string[];
   pageParam: number;
   size: number;
 }): Promise<ReviewResponse> {

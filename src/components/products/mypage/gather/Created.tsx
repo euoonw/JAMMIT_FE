@@ -1,7 +1,7 @@
-import InfinityScroll from '@/components/commons/InfinityScroll';
 import CardItem from '@/components/commons/Card/CardItem';
-import { GatheringCard } from '@/types/card';
+import InfinityScroll from '@/components/commons/InfinityScroll';
 import { STATUS_ENUM_TO_KR } from '@/constants/cardMapping';
+import { GatheringCard } from '@/types/card';
 
 interface CreatedProps {
   gatherings: GatheringCard[];

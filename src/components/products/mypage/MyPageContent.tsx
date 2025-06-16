@@ -8,6 +8,7 @@ import ReviewsToWrite from '@/components/products/mypage/towrite/ReviewsToWrite'
 import { useCreatedCount } from '@/hooks/queries/gather/useGatherMeCreate';
 import { useReviewToWriteInfiniteQuery } from '@/hooks/queries/review/useReviewInfiniteQuery';
 import { useReviewInfiniteQuery } from '@/hooks/queries/review/useSuspenseReview';
+import { useUserMeQuery } from '@/hooks/queries/user/useUserMeQuery';
 import { useQueryTab } from '@/hooks/useQueryTab';
 import clsx from 'clsx';
 import { useMemo, useState } from 'react';
@@ -28,14 +29,19 @@ export default function MyPage() {
 
   const [participatingCount, setParticipatingCount] = useState(0);
   const createdCount = useCreatedCount();
-
+  const { data: user } = useUserMeQuery();
   const { data: write } = useReviewToWriteInfiniteQuery({
     size: 8,
-    includeCanceled: true,
+    includeCanceled: false,
+    id: user?.id as number,
   });
-  const writeCount = write?.pages[0].totalElements ?? 0;
-
-  const { data: review } = useReviewInfiniteQuery({ size: 8 });
+  const writeCount =
+    write?.pages[0].gatherings.filter((item) => item.status === 'COMPLETED')
+      .length ?? 0;
+  const { data: review } = useReviewInfiniteQuery({
+    size: 8,
+    id: user?.id as number,
+  });
   const reviewCount = review?.pages[0].totalElements ?? 0;
 
   const tabList = useMemo(
@@ -102,7 +108,7 @@ export default function MyPage() {
           renderTabButton(key as TabKey, label, count, activeTab === key),
         )}
       </div>
-      <div className="mx-auto h-auto w-[84rem]">
+      <div className="pc:max-w-[84rem] mx-auto max-w-full">
         {tabList.find((tab) => tab.key === activeTab)?.component}
       </div>
     </main>

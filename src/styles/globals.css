@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 @import './utililtes.css';
 @import 'tw-animate-css';
+@import './fonts.css';
 
 :root {
   --background: #1a1a1e;

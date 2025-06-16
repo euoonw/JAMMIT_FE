@@ -1,6 +1,5 @@
-import { ImgTag01 } from '@/assets/images/received';
+import { ImgTag01 } from '@/assets/received';
 import ShimmerSkeleton from '@/components/commons/ShimmerSkeleton';
-import React from 'react';
 
 export default function SkeletonStatus() {
   return (

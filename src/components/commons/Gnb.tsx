@@ -1,12 +1,11 @@
 'use client';
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import JammitLogo from '@/assets/icons/ic_jammit_logo.svg';
 import Dropdown from '@/components/commons/Dropdown';
-import { useRouter } from 'next/navigation';
-import { logout } from '@/utils/authService';
 import { useUserStore } from '@/stores/useUserStore';
+import { logout } from '@/utils/authService';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import ProfileImage from './ProfileImage';
 
 const PROFILE_OPTIONS = ['마이페이지', '로그아웃'];

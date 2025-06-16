@@ -1,5 +1,5 @@
-import { GatheringStatus } from '@/types/tags';
 import { CARD_STATE, CardStatus } from '@/constants/card';
+import { GatheringStatus } from '@/types/tags';
 
 export const STATUS_ENUM_TO_KR = (status: GatheringStatus): CardStatus => {
   switch (status) {
@@ -10,7 +10,7 @@ export const STATUS_ENUM_TO_KR = (status: GatheringStatus): CardStatus => {
     case 'COMPLETED':
       return CARD_STATE.ENSEMBLE;
     case 'CANCELED':
-      return CARD_STATE.COMPLETED;
+      return CARD_STATE.CANCELED;
     default:
       return CARD_STATE.PROGRESS;
   }

@@ -19,12 +19,12 @@ export default function RecruitPage({
   shareGroupId,
 }: RecruitPageProps) {
   // 장르, 세션
+
   const [genres, setGenres] = useState<Genre[]>(defaultGenres);
   const [sessions, setSessions] = useState<BandSession[]>(defaultSessions);
-  const [sort, setSort] = useState<string>('');
+  const [sort, setSort] = useState<string>('recruitDeadline,asc');
   const [isShareModalOpen, setIsShareModalOpen] = useState(showShareModal);
   const router = useRouter();
-
   const { data, fetchNextPage, hasNextPage, isFetching } =
     useCommonInfiniteQuery({
       key: 'list',
@@ -44,11 +44,10 @@ export default function RecruitPage({
     url.searchParams.delete('groupId');
     router.replace(url.pathname);
   };
-
   useEffect(() => {
     setIsShareModalOpen(showShareModal);
   }, [showShareModal]);
-
+  const isInitialLoading = !data && isFetching;
   return (
     <>
       <div className="pc:max-w-[84rem] pc:mt-8 pc:pb-[5rem] mx-auto max-w-full pb-[1.375rem]">
@@ -58,13 +57,15 @@ export default function RecruitPage({
           sessions={sessions}
           setSessions={setSessions}
           setSort={setSort}
+          sort={sort}
         />
         <InfinityScroll
+          isInitialLoading={isInitialLoading}
           list={flatData}
           item={(item) => (
             <CardItem item={item} isLike={true} status={CARD_STATE.PROGRESS} />
           )}
-          emptyText=""
+          emptyText="해당 모임이 존재하지 않습니다."
           hasMore={!!hasNextPage && !isFetching}
           onInView={() => {
             if (hasNextPage && !isFetching) {
