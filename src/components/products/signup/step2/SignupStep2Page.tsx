@@ -18,7 +18,7 @@ import { GENRE_KR_TO_ENUM, SESSION_KR_TO_ENUM } from '@/constants/tagsMapping';
 import { GENRE_TAGS, SESSION_TAGS } from '@/constants/tags';
 import { useToastStore } from '@/stores/useToastStore';
 import ModalInteraction from '@/components/commons/Modal/ModalInteraction';
-import { useUploadProfileImageMutation } from '@/hooks/queries/user/useUploadProfileImageMutaion';
+import { useImageUpload } from '@/hooks/useImageUpload';
 
 interface FormValues {
   image: File;
@@ -32,8 +32,8 @@ export default function SignupStep2Page() {
   const { email, name, password, resetSignupData } = useSignupStore();
   const [missingInfoModalOpen, setMissingInfoModalOpen] = useState(false);
   const [profileImageUrl, setProfileImageUrl] = useState<string>('');
-  const { mutateAsync: uploadImage } = useUploadProfileImageMutation();
   const { mutateAsync: signup } = useSignupMutation();
+  const { handleImageUpload } = useImageUpload();
 
   const hasCheckedRef = useRef(false);
 
@@ -58,8 +58,10 @@ export default function SignupStep2Page() {
   } = methods;
 
   const handleFileUpload = async (file: File) => {
-    const uploadedUrl = await uploadImage({ userId: 1, file });
-    setProfileImageUrl(uploadedUrl);
+    const uploadedUrl = await handleImageUpload(1, file);
+    if (uploadedUrl) {
+      setProfileImageUrl(uploadedUrl);
+    }
   };
 
   const handleSessionTagChange = (selected: string[]) => {
@@ -132,7 +134,7 @@ export default function SignupStep2Page() {
                   control={control}
                   render={({ field }) => (
                     <ProfileImageUpload
-                      imageFile={field.value}
+                      imageFile={profileImageUrl}
                       onFileChange={(file) => {
                         field.onChange(file);
                         handleFileUpload(file);
