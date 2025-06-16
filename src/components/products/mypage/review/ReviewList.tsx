@@ -7,6 +7,7 @@ import { useUserStore } from '@/stores/useUserStore';
 import { ReviewItem } from '@/types/review';
 import { getDate } from '@/utils/date';
 import { imgChange } from '@/utils/imgChange';
+import { useSentryErrorLogger } from '@/utils/useSentryErrorLogger';
 import Image from 'next/image';
 import Link from 'next/link';
 import SkeletonReviewList from './SkeletonReviewList';
@@ -14,11 +15,17 @@ import SkeletonReviewList from './SkeletonReviewList';
 export default function ReviewList() {
   const { user } = useUserStore();
 
-  const { data, fetchNextPage, hasNextPage, isFetching } =
+  const { data, fetchNextPage, hasNextPage, isFetching, isError } =
     useReviewInfiniteQuery({
       size: 8,
       id: user?.id as number,
     });
+  useSentryErrorLogger({
+    isError: !!isError,
+    error: isError,
+    tags: { section: 'review', action: 'my_reviews' },
+    extra: { userId: user?.id },
+  });
   if (!data) return <SkeletonReviewList />;
   const flatData = data?.pages.flatMap((page) => page.content) ?? [];
 

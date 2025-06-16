@@ -1,18 +1,19 @@
 'use client';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import AuthCard from '@/components/commons/AuthCard';
+import Button from '@/components/commons/Button';
+import Input from '@/components/commons/Input';
+import { checkEmailDuplicate } from '@/lib/auth/signup';
+import { useSignupStore } from '@/stores/useSignupStore';
+import * as Sentry from '@sentry/nextjs';
 import debounce from 'lodash.debounce';
+import { useRouter } from 'next/navigation';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   FormProvider,
   SubmitHandler,
   useForm,
   useWatch,
 } from 'react-hook-form';
-import AuthCard from '@/components/commons/AuthCard';
-import Button from '@/components/commons/Button';
-import Input from '@/components/commons/Input';
-import { useSignupStore } from '@/stores/useSignupStore';
-import { checkEmailDuplicate } from '@/lib/auth/signup';
 
 interface FormValues {
   email: string;
@@ -51,7 +52,8 @@ export default function SignUpStep1Page() {
       } else {
         setDuplicateMessage('사용 가능한 이메일입니다.');
       }
-    } catch {
+    } catch (e) {
+      Sentry.captureException(e);
       setDuplicateMessage('중복 검사 중 오류가 발생했습니다.');
       setIsDuplicate(null);
     } finally {

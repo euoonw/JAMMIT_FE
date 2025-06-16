@@ -1,5 +1,6 @@
 import { postParticipateGatherings } from '@/lib/gatherings/gatherings';
 import { BandSessionType } from '@/types/tags';
+import { handleAuthApiError } from '@/utils/authApiError';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 interface ParticipateGatheringParams {
@@ -27,8 +28,11 @@ export const useParticipateGatheringMutation = () => {
       });
     },
     onError: (error) => {
-      console.error('모임 참여 신청 실패:', error);
-      alert('모임 참여 신청 중 문제가 발생했어요.');
+      // console.error('모임 참여 신청 실패:', error);
+      handleAuthApiError(error, '모임 참여 신청 중 문제가 발생했어요.', {
+        section: 'gather',
+        action: 'register_gather',
+      });
     },
   });
 };

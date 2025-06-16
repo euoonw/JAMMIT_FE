@@ -1,5 +1,4 @@
 'use client';
-
 import CardItem from '@/components/commons/Card/CardItem';
 import InfinityScroll from '@/components/commons/InfinityScroll';
 import RecruitHeader from '@/components/commons/RecruitHeader';
@@ -19,7 +18,6 @@ export default function RecruitPage({
   shareGroupId,
 }: RecruitPageProps) {
   // 장르, 세션
-
   const [genres, setGenres] = useState<Genre[]>(defaultGenres);
   const [sessions, setSessions] = useState<BandSession[]>(defaultSessions);
   const [sort, setSort] = useState<string>('recruitDeadline,asc');

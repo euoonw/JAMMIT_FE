@@ -1,5 +1,6 @@
 import { useUploadProfileImageMutation } from '@/hooks/queries/user/useUploadProfileImageMutaion';
 import { useErrorModalStore } from '@/stores/useErrorModalStore';
+import { handleAuthApiError } from '@/utils/authApiError';
 
 export const useImageUpload = () => {
   const { mutateAsync: uploadImage } = useUploadProfileImageMutation();
@@ -11,8 +12,17 @@ export const useImageUpload = () => {
       open('파일 크기는 최대 5MB까지 업로드 가능합니다.');
       return null;
     }
-    const uploadedUrl = await uploadImage({ userId, file });
-    return uploadedUrl;
+    try {
+      const uploadedUrl = await uploadImage({ userId, file });
+      return uploadedUrl;
+    } catch (error) {
+      handleAuthApiError(error, '이미지 업로드에 실패했습니다.', {
+        section: 'upload',
+        action: 'profile_image',
+        extra: { userId, fileSize: file.size, fileType: file.type },
+      });
+      return null;
+    }
   };
 
   return { handleImageUpload };

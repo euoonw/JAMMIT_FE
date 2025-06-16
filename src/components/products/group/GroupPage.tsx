@@ -1,25 +1,25 @@
 'use client';
 
-import Image from 'next/image';
-import GroupInfoSection from './GroupInfoSection';
-import GroupPageLayout from '@/components/commons/GroupPageLayout';
-import { useQueryTab } from '@/hooks/useQueryTab';
-import MemberInfoSection from './MemberInfoSection';
-import ParticipantsSection from './ParticipantsSection';
-import { useParams, useSearchParams } from 'next/navigation';
-import { useGatheringDetailQuery } from '@/hooks/queries/gatherings/useGatheringsDetailQuery';
-import { useUserStore } from '@/stores/useUserStore';
-import { useGatheringParticipantsQuery } from '@/hooks/queries/gatherings/useGatheringsParticipantsQuery';
-import { useEffect, useState } from 'react';
 import Button from '@/components/commons/Button';
-import ParticipationForm from './ParticipationForm';
-import { useParticipateGatheringMutation } from '@/hooks/queries/gatherings/useParticipateGatheringsMutation';
+import GroupPageLayout from '@/components/commons/GroupPageLayout';
+import ModalInteraction from '@/components/commons/Modal/ModalInteraction';
 import { SESSION_KR_TO_ENUM } from '@/constants/tagsMapping';
 import { useCancelParticipateGatheringMutation } from '@/hooks/queries/gatherings/useCancelParticipateGathering';
-import { imgChange } from '@/utils/imgChange';
-import { useRouter } from 'next/navigation';
+import { useGatheringDetailQuery } from '@/hooks/queries/gatherings/useGatheringsDetailQuery';
+import { useGatheringParticipantsQuery } from '@/hooks/queries/gatherings/useGatheringsParticipantsQuery';
+import { useParticipateGatheringMutation } from '@/hooks/queries/gatherings/useParticipateGatheringsMutation';
 import { useWrittenReviewsQuery } from '@/hooks/queries/review/useWrittenReviewsQuery';
-import ModalInteraction from '@/components/commons/Modal/ModalInteraction';
+import { useQueryTab } from '@/hooks/useQueryTab';
+import { useUserStore } from '@/stores/useUserStore';
+import { imgChange } from '@/utils/imgChange';
+import { useSentryErrorLogger } from '@/utils/useSentryErrorLogger';
+import Image from 'next/image';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import GroupInfoSection from './GroupInfoSection';
+import MemberInfoSection from './MemberInfoSection';
+import ParticipantsSection from './ParticipantsSection';
+import ParticipationForm from './ParticipationForm';
 
 export default function GroupPage() {
   const router = useRouter();
@@ -72,7 +72,27 @@ export default function GroupPage() {
 
   const participateMutation = useParticipateGatheringMutation();
   const cancelMutation = useCancelParticipateGatheringMutation();
+  // 에러로깅
+  useSentryErrorLogger({
+    isError: !!error,
+    error,
+    tags: { section: 'gather', action: 'fetch_detail' },
+    extra: { gatheringId: numericId },
+  });
 
+  useSentryErrorLogger({
+    isError: !!participantsError,
+    error: participantsError,
+    tags: { section: 'gather', action: 'fetch_participants' },
+    extra: { gatheringId: numericId },
+  });
+
+  useSentryErrorLogger({
+    isError: !!wittenReviewError,
+    error: wittenReviewError,
+    tags: { section: 'gather', action: 'fetch_written_reviews' },
+    extra: { gatheringId: numericId },
+  });
   // TODO: 스켈레톤 적용
   if (isLoading) return <div>로딩 중...</div>;
   if (error) return <div>에러 발생</div>;

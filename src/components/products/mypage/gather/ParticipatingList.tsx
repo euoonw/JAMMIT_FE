@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import Participating from '@/components/products/mypage/gather/Participating';
-import { GatheringCard } from '@/types/card';
 import { useGatherMeParticipants } from '@/hooks/queries/gather/useGatherMeParticipants';
+import { GatheringCard } from '@/types/card';
+import { useSentryErrorLogger } from '@/utils/useSentryErrorLogger';
+import { useEffect, useState } from 'react';
 
 type ParticipatingListProps = {
   size?: number;
@@ -19,12 +20,16 @@ export default function ParticipatingList({
   const [page, setPage] = useState(0);
   const [list, setList] = useState<GatheringCard[]>([]);
 
-  const { data } = useGatherMeParticipants({
+  const { data, isError } = useGatherMeParticipants({
     page,
     size,
     includeCanceled,
   });
-
+  useSentryErrorLogger({
+    isError: !!isError,
+    error: isError,
+    tags: { section: 'participating', action: 'participating' },
+  });
   useEffect(() => {
     if (data) {
       setList((prev) =>

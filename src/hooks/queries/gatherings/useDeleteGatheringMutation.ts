@@ -1,5 +1,7 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { deleteGathering } from '@/lib/gatherings/gatherings';
+import { useToastStore } from '@/stores/useToastStore';
+import { handleAuthApiError } from '@/utils/authApiError';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const useDeleteGatheringMutation = () => {
   const queryClient = useQueryClient();
@@ -7,7 +9,7 @@ export const useDeleteGatheringMutation = () => {
   return useMutation({
     mutationFn: (id: number) => deleteGathering(id),
     onSuccess: (_, id) => {
-      alert('모임이 성공적으로 취소되었습니다.');
+      useToastStore.getState().show('모임이 성공적으로 취소되었습니다.');
       queryClient.invalidateQueries({ queryKey: ['gatheringDetail', id] });
       queryClient.invalidateQueries({
         queryKey: ['gatheringParticipants', id],
@@ -18,8 +20,11 @@ export const useDeleteGatheringMutation = () => {
       });
     },
     onError: (error) => {
-      console.error('모임 취소 실패:', error);
-      alert('모임 취소 중 오류가 발생했습니다.');
+      // console.error('모임 취소 실패:', error);
+      handleAuthApiError(error, '모임 삭제 중 오류가 발생했습니다.', {
+        section: 'meeting',
+        action: 'cancel_meeting',
+      });
     },
   });
 };

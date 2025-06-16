@@ -1,24 +1,25 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
+import AuthCard from '@/components/commons/AuthCard';
+import Button from '@/components/commons/Button';
+import Input from '@/components/commons/Input';
+import ModalInteraction from '@/components/commons/Modal/ModalInteraction';
+import ProfileImageUpload from '@/components/commons/ProfileImageUpload';
+import TagSection from '@/components/commons/TagSection';
+import { GENRE_TAGS, SESSION_TAGS } from '@/constants/tags';
+import { GENRE_KR_TO_ENUM, SESSION_KR_TO_ENUM } from '@/constants/tagsMapping';
+import { useSignupMutation } from '@/hooks/queries/user/useSignupMutation';
+import { useImageUpload } from '@/hooks/useImageUpload';
+import { useSignupStore } from '@/stores/useSignupStore';
+import { useToastStore } from '@/stores/useToastStore';
+import { handleAuthApiError } from '@/utils/authApiError';
 import { useRouter } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
 import {
   Controller,
   FormProvider,
   SubmitHandler,
   useForm,
 } from 'react-hook-form';
-import AuthCard from '@/components/commons/AuthCard';
-import Button from '@/components/commons/Button';
-import Input from '@/components/commons/Input';
-import ProfileImageUpload from '@/components/commons/ProfileImageUpload';
-import TagSection from '@/components/commons/TagSection';
-import { useSignupStore } from '@/stores/useSignupStore';
-import { useSignupMutation } from '@/hooks/queries/user/useSignupMutation';
-import { GENRE_KR_TO_ENUM, SESSION_KR_TO_ENUM } from '@/constants/tagsMapping';
-import { GENRE_TAGS, SESSION_TAGS } from '@/constants/tags';
-import { useToastStore } from '@/stores/useToastStore';
-import ModalInteraction from '@/components/commons/Modal/ModalInteraction';
-import { useImageUpload } from '@/hooks/useImageUpload';
 
 interface FormValues {
   image: File;
@@ -98,24 +99,29 @@ export default function SignupStep2Page() {
     const preferredBandSessions = data.session.map(
       (kr) => SESSION_KR_TO_ENUM[kr],
     );
+    try {
+      const profileImagePath = profileImageUrl;
+      const fullData = {
+        email,
+        username: name,
+        password,
+        nickname: data.nickname,
+        preferredGenres,
+        preferredBandSessions,
+        profileImagePath,
+      };
 
-    const profileImagePath = profileImageUrl;
+      await signup(fullData);
+      useToastStore.getState().show('회원가입이 완료되었습니다!');
+      router.push('/login');
 
-    const fullData = {
-      email,
-      username: name,
-      password,
-      nickname: data.nickname,
-      preferredGenres,
-      preferredBandSessions,
-      profileImagePath,
-    };
-
-    await signup(fullData);
-    useToastStore.getState().show('회원가입이 완료되었습니다!');
-    router.push('/login');
-
-    resetSignupData();
+      resetSignupData();
+    } catch (error) {
+      handleAuthApiError(error, '회원가입에 실패했습니다.', {
+        section: 'signup',
+        action: 'signup',
+      });
+    }
   };
 
   return (

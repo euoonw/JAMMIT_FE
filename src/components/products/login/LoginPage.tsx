@@ -1,11 +1,12 @@
 'use client';
-import { useRouter } from 'next/navigation';
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import AuthCard from '@/components/commons/AuthCard';
-import Input from '@/components/commons/Input';
 import Button from '@/components/commons/Button';
+import Input from '@/components/commons/Input';
 import { useLoginMutation } from '@/hooks/queries/auth/useLoginMutaion';
 import { useToastStore } from '@/stores/useToastStore';
+import { handleAuthApiError } from '@/utils/authApiError';
+import { useRouter } from 'next/navigation';
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 
 interface FormValues {
   email: string;
@@ -27,10 +28,17 @@ export default function LoginPage() {
   const { mutateAsync } = useLoginMutation();
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    await mutateAsync(data);
-    useToastStore.getState().show('로그인 성공!');
-    router.push('/');
-    reset();
+    try {
+      await mutateAsync(data);
+      useToastStore.getState().show('로그인 성공!');
+      router.push('/');
+      reset();
+    } catch (error) {
+      handleAuthApiError(error, '로그인에 실패했습니다.', {
+        section: 'login',
+        action: 'login',
+      });
+    }
   };
 
   return (

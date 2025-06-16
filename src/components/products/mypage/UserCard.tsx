@@ -7,10 +7,10 @@ import { GENRE_ENUM_TO_KR, SESSION_ENUM_TO_KR } from '@/constants/tagsMapping';
 import { useUpdateProfile } from '@/hooks/queries/user/useUpdateProfile';
 import { useUpdateProfileImage } from '@/hooks/queries/user/useUpdateProfileImage';
 import { useUserMeQuery } from '@/hooks/queries/user/useUserMeQuery';
-import { useToastStore } from '@/stores/useToastStore';
 import { useUserStore } from '@/stores/useUserStore';
 import { EditFormData } from '@/types/modal';
 import { BandSession, Genre } from '@/types/tags';
+import { handleAuthApiError } from '@/utils/authApiError';
 import { useState } from 'react';
 
 export default function UserCard() {
@@ -37,33 +37,34 @@ export default function UserCard() {
   };
 
   const handleModalSubmit = async (data: EditFormData) => {
-    const imageUrl =
-      typeof data.image === 'string' ? data.image : user.profileImagePath;
+    try {
+      const imageUrl =
+        typeof data.image === 'string' ? data.image : user.profileImagePath;
+      // 프로필 업데이트
+      await updateProfile.mutateAsync(data);
 
-    updateProfile.mutate(data, {
-      onSuccess: () => {
-        updateProfileImage.mutate(
-          {
-            orgFileName: 'profile.jpg',
-            profileImagePath: imageUrl,
-          },
-          {
-            onSuccess: () => {
-              useToastStore.getState().show('프로필 수정이 완료되었습니다!');
-            },
-          },
-        );
+      // 이미지 업데이트
+      if (imageUrl !== user.profileImagePath) {
+        await updateProfileImage.mutateAsync({
+          orgFileName: 'profile.jpg',
+          profileImagePath: imageUrl,
+        });
+      }
 
-        const updatedUser = {
-          ...user,
-          username: data.username,
-          preferredGenres: data.preferredGenres,
-          preferredBandSessions: data.preferredBandSessions,
-        };
-        setUser(updatedUser);
-        setIsModalOpen(false);
-      },
-    });
+      const updatedUser = {
+        ...user,
+        username: data.username,
+        preferredGenres: data.preferredGenres,
+        preferredBandSessions: data.preferredBandSessions,
+      };
+      setUser(updatedUser);
+      setIsModalOpen(false);
+    } catch (error) {
+      handleAuthApiError(error, '프로필 수정에 실패했습니다.', {
+        section: 'profile',
+        action: 'update',
+      });
+    }
   };
 
   return (
