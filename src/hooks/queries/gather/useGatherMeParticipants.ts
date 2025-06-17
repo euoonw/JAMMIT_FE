@@ -1,6 +1,15 @@
-import { getUserParticipantsGatherings } from '@/lib/gathering/participants';
 import { useQuery } from '@tanstack/react-query';
+import { getUserParticipantsGatherings } from '@/lib/gathering/participants';
 import { GetUserGatheringsParams } from '@/types/gather';
+
+export const gatherMeParticipantsQuery = ({
+  page,
+  size,
+  includeCanceled,
+}: GetUserGatheringsParams) => ({
+  queryKey: ['me', 'participants', page, size, includeCanceled],
+  queryFn: () => getUserParticipantsGatherings({ page, size, includeCanceled }),
+});
 
 export const useGatherMeParticipants = (
   { page, size = 4, includeCanceled = false }: GetUserGatheringsParams = {

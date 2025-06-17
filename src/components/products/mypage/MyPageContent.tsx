@@ -1,17 +1,25 @@
 'use client';
 
+import { useMemo } from 'react';
+import clsx from 'clsx';
 import UserCard from '@/components/products/mypage/UserCard';
-import CreatedList from '@/components/products/mypage/gather/CreatedList';
-import ParticipatingList from '@/components/products/mypage/gather/ParticipatingList';
+import GatheringList from '@/components/products/mypage/gather/GatheringList';
+import GatheringListComponents from '@/components/products/mypage/gather/GatheringListComponents';
 import ReviewsReceived from '@/components/products/mypage/review/ReviewsReceived';
 import ReviewsToWrite from '@/components/products/mypage/towrite/ReviewsToWrite';
-import { useCreatedCount } from '@/hooks/queries/gather/useGatherMeCreate';
+import { usePrefetchedCount } from '@/hooks/queries/gather/usePrefetchedCoint';
+import {
+  gatherMeParticipantsQuery,
+  useGatherMeParticipants,
+} from '@/hooks/queries/gather/useGatherMeParticipants';
+import {
+  gatherMeCreateQuery,
+  useGatherMeCreate,
+} from '@/hooks/queries/gather/useGatherMeCreate';
 import { useReviewToWriteInfiniteQuery } from '@/hooks/queries/review/useReviewInfiniteQuery';
 import { useReviewInfiniteQuery } from '@/hooks/queries/review/useSuspenseReview';
 import { useUserMeQuery } from '@/hooks/queries/user/useUserMeQuery';
 import { useQueryTab } from '@/hooks/useQueryTab';
-import clsx from 'clsx';
-import { useMemo, useState } from 'react';
 
 type TabKey =
   | 'participating'
@@ -27,14 +35,24 @@ export default function MyPage() {
     'reviews_towrite',
   ]);
 
-  const [participatingCount, setParticipatingCount] = useState(0);
-  const createdCount = useCreatedCount();
+  const participatingCount = usePrefetchedCount({
+    ...gatherMeParticipantsQuery({ page: 0, size: 1, includeCanceled: true }),
+    selector: (data) => data.totalElements,
+  });
+
+  const createdCount = usePrefetchedCount({
+    ...gatherMeCreateQuery({ page: 0, size: 1, includeCanceled: true }),
+    selector: (data) => data.totalElements,
+  });
+
   const { data: user } = useUserMeQuery();
+
   const { data: write } = useReviewToWriteInfiniteQuery({
     size: 8,
     includeCanceled: false,
     id: user?.id as number,
   });
+
   const writeCount =
     write?.pages[0].gatherings.filter((item) => item.status === 'COMPLETED')
       .length ?? 0;
@@ -42,6 +60,7 @@ export default function MyPage() {
     size: 8,
     id: user?.id as number,
   });
+
   const reviewCount = review?.pages[0].totalElements ?? 0;
 
   const tabList = useMemo(
@@ -50,13 +69,35 @@ export default function MyPage() {
         key: 'participating',
         label: '참여 모임',
         count: participatingCount,
-        component: <ParticipatingList onCountChange={setParticipatingCount} />,
+        component: (
+          <GatheringList
+            useHook={useGatherMeParticipants}
+            renderComponent={(props) => (
+              <GatheringListComponents
+                {...props}
+                emptyText="참여 중인 모집이 없습니다."
+              />
+            )}
+            errorConfig={{ section: 'participating', action: 'participating' }}
+          />
+        ),
       },
       {
         key: 'created',
         label: '내가 만든 모임',
         count: createdCount,
-        component: <CreatedList />,
+        component: (
+          <GatheringList
+            useHook={useGatherMeCreate}
+            renderComponent={(props) => (
+              <GatheringListComponents
+                {...props}
+                emptyText="생성한 모집이 없습니다."
+              />
+            )}
+            errorConfig={{ section: 'created', action: 'created' }}
+          />
+        ),
       },
       {
         key: 'reviews_received',
