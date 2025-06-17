@@ -34,10 +34,12 @@ export default function MemberList({
       return;
     }
 
+    const allMemberIds = members.map((m) => m.participantId);
+
     if (selectedIds.length === members.length) {
       setSelectedIds([]);
     } else {
-      setSelectedIds(members.map((m) => m.userId));
+      setSelectedIds(allMemberIds);
     }
   };
 

@@ -17,3 +17,10 @@
     @apply my-[1.25rem] border-t border-[#2d3035];
   }
 }
+
+/* 그룹 상세 스켈레톤 커스텀 스타일 */
+@layer utilities {
+  .group-info-subtitle-skeleton {
+    @apply h-[24px] w-[298px] rounded-[8px];
+  }
+}

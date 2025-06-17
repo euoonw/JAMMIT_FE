@@ -41,6 +41,21 @@ export default function ParticipantsSection({
   } | null>(null);
   const reviewMutation = usePostReviewMutation();
 
+  const participantsWithHost: Participant[] = [
+    {
+      participantId: -1, // 임의의 숫자
+      userId: gathering.creator.id,
+      userNickname: gathering.creator.nickname,
+      userEmail: 'host@example.com', // 임의 이메일
+      bandSession: 'VOCAL', // 임의 세션
+      status: 'COMPLETED',
+      createdAt: new Date().toISOString(), // 임의 시간 (현재 시간)
+      introduction: '',
+      profileImagePath: '',
+    },
+    ...participants,
+  ];
+
   const handleOpenReviewModal = (userId: number, nickname: string) => {
     setSelectedParticipant({ userId, nickname });
   };
@@ -90,47 +105,47 @@ export default function ParticipantsSection({
       </div>
 
       <div className="group-info-divider-line" />
-      {participants.length === 0 && (
-        <div className="flex w-full flex-col items-center justify-center">
-          <Image
-            src="/images/img_character01.png"
-            alt="링크 공유 캐릭터 이미지"
-            width={128}
-            height={128}
-          />
-          <div className="h-[1.5rem] w-full pt-[8px] text-center text-gray-400">
-            아직 참여 멤버가 없어요~
-          </div>
-        </div>
-      )}
-      {participants.map(
-        ({
-          participantId,
-          userNickname,
-          bandSession,
-          introduction,
-          userId,
-          profileImagePath,
-        }) => {
+      {participantsWithHost.map(
+        (
+          {
+            participantId,
+            userNickname,
+            bandSession,
+            introduction,
+            userId,
+            profileImagePath,
+          },
+          index,
+        ) => {
           const hasWrittenReview = writtenReviews?.some(
             (review) =>
               review.revieweeId === userId &&
               review.gatheringId === gathering.id,
           );
+          const isHostItem = index === 0;
 
           return (
             <div key={participantId}>
               <div className="my-[0.75rem] flex items-center gap-[1.25rem]">
                 <ProfileImage src={profileImagePath} size={3} />
 
-                <div className="w-[8.6875rem] underline underline-offset-2">
-                  {userNickname}
+                <div className="flex w-[8.6875rem] items-center">
+                  <span className="text-[1rem] underline underline-offset-2">
+                    {userNickname}
+                  </span>
+                  {isHostItem && (
+                    <div className="ml-[0.4375rem] flex h-[1rem] w-[2.875rem] items-center justify-center rounded-[0.5313rem] bg-purple-700 text-center text-[0.75rem] font-semibold">
+                      주최자
+                    </div>
+                  )}
                 </div>
 
                 <div className="flex w-[10.4375rem] gap-[0.25rem]">
-                  <div className="rounded-[0.5rem] bg-[#34343A] px-[0.75rem] py-[0.375rem] text-gray-100">
-                    {SESSION_ENUM_TO_KR[bandSession]}
-                  </div>
+                  {!isHostItem && (
+                    <div className="rounded-[0.5rem] bg-[#34343A] px-[0.75rem] py-[0.375rem] text-gray-100">
+                      {SESSION_ENUM_TO_KR[bandSession]}
+                    </div>
+                  )}
                 </div>
 
                 <div
@@ -164,6 +179,19 @@ export default function ParticipantsSection({
             </div>
           );
         },
+      )}
+      {participants.length === 0 && (
+        <div className="mt-[2.5rem] flex w-full flex-col items-center justify-center">
+          <Image
+            src="/images/img_character01.png"
+            alt="링크 공유 캐릭터 이미지"
+            width={128}
+            height={128}
+          />
+          <div className="h-[1.5rem] w-full pt-[0.5rem] text-center text-gray-400">
+            아직 참여 멤버가 없어요~
+          </div>
+        </div>
       )}
       {selectedParticipant && (
         <ModalReview

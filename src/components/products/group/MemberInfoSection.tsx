@@ -23,26 +23,22 @@ export default function MemberInfoSection({
   const isRecruiting = gathering.status === 'RECRUITING';
 
   const handleAccept = async () => {
-    await Promise.all(
-      selectedIds.map((participantId) =>
-        approveMutation.mutateAsync({
-          gatheringId: gathering.id,
-          participantId,
-        }),
-      ),
-    );
+    for (const participantId of selectedIds) {
+      await approveMutation.mutateAsync({
+        gatheringId: gathering.id,
+        participantId,
+      });
+    }
     setSelectedIds([]);
   };
 
   const handleReject = async () => {
-    await Promise.all(
-      selectedIds.map((participantId) =>
-        rejectMutation.mutateAsync({
-          gatheringId: gathering.id,
-          participantId,
-        }),
-      ),
-    );
+    for (const participantId of selectedIds) {
+      await rejectMutation.mutateAsync({
+        gatheringId: gathering.id,
+        participantId,
+      });
+    }
     setSelectedIds([]);
   };
 
