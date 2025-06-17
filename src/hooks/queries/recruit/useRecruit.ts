@@ -1,35 +1,27 @@
+import { getRecruit } from '@/lib/recruit/recruit';
 import { RecruitResponse } from '@/types/recruit';
+import { BandSession, Genre } from '@/types/tags';
 import { QueryClient, useInfiniteQuery } from '@tanstack/react-query';
 
-interface CommonQueryParams<T> {
+interface CommonQueryParams {
   key: string;
-  variables: T;
   size: number;
-  includeCanceled: boolean;
   sort: string;
-  fetchFn: (args: {
-    queryKey: [string, T & { includeCanceled: boolean }];
-    pageParam: number;
-    size: number;
-    sort: string;
-  }) => Promise<RecruitResponse>;
+  genres: Genre[];
+  sessions: BandSession[];
 }
 
-export const useCommonInfiniteQuery = <T>({
+export const useCommonInfiniteQuery = ({
   key,
-  variables,
   size,
-  includeCanceled,
-  fetchFn,
   sort,
-}: CommonQueryParams<T>) => {
+  genres,
+  sessions,
+}: CommonQueryParams) => {
   return useInfiniteQuery({
-    queryKey: [key, { ...variables, includeCanceled }] as [
-      string,
-      T & { includeCanceled: boolean },
-    ],
-    queryFn: ({ queryKey, pageParam = 0 }) =>
-      fetchFn({ queryKey, pageParam, size, sort }),
+    queryKey: [key, genres, sessions],
+    queryFn: ({ pageParam = 0 }) =>
+      getRecruit({ pageParam, size, sort, genres, sessions }),
     initialPageParam: 0,
     getNextPageParam: (lastPage: RecruitResponse) =>
       lastPage.currentPage + 1 < lastPage.totalPage
@@ -38,22 +30,18 @@ export const useCommonInfiniteQuery = <T>({
     staleTime: 1000 * 60 * 1,
   });
 };
-export const prefetchCommonInfiniteQuery = async <T>({
+export const prefetchCommonInfiniteQuery = async ({
   queryClient,
   key,
-  variables,
   size,
-  includeCanceled,
-  fetchFn,
   sort,
-}: CommonQueryParams<T> & { queryClient: QueryClient }) => {
+  genres,
+  sessions,
+}: CommonQueryParams & { queryClient: QueryClient }) => {
   return await queryClient.prefetchInfiniteQuery({
-    queryKey: [key, { ...variables, includeCanceled }] as [
-      string,
-      T & { includeCanceled: boolean },
-    ],
-    queryFn: ({ queryKey, pageParam = 0 }) =>
-      fetchFn({ queryKey, pageParam, size, sort }),
+    queryKey: [key, genres, sessions],
+    queryFn: ({ pageParam = 0 }) =>
+      getRecruit({ pageParam, size, sort, genres, sessions }),
     initialPageParam: 0,
     getNextPageParam: (lastPage: RecruitResponse) =>
       lastPage.currentPage + 1 < lastPage.totalPage

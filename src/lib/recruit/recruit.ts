@@ -1,30 +1,25 @@
-import { apiClient } from '@/utils/apiClient';
-import { BandSession, Genre } from '@/types/tags';
 import { RecruitResponse } from '@/types/recruit';
+import { BandSession, Genre } from '@/types/tags';
+import { apiClient } from '@/utils/apiClient';
+
+interface GetRecruitRequest {
+  size: number;
+  sort: string;
+  genres: Genre[];
+  sessions: BandSession[];
+  pageParam: number;
+}
 
 export async function getRecruit({
-  queryKey,
   pageParam,
   size,
   sort,
-}: {
-  queryKey: [
-    string,
-    {
-      genres: Genre[];
-      sessions: BandSession[];
-      includeCanceled: boolean;
-    },
-  ];
-  pageParam: number;
-  size: number;
-  sort: string;
-}): Promise<RecruitResponse> {
-  const [, { genres, sessions, includeCanceled }] = queryKey;
+  genres,
+  sessions,
+}: GetRecruitRequest): Promise<RecruitResponse> {
   const params = new URLSearchParams();
-  genres.forEach((g) => params.append('genres', g));
-  sessions.forEach((s) => params.append('sessions', s));
-  params.append('includeCanceled', includeCanceled.toString());
+  genres.forEach((genre) => params.append('genres', genre));
+  sessions.forEach((session) => params.append('sessions', session));
   params.append('page', pageParam.toString());
   params.append('size', size.toString());
   params.append('sort', sort.toString());

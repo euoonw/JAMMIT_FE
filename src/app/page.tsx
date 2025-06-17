@@ -1,6 +1,5 @@
 import RecruitPage from '@/components/products/recruit/RecruitPage';
 import { prefetchCommonInfiniteQuery } from '@/hooks/queries/recruit/useRecruit';
-import { getRecruit } from '@/lib/recruit/recruit';
 import { BandSession, Genre } from '@/types/tags';
 import {
   dehydrate,
@@ -32,11 +31,10 @@ export default async function Home({ searchParams }: HomeProps) {
   await prefetchCommonInfiniteQuery({
     queryClient,
     key: 'list',
-    variables: { genres: defaultGenres, sessions: defaultSessions },
+    genres: defaultGenres,
+    sessions: defaultSessions,
     size: 8,
     sort: defaultSort,
-    includeCanceled: false,
-    fetchFn: getRecruit,
   });
 
   return (

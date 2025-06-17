@@ -5,7 +5,6 @@ import RecruitHeader from '@/components/commons/RecruitHeader';
 import ShareLinkModal from '@/components/products/group/ShareLinkModal';
 import { CARD_STATE } from '@/constants/card';
 import { useCommonInfiniteQuery } from '@/hooks/queries/recruit/useRecruit';
-import { getRecruit } from '@/lib/recruit/recruit';
 import { RecruitPageProps } from '@/types/recruit';
 import { BandSession, Genre } from '@/types/tags';
 import { useRouter } from 'next/navigation';
@@ -26,11 +25,11 @@ export default function RecruitPage({
   const { data, fetchNextPage, hasNextPage, isFetching } =
     useCommonInfiniteQuery({
       key: 'list',
-      variables: { genres, sessions, sort },
+
       size: 8,
+      genres,
+      sessions,
       sort,
-      includeCanceled: false,
-      fetchFn: getRecruit,
     });
 
   const flatData = data?.pages.flatMap((page) => page.gatherings) ?? [];
