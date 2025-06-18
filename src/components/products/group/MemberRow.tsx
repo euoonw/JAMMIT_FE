@@ -1,9 +1,8 @@
-'use client';
-
 import Checkbox from '@/assets/icons/ic_checkbox.svg';
 import CheckboxEmpty from '@/assets/icons/ic_checkbox_empty.svg';
-import { SESSION_ENUM_TO_KR } from '@/constants/tagsMapping';
 import ProfileImage from '@/components/commons/ProfileImage';
+import { SESSION_ENUM_TO_KR } from '@/constants/tagsMapping';
+import Link from 'next/link';
 
 interface MemberRowProps {
   id: number;
@@ -14,6 +13,7 @@ interface MemberRowProps {
   introduction: string;
   profileImage?: string | null;
   isSelectable?: boolean;
+  gathering?: number;
 }
 
 export default function MemberRow({
@@ -25,6 +25,7 @@ export default function MemberRow({
   introduction,
   profileImage = null,
   isSelectable = true,
+  gathering,
 }: MemberRowProps) {
   return (
     <div>
@@ -39,7 +40,10 @@ export default function MemberRow({
         <ProfileImage src={profileImage} size={3} />
 
         <div className="w-[8.6875rem] underline underline-offset-2">
-          {nickname}
+          {!gathering && nickname}
+          {gathering && (
+            <Link href={`/group/${gathering}/reviews/${id}`}>{nickname}</Link>
+          )}
         </div>
 
         <div className="flex w-[10.4375rem] gap-[0.25rem]">

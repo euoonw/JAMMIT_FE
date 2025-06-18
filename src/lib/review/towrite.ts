@@ -1,7 +1,12 @@
 import { RecruitResponse } from '@/types/recruit';
+import { ReviewWriteResponse } from '@/types/review';
 import { apiClient } from '@/utils/apiClient';
 
-export async function getReviewWrite({
+export async function getReviewWrite(): Promise<ReviewWriteResponse> {
+  return await apiClient.get<ReviewWriteResponse>('/review/unwritten');
+}
+
+export async function getReviewWrites({
   pageParam,
   size,
   includeCanceled,

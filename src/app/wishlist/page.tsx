@@ -1,7 +1,7 @@
 'use client';
 import CardItem from '@/components/commons/Card/CardItem';
 import RecruitHeader from '@/components/commons/RecruitHeader';
-import VirtualGrid from '@/components/products/wish/VirtualGrid';
+import VirtualGrid from '@/components/commons/VirtualGrid';
 import { CARD_STATE } from '@/constants/card';
 import { GENRE_OPTIONS, SESSION_OPTIONS } from '@/constants/checkbox';
 import { useWishStore } from '@/stores/useWishStore';

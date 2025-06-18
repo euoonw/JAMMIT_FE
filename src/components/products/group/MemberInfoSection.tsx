@@ -1,10 +1,10 @@
 'use client';
 import Button from '@/components/commons/Button';
-import MemberList from './MemberList';
-import { useState } from 'react';
-import { GatheringDetailResponse, Participant } from '@/types/gathering';
 import { useApproveParticipantMutation } from '@/hooks/queries/gatherings/useApproveParticipantMutation';
 import { useRejectParticipantMutation } from '@/hooks/queries/gatherings/useRejectParticipantMutation';
+import { GatheringDetailResponse, Participant } from '@/types/gathering';
+import { useState } from 'react';
+import MemberList from './MemberList';
 
 interface MemberInfoSectionProps {
   approvedParticipants: Participant[];
@@ -21,7 +21,6 @@ export default function MemberInfoSection({
   const approveMutation = useApproveParticipantMutation();
   const rejectMutation = useRejectParticipantMutation();
   const isRecruiting = gathering.status === 'RECRUITING';
-
   const handleAccept = async () => {
     for (const participantId of selectedIds) {
       await approveMutation.mutateAsync({
@@ -63,6 +62,7 @@ export default function MemberInfoSection({
           selectedIds={selectedIds}
           setSelectedIds={setSelectedIds}
           isSelectable={true}
+          gathering={gathering.id}
         />
       </section>
 

@@ -1,11 +1,12 @@
 'use client';
 
 import { GatheringCard } from '@/types/card';
+import { ReviewItem } from '@/types/review';
 import { forwardRef, Fragment, ReactNode, useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { Virtuoso, VirtuosoGrid } from 'react-virtuoso';
 
-type InfinityScrollVariant = 'list' | 'grid';
+export type InfinityScrollVariant = 'list' | 'grid';
 
 // 0.5: 화면에 요소의 절반이 보이면 감지
 // 0: 화면에 요소의 조금이라도 보이면 감지
@@ -82,11 +83,7 @@ export default function InfinityScroll<T>({
       <Fragment>
         <Virtuoso
           useWindowScroll
-          overscan={1600}
-          increaseViewportBy={{ top: 800, bottom: 800 }}
-          computeItemKey={(index) =>
-            (list[index] as GatheringCard)?.id ?? index
-          }
+          computeItemKey={(index) => (list[index] as ReviewItem).id ?? index}
           totalCount={list.length}
           itemContent={(index) => item(list[index], index)}
           className={className}
@@ -100,8 +97,6 @@ export default function InfinityScroll<T>({
       <VirtuosoGrid
         totalCount={list.length}
         useWindowScroll
-        overscan={1600}
-        increaseViewportBy={{ top: 800, bottom: 800 }}
         computeItemKey={(index) => (list[index] as GatheringCard)?.id ?? index}
         components={{
           List: DynamicGridList,

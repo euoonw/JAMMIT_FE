@@ -1,9 +1,9 @@
 import Checkbox from '@/assets/icons/ic_checkbox.svg';
 import CheckboxEmpty from '@/assets/icons/ic_checkbox_empty.svg';
-import MemberRow from './MemberRow';
 import { Participant } from '@/types/gathering';
 import Image from 'next/image';
 import CharacterImage from '../../../../public/images/img_character01.png';
+import MemberRow from './MemberRow';
 
 interface MemberListProps {
   title: string;
@@ -11,6 +11,7 @@ interface MemberListProps {
   isSelectable?: boolean;
   selectedIds?: number[];
   setSelectedIds?: React.Dispatch<React.SetStateAction<number[]>>;
+  gathering?: number;
 }
 
 export default function MemberList({
@@ -19,6 +20,7 @@ export default function MemberList({
   isSelectable = true,
   selectedIds = [],
   setSelectedIds,
+  gathering,
 }: MemberListProps) {
   const handleSelectChange = (id: number) => {
     if (!isSelectable || !setSelectedIds) {
@@ -98,6 +100,7 @@ export default function MemberList({
               selected={selectedIds.includes(member.participantId)}
               onSelectChange={handleSelectChange}
               isSelectable={isSelectable}
+              gathering={gathering}
             />
           ))}
         </>

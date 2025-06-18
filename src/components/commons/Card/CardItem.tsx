@@ -8,12 +8,14 @@ interface CardItemProps {
   item: GatheringCard;
   isLike?: boolean;
   status: CardStatus;
+  page?: string;
 }
 
 export default function CardItem({
   item,
   isLike = false,
   status,
+  page = 'read',
 }: CardItemProps) {
   return (
     <Link key={item.id} href={`/group/${item.id}?tab=recruit`}>
@@ -31,6 +33,7 @@ export default function CardItem({
         recruitDeadline={item.recruitDeadline}
         member={item.sessions}
         id={item.id}
+        page={page}
       />
     </Link>
   );

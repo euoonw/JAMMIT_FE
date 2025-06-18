@@ -1,4 +1,5 @@
 import { BandSession } from './tags';
+import { UserResponse } from './user';
 
 export interface ReviewItem {
   id: number;
@@ -65,4 +66,39 @@ export interface PostReviewRequest {
   isHelpful: boolean;
   isGoodLearner: boolean;
   isKeepingPromises: boolean;
+}
+
+export interface ReviewWriteResponse {
+  success: true;
+  code: number;
+  message: string;
+  result: GatheringReviewInfo[];
+}
+export interface GatheringReviewInfo {
+  gatheringId: number;
+  gatheringName: string;
+  gatheringThumbnail: string;
+  unwrittenParticipants: UnwrittenParticipant[];
+}
+
+export interface UnwrittenParticipant {
+  participantId: number;
+  userId: number;
+  userNickname: string;
+  userEmail: string;
+  bandSession: string;
+  status: string;
+  createdAt: string;
+  introduction: string;
+}
+
+export interface ReviewDetailResponse {
+  userInfo: UserResponse;
+  statistics: ReviewStatusPros;
+  reviews: ReviewItem[];
+}
+
+export interface ReviewRequest {
+  gatheringId: number;
+  userId: number;
 }

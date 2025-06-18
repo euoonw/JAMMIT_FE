@@ -1,11 +1,11 @@
-import { GenreType, BandSessionType, GatheringStatus } from './tags';
+import { BandSessionType, GatheringStatus, GenreType } from './tags';
 
 export interface GatheringCard {
   id: number;
   name: string;
   place: string;
   thumbnail: string;
-  gatheringDateTime: string;
+  gatheringDateTime?: string;
   totalRecruit: number;
   totalCurrent: number;
   viewCount: number;

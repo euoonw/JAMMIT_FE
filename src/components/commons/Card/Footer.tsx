@@ -17,6 +17,7 @@ interface FooterProps {
   }[];
   recruitDeadline?: string;
   id?: number;
+  page?: string;
 }
 
 export default function Footer({
@@ -26,6 +27,7 @@ export default function Footer({
   recruitDeadline,
   member,
   id,
+  page,
 }: FooterProps) {
   const text = `${totalRecruit}/${totalCurrent}`;
   const cardStatus = getRecruitStatus(
@@ -114,7 +116,7 @@ export default function Footer({
       <div className="flex items-center justify-between">
         {left()} {right()}
       </div>
-      {status === '합주완료' && (
+      {status === '합주완료' && page === 'towrite' && (
         <button
           onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
             handleButton(e);

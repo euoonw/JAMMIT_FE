@@ -1,27 +1,19 @@
-import { getReviewWrite } from '@/lib/review/towrite';
-import { RecruitResponse } from '@/types/recruit';
+import { getReview } from '@/lib/review/received';
+import { ReviewResponse } from '@/types/review';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
-interface ReivewProps {
+interface ReviewProps {
   size: number;
-  includeCanceled: boolean;
   id: number;
 }
 
-export const useReviewToWriteInfiniteQuery = ({
-  size,
-  includeCanceled,
-  id,
-}: ReivewProps) => {
+export const useReviewInfiniteQuery = ({ size, id }: ReviewProps) => {
   return useInfiniteQuery({
-    queryKey: ['getReviewWrite', includeCanceled, id],
-    queryFn: ({ pageParam = 0 }) =>
-      getReviewWrite({ pageParam, size, includeCanceled }),
+    queryKey: ['received-reviews', id],
+    queryFn: ({ pageParam = 0 }) => getReview({ pageParam, size }),
     initialPageParam: 0,
-    getNextPageParam: (lastPage: RecruitResponse) =>
-      lastPage.currentPage + 1 < lastPage.totalPage
-        ? lastPage.currentPage + 1
-        : undefined,
+    getNextPageParam: (lastPage: ReviewResponse) =>
+      lastPage.page + 1 < lastPage.totalPages ? lastPage.page + 1 : undefined,
     staleTime: 1000 * 60 * 5,
   });
 };

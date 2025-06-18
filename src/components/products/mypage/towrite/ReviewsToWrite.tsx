@@ -3,7 +3,7 @@ import CardItem from '@/components/commons/Card/CardItem';
 import CardSkeleton from '@/components/commons/Card/SkeletonItem';
 import InfinityScroll from '@/components/commons/InfinityScroll';
 import { CARD_STATE } from '@/constants/card';
-import { useReviewToWriteInfiniteQuery } from '@/hooks/queries/review/useReviewInfiniteQuery';
+import { useReviewToWriteInfiniteQuery } from '@/hooks/queries/review/usePrefetchReview';
 import { useUserMeQuery } from '@/hooks/queries/user/useUserMeQuery';
 import { useSentryErrorLogger } from '@/utils/useSentryErrorLogger';
 
@@ -37,7 +37,9 @@ export default function ReviewsToWrite() {
     <>
       <InfinityScroll
         list={completedData}
-        item={(item) => <CardItem item={item} status={CARD_STATE.ENSEMBLE} />}
+        item={(item) => (
+          <CardItem item={item} status={CARD_STATE.ENSEMBLE} page="towrite" />
+        )}
         emptyText="리뷰가능한 모임이 없습니다."
         hasMore={!!hasNextPage && !isFetching}
         onInView={() => {

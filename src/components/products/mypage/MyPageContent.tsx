@@ -1,25 +1,26 @@
 'use client';
 
-import { useMemo } from 'react';
-import clsx from 'clsx';
 import UserCard from '@/components/products/mypage/UserCard';
-import GatheringList from '@/components/products/mypage/gather/GatheringList';
-import GatheringListComponents from '@/components/products/mypage/gather/GatheringListComponents';
-import ReviewsReceived from '@/components/products/mypage/review/ReviewsReceived';
 import ReviewsToWrite from '@/components/products/mypage/towrite/ReviewsToWrite';
-import { usePrefetchedCount } from '@/hooks/queries/gather/usePrefetchedCoint';
-import {
-  gatherMeParticipantsQuery,
-  useGatherMeParticipants,
-} from '@/hooks/queries/gather/useGatherMeParticipants';
 import {
   gatherMeCreateQuery,
   useGatherMeCreate,
 } from '@/hooks/queries/gather/useGatherMeCreate';
-import { useReviewToWriteInfiniteQuery } from '@/hooks/queries/review/useReviewInfiniteQuery';
-import { useReviewInfiniteQuery } from '@/hooks/queries/review/useSuspenseReview';
+import {
+  gatherMeParticipantsQuery,
+  useGatherMeParticipants,
+} from '@/hooks/queries/gather/useGatherMeParticipants';
+import { usePrefetchedCount } from '@/hooks/queries/gather/usePrefetchedCoint';
+import { useReviewToWriteInfiniteQuery } from '@/hooks/queries/review/usePrefetchReview';
+import { useReviewInfiniteQuery } from '@/hooks/queries/review/useReviewInfiniteQuery';
 import { useUserMeQuery } from '@/hooks/queries/user/useUserMeQuery';
 import { useQueryTab } from '@/hooks/useQueryTab';
+import clsx from 'clsx';
+import { useMemo } from 'react';
+import GatheringList from './gather/GatheringList';
+import GatheringListComponents from './gather/GatheringListComponents';
+import ReviewList from './review/ReviewList';
+import ReviewStatus from './review/ReviewStatus';
 
 type TabKey =
   | 'participating'
@@ -46,7 +47,6 @@ export default function MyPage() {
   });
 
   const { data: user } = useUserMeQuery();
-
   const { data: write } = useReviewToWriteInfiniteQuery({
     size: 8,
     includeCanceled: false,
@@ -103,7 +103,12 @@ export default function MyPage() {
         key: 'reviews_received',
         label: '내가 받은 리뷰',
         count: reviewCount,
-        component: <ReviewsReceived />,
+        component: (
+          <div className="flex items-start gap-5">
+            <ReviewStatus />
+            <ReviewList />
+          </div>
+        ),
       },
       {
         key: 'reviews_towrite',
@@ -112,7 +117,7 @@ export default function MyPage() {
         component: <ReviewsToWrite />,
       },
     ],
-    [participatingCount, createdCount, writeCount, reviewCount],
+    [participatingCount, createdCount, reviewCount, writeCount],
   );
 
   const tabClass = (isActive: boolean) =>
