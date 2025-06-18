@@ -3,6 +3,7 @@ import IconLove from '@/assets/icons/ic_love.svg';
 import { useWishStore } from '@/stores/useWishStore';
 import { GatheringCard } from '@/types/card';
 import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 
 interface LikeProps {
   item: GatheringCard;
@@ -10,7 +11,17 @@ interface LikeProps {
 
 export default function Like({ item }: LikeProps) {
   const toggle = useWishStore((s) => s.toggle);
+
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   const isLiked = useWishStore((s) => s.isLiked(item.id));
+
+  if (!isClient) return null;
+
   return (
     <motion.button
       className="absolute top-2 right-2 z-10"

@@ -20,7 +20,6 @@ export const useDeleteGatheringMutation = () => {
       });
     },
     onError: (error) => {
-      // console.error('모임 취소 실패:', error);
       handleAuthApiError(error, '모임 삭제 중 오류가 발생했습니다.', {
         section: 'meeting',
         action: 'cancel_meeting',

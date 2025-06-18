@@ -12,6 +12,7 @@ import Like from '@/components/commons/Card/Like';
 import ShareIcon from '@/assets/icons/ic_share.svg';
 import ShareLinkModal from './ShareLinkModal';
 import { useState } from 'react';
+import ModalInteraction from '@/components/commons/Modal/ModalInteraction';
 
 interface GroupInfoSectionProps {
   gathering: GatheringDetailResponse;
@@ -23,7 +24,8 @@ export default function GroupInfoSection({
   isHost,
 }: GroupInfoSectionProps) {
   const router = useRouter();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const {
     name,
     place,
@@ -41,6 +43,11 @@ export default function GroupInfoSection({
 
   const deleteMutation = useDeleteGatheringMutation();
 
+  const handleDelete = () => {
+    deleteMutation.mutate(id);
+    setIsDeleteModalOpen(false);
+  };
+
   const actionButtons = [
     {
       label: '수정하기',
@@ -52,10 +59,8 @@ export default function GroupInfoSection({
     {
       label: '삭제하기',
       variant: 'outline',
-      // TODO: 확인 모달 적용
       onClick: () => {
-        if (!confirm('정말로 이 모임을 취소하시겠습니까?')) return;
-        deleteMutation.mutate(gathering.id);
+        setIsDeleteModalOpen(true);
       },
     },
   ];
@@ -70,7 +75,7 @@ export default function GroupInfoSection({
             <div className="relative">
               <ShareIcon
                 className="absolute top-1.5 right-[2.5rem] w-7 cursor-pointer"
-                onClick={() => setIsModalOpen(true)}
+                onClick={() => setIsShareModalOpen(true)}
               />
               <Like item={convertToCardItem(gathering)} />
             </div>
@@ -162,10 +167,18 @@ export default function GroupInfoSection({
           </div>
         )}
       </div>
-      {isModalOpen && (
+      {isShareModalOpen && (
         <ShareLinkModal
           inviteLink={`https://jammit-fe-six.vercel.app/group/${id}`}
-          onClose={() => setIsModalOpen(false)}
+          onClose={() => setIsShareModalOpen(false)}
+        />
+      )}
+      {isDeleteModalOpen && (
+        <ModalInteraction
+          message={'정말로 이 모임을\n취소하시겠습니까?'}
+          onConfirm={handleDelete}
+          onClose={() => setIsDeleteModalOpen(false)}
+          isShowCancel
         />
       )}
     </>

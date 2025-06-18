@@ -1,12 +1,12 @@
 'use client';
 
 import Button from '@/components/commons/Button';
-import ModalInteraction from '@/components/commons/Modal/ModalInteraction';
 import ModalReview from '@/components/commons/Modal/ModalReview';
 import ProfileImage from '@/components/commons/ProfileImage';
 import { ReviewField, tagToFieldMap } from '@/constants/review';
 import { SESSION_ENUM_TO_KR } from '@/constants/tagsMapping';
 import { usePostReviewMutation } from '@/hooks/queries/review/usePostReviewMutation';
+import { useToastStore } from '@/stores/useToastStore';
 import { useUserStore } from '@/stores/useUserStore';
 import { GatheringDetailResponse, Participant } from '@/types/gathering';
 import { ReviewItem } from '@/types/review';
@@ -26,7 +26,6 @@ export default function ParticipantsSection({
   participants,
   writtenReviews,
 }: ParticipantsSectionProps) {
-  const [successModalOpen, setSuccessModalOpen] = useState(false);
   const user = useUserStore((state) => state.user);
   const isHost = user?.id === gathering.creator.id;
 
@@ -85,7 +84,7 @@ export default function ParticipantsSection({
     reviewMutation.mutate(reviewData, {
       onSuccess: () => {
         handleCloseReviewModal();
-        setSuccessModalOpen(true);
+        useToastStore.getState().show('리뷰가 성공적으로 작성되었습니다.');
       },
       onError: (error) => {
         handleAuthApiError(error, '리뷰 작성 중 오류가 발생했습니다.', {
@@ -198,14 +197,6 @@ export default function ParticipantsSection({
           onCancel={handleCloseReviewModal}
           onSubmit={handleSubmitReview}
           revieweeNickname={selectedParticipant.nickname}
-        />
-      )}
-      {successModalOpen && (
-        <ModalInteraction
-          message="리뷰가 작성되었습니다!"
-          onConfirm={() => setSuccessModalOpen(false)}
-          onClose={() => setSuccessModalOpen(false)}
-          isShowCancel={false}
         />
       )}
     </section>
