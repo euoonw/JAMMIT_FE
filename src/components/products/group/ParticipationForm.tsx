@@ -1,6 +1,6 @@
 'use client';
 
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import Button from '@/components/commons/Button';
 import TextArea from '@/components/commons/Textarea';
 import TagSelector from '@/components/commons/TagSelector';
@@ -24,7 +24,6 @@ export default function ParticipationForm({
 }: ParticipationFormProps) {
   const {
     handleSubmit,
-    control,
     formState: { isValid },
     setValue,
   } = useForm<ParticipationFormData>({
@@ -80,17 +79,16 @@ export default function ParticipationForm({
 
           <div>
             <ParticipationFormTitle>간단 소개</ParticipationFormTitle>
-            <Controller
+            <TextArea
               name="introduction"
-              control={control}
-              rules={{ required: '소개를 입력해주세요.' }}
-              render={({ field }) => (
-                <TextArea
-                  placeholder="어떤 연주를 하고 싶나요?"
-                  value={field.value}
-                  onChange={field.onChange}
-                />
-              )}
+              placeholder="어떤 연주를 하고 싶나요?"
+              rules={{
+                required: '소개글을 입력하세요.',
+                maxLength: {
+                  value: 500,
+                  message: '소개글은 500자 이내로 입력해주세요.',
+                },
+              }}
             />
           </div>
         </div>

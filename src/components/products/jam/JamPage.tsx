@@ -63,6 +63,8 @@ export default function JamPage({
     formState: { isValid },
   } = methods;
 
+  const thumbnail = watch('thumbnail');
+
   const { mutate: registerGathering } = useGatherRegister();
   const { mutate: modifyGathering } = useGatherModify();
 
@@ -106,7 +108,7 @@ export default function JamPage({
               variant="solid"
               className="mt-[2.5rem] w-[22.75rem]"
               type="submit"
-              disabled={!isValid}
+              disabled={!isValid || !thumbnail}
             >
               {formType === 'edit' ? '모임 수정하기' : '모임 만들기'}
             </Button>

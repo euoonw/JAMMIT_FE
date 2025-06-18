@@ -43,7 +43,7 @@ export default function SessionSelector({
         placeholder="세션을 선택하세요."
       />
       <NumberInput
-        count={session[SESSION_KEY_MAP[sortOption]] || 0}
+        count={session[SESSION_KEY_MAP[sortOption]] || 1}
         onChange={onChange}
       />
     </div>

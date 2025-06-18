@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { useForm, FormProvider, Controller } from 'react-hook-form';
+import { useForm, FormProvider } from 'react-hook-form';
 import ModalWrapper from './ModalWrapper';
 import TextArea from '../Textarea';
 import Button from '../Button';
@@ -37,7 +37,7 @@ export default function ModalReview({
     },
   });
 
-  const { handleSubmit, watch, control, setValue } = methods;
+  const { handleSubmit, watch, setValue } = methods;
   const tags = watch('tags') || [];
   const isValid = tags.length > 0;
 
@@ -88,17 +88,16 @@ export default function ModalReview({
               <p className="text-lg font-semibold">
                 경험에 대해 자유롭게 남겨주세요.(선택)
               </p>
-              <Controller
+              <TextArea
                 name="review"
-                control={control}
-                defaultValue=""
-                render={({ field }) => (
-                  <TextArea
-                    placeholder="남겨주신 리뷰는 프로그램 운영 및 다른 회원 분들께 큰 도움이 됩니다."
-                    value={field.value}
-                    onChange={field.onChange}
-                  />
-                )}
+                placeholder="남겨주신 리뷰는 프로그램 운영 및 다른 회원 분들께 큰 도움이 됩니다."
+                rules={{
+                  required: '소개글을 입력하세요.',
+                  maxLength: {
+                    value: 500,
+                    message: '소개글은 500자 이내로 입력해주세요.',
+                  },
+                }}
               />
             </div>
           </div>

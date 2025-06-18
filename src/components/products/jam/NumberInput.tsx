@@ -16,7 +16,11 @@ export default function NumberInput({
   onChange,
   min = 1,
 }: NumberInputProps) {
-  const decrease = () => onChange(Math.max(count - 1, min));
+  const decrease = () => {
+    if (count > min) {
+      onChange(count - 1);
+    }
+  };
   const increase = () => onChange(count + 1);
 
   return (

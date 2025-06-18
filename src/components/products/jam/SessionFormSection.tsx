@@ -41,20 +41,30 @@ export default function SessionFormSection({
 
   const handleSortOptionChange = useCallback(
     (index: number, newSortOption: string) => {
-      setSessionList((prev) =>
-        prev.map((session, idx) =>
+      setSessionList((prev) => {
+        const newList = prev.map((session, idx) =>
           idx === index ? { ...session, sortOption: newSortOption } : session,
-        ),
-      );
+        );
+        setValue(
+          'gatheringSessions',
+          newList
+            .filter((s) => s.sortOption !== '')
+            .map((s) => ({
+              bandSession: SESSION_KEY_MAP[s.sortOption],
+              recruitCount: s.count,
+            })),
+        );
+        return newList;
+      });
     },
-    [],
+    [setValue],
   );
 
   const handleCountChange = useCallback(
     (index: number, newCount: number) => {
       setSessionList((prev) => {
-        const newList = prev.map((session, i) =>
-          i === index ? { ...session, count: newCount } : session,
+        const newList = prev.map((session, idx) =>
+          idx === index ? { ...session, count: newCount } : session,
         );
 
         setValue(

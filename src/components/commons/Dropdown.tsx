@@ -40,8 +40,8 @@ export default function Dropdown({
   placeholder = '',
 }: DropdownProps) {
   const sizeClass = {
-    sm: 'w-[6.875rem]',
-    md: 'w-[24rem]',
+    sm: 'w-[9rem]',
+    md: 'w-[26rem]',
     lg: 'w-auto',
   }[size || 'lg'];
 

@@ -8,7 +8,7 @@ import { RegisterGatheringsRequest } from '@/types/gather';
 import SessionFormSection from './SessionFormSection';
 import DateFormSection from './DateFormSection';
 import GenreFormSection from './GenreFormSection';
-import DescriptionFormSection from './DescriptionFormSection';
+import TextArea from '@/components/commons/Textarea';
 
 const DIVIDER = 'mx-auto my-[2.5rem] w-[56rem] border-gray-800';
 
@@ -76,7 +76,20 @@ export default function JamFormSection({
       <hr className={DIVIDER} />
 
       {/* 소개글 */}
-      <DescriptionFormSection control={control} />
+      <div className="flex flex-col gap-[0.5rem]">
+        <p className="text-sm font-semibold">소개글</p>
+        <TextArea
+          name="description"
+          placeholder="어떤 일이 일어날까요?"
+          rules={{
+            required: '소개글을 입력하세요.',
+            maxLength: {
+              value: 500,
+              message: '소개글은 500자 이내로 입력해주세요.',
+            },
+          }}
+        />
+      </div>
     </div>
   );
 }
