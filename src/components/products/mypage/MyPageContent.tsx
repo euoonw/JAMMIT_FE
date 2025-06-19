@@ -19,8 +19,7 @@ import clsx from 'clsx';
 import { useMemo } from 'react';
 import GatheringList from './gather/GatheringList';
 import GatheringListComponents from './gather/GatheringListComponents';
-import ReviewList from './review/ReviewList';
-import ReviewStatus from './review/ReviewStatus';
+import MyReview from './review/MyReview';
 
 type TabKey =
   | 'participating'
@@ -103,12 +102,7 @@ export default function MyPage() {
         key: 'reviews_received',
         label: '내가 받은 리뷰',
         count: reviewCount,
-        component: (
-          <div className="flex items-start gap-5">
-            <ReviewStatus />
-            <ReviewList />
-          </div>
-        ),
+        component: <MyReview />,
       },
       {
         key: 'reviews_towrite',
@@ -134,22 +128,21 @@ export default function MyPage() {
     count: number,
     isActive: boolean,
   ) => (
-    <div key={key} className="flex items-center gap-[0.2rem]">
-      <button
-        onClick={() => setTab(key)}
-        className={clsx(
-          'flex items-center gap-[0.25rem]',
-          tabClass(isActive),
-          isActive ? 'text-[var(--purple-500)]' : 'text-gray-400',
-        )}
-      >{`${label} ${count}`}</button>
-    </div>
+    <button
+      onClick={() => setTab(key)}
+      key={key}
+      className={clsx(
+        'flex flex-shrink-0 items-center gap-[0.25rem] whitespace-nowrap',
+        tabClass(isActive),
+        isActive ? 'text-[var(--purple-500)]' : 'text-gray-400',
+      )}
+    >{`${label} ${count}`}</button>
   );
 
   return (
     <main className="min-h-screen bg-[#212121] pb-[3.75rem]">
       <UserCard />
-      <div className="mx-auto my-10 flex w-[84rem] gap-[1.25rem]">
+      <div className="pc:my-10 pc:max-w-[84rem] pc:px-0 hide-scrollbar mx-auto my-5 flex gap-[1.25rem] overflow-x-auto px-8">
         {tabList.map(({ key, label, count }) =>
           renderTabButton(key as TabKey, label, count, activeTab === key),
         )}

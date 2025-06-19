@@ -37,8 +37,13 @@ export default function ReviewsToWrite() {
     <>
       <InfinityScroll
         list={completedData}
-        item={(item) => (
-          <CardItem item={item} status={CARD_STATE.ENSEMBLE} page="towrite" />
+        item={(item, index) => (
+          <CardItem
+            item={item}
+            status={CARD_STATE.ENSEMBLE}
+            page="towrite"
+            isFirst={index === 0}
+          />
         )}
         emptyText="리뷰가능한 모임이 없습니다."
         hasMore={!!hasNextPage && !isFetching}

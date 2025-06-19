@@ -7,9 +7,10 @@ import { useEffect, useState } from 'react';
 interface ThumbnailProps {
   thumbnail: string;
   alt: string;
+  isFirst: boolean;
 }
 
-export default function Thumbnail({ thumbnail, alt }: ThumbnailProps) {
+export default function Thumbnail({ thumbnail, alt, isFirst }: ThumbnailProps) {
   const device = useDeviceType();
   const [imgSrc, setImgSrc] = useState<string>(
     imgChange(thumbnail, 'card', 'pc'),
@@ -22,11 +23,13 @@ export default function Thumbnail({ thumbnail, alt }: ThumbnailProps) {
     <Image
       src={imgSrc}
       alt={alt}
-      fill
-      className="pc:aspect-[8/5] tab:aspect-[87/25] aspect-[343/200] rounded-lg object-cover"
-      loading="eager"
-      priority
-      sizes="(min-width: 1344px) 1344px, (min-width: 744px) 744px, 100vw"
+      unoptimized
+      width={343}
+      height={200}
+      loading={isFirst ? 'eager' : 'lazy'}
+      priority={isFirst}
+      sizes="(min-width:1344px) 25vw, 100vw"
+      className="h-full w-full object-cover"
     />
   );
 }

@@ -10,7 +10,7 @@ import Link from 'next/link';
 export default function ReviewItems({ item }: { item: ReviewItem }) {
   return (
     <div
-      className="mb-5 rounded-lg bg-[#28282a] px-[3.75rem] py-[3.75rem]"
+      className="pc:px-[3.75rem] pc:py-[3.75rem] mb-5 rounded-lg bg-[#28282a] px-6 py-6"
       key={item.id}
     >
       <div className="mb-6 flex items-center gap-3">
@@ -36,16 +36,15 @@ export default function ReviewItems({ item }: { item: ReviewItem }) {
       <p className="mb-[35px] opacity-60">{getDate(item.createdAt)}</p>
       <Link
         href={`/group/${item.gatheringId}?tab=recruit`}
-        className="flex w-full items-center justify-between rounded-lg border border-[#464141] py-3 pr-[13px] pl-[27px]"
+        className="pc:py-3 pc:pr-[13px] pc:pl-[27px] tab:px-3 flex w-full items-center justify-between rounded-lg border border-[#464141] px-5 py-4"
       >
-        <div>
-          <p className="leading-6">{item.gatheringName}</p>
-          <p className="mt-1 leading-6 opacity-60">
+        <div className="flex-[1] overflow-hidden pr-4">
+          <p className="truncate leading-6">{item.gatheringName}</p>
+          <p className="mt-1 truncate leading-6 opacity-60">
             {item.gatheringHostNickname}
           </p>
         </div>
         <div className="h-[73px] w-[117px] overflow-hidden rounded-lg">
-          {}
           <Image
             src={imgChange(item.gatheringThumbnail, 'card')}
             alt={item.gatheringName}

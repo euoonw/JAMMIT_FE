@@ -1,5 +1,5 @@
-import InfinityScroll from '@/components/commons/InfinityScroll';
 import CardItem from '@/components/commons/Card/CardItem';
+import InfinityScroll from '@/components/commons/InfinityScroll';
 import { STATUS_ENUM_TO_KR } from '@/constants/cardMapping';
 import { GatheringCard } from '@/types/card';
 
@@ -23,8 +23,12 @@ export default function GatheringListComponents({
   return (
     <InfinityScroll<GatheringCard>
       list={gatherings}
-      item={(item) => (
-        <CardItem item={item} status={STATUS_ENUM_TO_KR(item.status)} />
+      item={(item, index) => (
+        <CardItem
+          item={item}
+          status={STATUS_ENUM_TO_KR(item.status)}
+          isFirst={index === 0}
+        />
       )}
       emptyText={emptyText}
       onInView={onLoadMore}

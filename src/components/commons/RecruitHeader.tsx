@@ -31,9 +31,9 @@ export default function RecruitHeader({
   const [src, setSrc] = useState<string | null>(null);
   const device = useDeviceType();
   useEffect(() => {
-    if (device === 'mob') setSrc('/images/main/img_main_banner_mob.jpg');
-    else if (device === 'tab') setSrc('/images/main/img_main_banner_tab.jpg');
-    else setSrc('/images/main/img_main_banner_pc.jpg');
+    if (device === 'mob') setSrc('/images/main/img_main_banner_mob.avif');
+    else if (device === 'tab') setSrc('/images/main/img_main_banner_tab.avif');
+    else setSrc('/images/main/img_main_banner_pc.avif');
   }, [device]);
 
   const handleSort = useCallback(() => {
@@ -49,7 +49,7 @@ export default function RecruitHeader({
     <Fragment>
       <div className="pc:aspect-[1344/250] tab:aspect-[186/49] relative aspect-[375/199] min-h-[200px] overflow-hidden rounded-lg">
         {(device === 'tab' || device === 'mob') && (
-          <div className="tab:left-[3.75rem] tab:-translate-x-0 absolute top-1/2 left-1/2 z-5 block -translate-x-1/2 -translate-y-1/2">
+          <div className="tab:left-[3.75rem] tab:text-left absolute inset-0 z-5 flex flex-col justify-center text-center">
             <p className="tab:text-[1.25rem] tab:tracking-[-0.04em] text-base leading-[1.5rem] text-[#DAA3FF]">
               함께하면 더 재밌으니까, 재밋 🤘️️
             </p>
@@ -62,9 +62,10 @@ export default function RecruitHeader({
           src={src}
           alt="메인이미지"
           fill
-          className="object-cover"
-          sizes="100vw"
           priority
+          quality={85}
+          fetchPriority="high"
+          sizes="100vw"
         />
       </div>
       <div className="pc:px-0 tab:px-6 mt-8 mb-9 flex items-center justify-between px-4">

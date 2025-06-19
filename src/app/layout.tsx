@@ -3,6 +3,7 @@ import GlobalErrorModalProvider from '@/components/commons/Modal/GlobalErrorModa
 import Toast from '@/components/commons/Toast';
 import '@/styles/globals.css';
 import { Metadata } from 'next';
+import PreloadResources from './preload/resources';
 import Providers from './providers';
 
 export const metadata: Metadata = {
@@ -39,6 +40,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko">
+      <head>
+        <PreloadResources />
+      </head>
       <body>
         <div id="modal-root">
           <GlobalErrorModalProvider />

@@ -51,7 +51,7 @@ const baseMock: GatheringCard = {
   status: 'RECRUITING',
 };
 
-export const mockRecruits: GatheringCard[] = Array.from({ length: 40 }).map(
+export const mockRecruits: GatheringCard[] = Array.from({ length: 1000 }).map(
   (_, i) => {
     const thumbnails = [
       'img_banner_01',

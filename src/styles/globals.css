@@ -8,7 +8,9 @@
   --foreground: #f3f4f6;
   --primary: #c179ff;
   --purple-500: #BF5eff;
+  --purple-600: #a339ff;
   --purple-700: #9900ff;
+  --purple-750: #9952ff;
   --bg-34343A: #34343a;
   --gray-50: #9CA3AF;
   --gray-100: #29292C;
@@ -74,6 +76,7 @@
 
   p {
     margin: 0;
+    word-break: keep-all;
   }
 
   button:disabled {
@@ -83,12 +86,14 @@
 
   em {
     font-style: normal;
+    word-break: keep-all;
   }
 
   a {
     text-decoration: none;
     color: inherit;
     cursor: pointer;
+    word-break: keep-all;
   }
 
   img,
@@ -151,4 +156,11 @@
 ::-webkit-scrollbar-thumb {
   background: #4b5563;
   border-radius: 0.5rem;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
 }

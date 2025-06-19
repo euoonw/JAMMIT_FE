@@ -1,6 +1,7 @@
 import EditIcon from '@/assets/icons/ic_edit.svg';
 import ProfileImage from '@/components/commons/ProfileImage';
 import { GENRE_ENUM_TO_KR, SESSION_ENUM_TO_KR } from '@/constants/tagsMapping';
+import { useDeviceType } from '@/hooks/useDeviceType';
 import { BandSession, Genre } from '@/types/tags';
 import { UserResponse } from '@/types/user';
 import React from 'react';
@@ -19,11 +20,22 @@ export default function UserCardItem({
   const handleProfileEdit = () => {
     setIsModalOpen?.(true);
   };
+  const deviceType = useDeviceType();
+  const getProfileSize = () => {
+    switch (deviceType) {
+      case 'pc':
+        return 8;
+      case 'tab':
+        return 3.5;
+      case 'mob':
+        return 3.5;
+      default:
+        return 8;
+    }
+  };
   return (
-    <div className="flex h-[15.625rem] w-[full] items-center justify-center gap-[3.3125rem] bg-[#36114E]">
-      <div>
-        <ProfileImage src={user.profileImagePath} size={8} />
-      </div>
+    <div className="pc:h-[15.625rem] pc:gap-[3.3125rem] tab:gap-5 flex h-[7.375rem] w-[full] items-center justify-center gap-6 bg-[#36114E]">
+      <ProfileImage src={user.profileImagePath} size={getProfileSize()} />
       <div className="flex flex-col text-gray-100">
         <div className="flex items-center gap-[0.625rem]">
           <p className="text-[1.5rem] leading-[2.4rem] font-bold">
@@ -39,7 +51,7 @@ export default function UserCardItem({
             </button>
           )}
         </div>
-        <div className="flex items-center gap-[0.5rem] text-sm font-medium">
+        <div className="pc:flex hidden items-center gap-[0.5rem] text-sm font-medium">
           <p>담당 세션</p>
           {user.preferredBandSessions.map((session: BandSession) => (
             <div

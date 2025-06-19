@@ -25,7 +25,6 @@ export default function RecruitPage({
   const { data, fetchNextPage, hasNextPage, isFetching } =
     useCommonInfiniteQuery({
       key: 'list',
-
       size: 8,
       genres,
       sessions,
@@ -59,8 +58,13 @@ export default function RecruitPage({
         <InfinityScroll
           isInitialLoading={isInitialLoading}
           list={flatData}
-          item={(item) => (
-            <CardItem item={item} isLike={true} status={CARD_STATE.PROGRESS} />
+          item={(item, index) => (
+            <CardItem
+              item={item}
+              isLike={true}
+              status={CARD_STATE.PROGRESS}
+              isFirst={index === 0}
+            />
           )}
           emptyText="해당 모임이 존재하지 않습니다."
           hasMore={!!hasNextPage && !isFetching}

@@ -1,9 +1,0 @@
-export { default as ImgTag01 } from './img_tag_sticker_01.svg';
-export { default as ImgTag02 } from './img_tag_sticker_02.svg';
-export { default as ImgTag03 } from './img_tag_sticker_03.svg';
-export { default as ImgTag04 } from './img_tag_sticker_04.svg';
-export { default as ImgTag05 } from './img_tag_sticker_05.svg';
-export { default as ImgTag06 } from './img_tag_sticker_06.svg';
-export { default as ImgTag07 } from './img_tag_sticker_07.svg';
-export { default as ImgTag08 } from './img_tag_sticker_08.svg';
-export { default as ImgTag09 } from './img_tag_sticker_09.svg';

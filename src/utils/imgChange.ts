@@ -9,7 +9,7 @@ export const imgChange = (
   const match = isBannerImg ? thumbnail.match(/\d+/) : null;
   const num = match ? match[0].padStart(2, '0') : '01';
   if (type === 'card') {
-    return `/images/card/img_card_${device}_${num}.jpg`;
+    return `/images/card/img_card_${device}_${num}.avif`;
   } else {
     return `/images/banner/img_banner_${num}.png`;
   }

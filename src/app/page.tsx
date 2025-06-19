@@ -36,7 +36,6 @@ export default async function Home({ searchParams }: HomeProps) {
     size: 8,
     sort: defaultSort,
   });
-
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <RecruitPage

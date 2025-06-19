@@ -43,12 +43,13 @@ export default function Page() {
       />
       <VirtualGrid
         list={filteredData}
-        item={(item) => (
+        item={(item, index) => (
           <CardItem
             key={item.id}
             item={item}
             isLike={true}
             status={CARD_STATE.PROGRESS}
+            isFirst={index === 0}
           />
         )}
         emptyText="찜한 항목이 없습니다."

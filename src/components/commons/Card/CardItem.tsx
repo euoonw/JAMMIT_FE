@@ -9,6 +9,7 @@ interface CardItemProps {
   isLike?: boolean;
   status: CardStatus;
   page?: string;
+  isFirst: boolean;
 }
 
 export default function CardItem({
@@ -16,12 +17,17 @@ export default function CardItem({
   isLike = false,
   status,
   page = 'read',
+  isFirst = false,
 }: CardItemProps) {
   return (
     <Link key={item.id} href={`/group/${item.id}?tab=recruit`}>
       <div className="pc:aspect-[8/5] tab:aspect-[87/25] relative aspect-[343/200] overflow-hidden rounded-lg">
         {isLike && <Like item={item} />}
-        <Card.Thumbnail thumbnail={item.thumbnail} alt={item.name} />
+        <Card.Thumbnail
+          thumbnail={item.thumbnail}
+          alt={item.name}
+          isFirst={isFirst}
+        />
       </div>
 
       <Card.TagList tags={item.genres} />

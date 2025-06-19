@@ -6,14 +6,15 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'picsum.photos',
-        port: '',
-      },
-      {
-        protocol: 'https',
         hostname: 'torip.s3.ap-northeast-2.amazonaws.com',
       },
     ],
+    // 우선 렌더링 되야 하는것들
+    formats: ['image/avif', 'image/webp'],
+    // 실제 사용되는 디바이스 크기들
+    deviceSizes: [375, 414, 640, 744, 768, 1024, 1344, 1440, 1920],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256],
+    minimumCacheTTL: 31536000,
   },
   experimental: {
     turbo: {
