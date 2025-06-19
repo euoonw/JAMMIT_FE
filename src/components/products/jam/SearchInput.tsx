@@ -36,7 +36,9 @@ export default function SearchInput({ value, onChange }: SearchInputProps) {
       />
 
       <div className="flex flex-col gap-[0.5rem]">
-        <label className="block text-sm text-gray-100">모임 장소</label>
+        <label className="block text-sm font-semibold text-gray-100">
+          모임 장소
+        </label>
         <div className="relative w-[27.9375rem] text-gray-400">
           <label className="block cursor-pointer">
             <input

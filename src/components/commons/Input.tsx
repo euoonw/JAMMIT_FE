@@ -106,7 +106,10 @@ function Input({
 
   return (
     <div className="flex flex-col gap-[0.5rem]">
-      <label htmlFor={name} className="block text-sm text-gray-100">
+      <label
+        htmlFor={name}
+        className="block text-sm font-semibold text-gray-100"
+      >
         {label}
       </label>
       <div className={`relative ${sizeClass} text-gray-400`}>

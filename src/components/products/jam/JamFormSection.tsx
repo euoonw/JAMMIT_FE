@@ -77,7 +77,7 @@ export default function JamFormSection({
 
       {/* 소개글 */}
       <div className="flex flex-col gap-[0.5rem]">
-        <p className="text-sm font-semibold">소개글</p>
+        <p className="text-sm font-semibold text-gray-100">소개글</p>
         <TextArea
           name="description"
           placeholder="어떤 일이 일어날까요?"
