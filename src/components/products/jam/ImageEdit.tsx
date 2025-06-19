@@ -30,7 +30,7 @@ export default function ImageEdit() {
     if (thumb) {
       setSelectedFileName(thumb);
     }
-  }, [watch]);
+  }, [watch('thumbnail')]);
 
   const selectedImageSrc = selectedFileName
     ? imgChange(selectedFileName, 'banner')

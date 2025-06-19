@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, useRef, useState } from 'react';
+import { ReactNode, useRef, useState, useEffect } from 'react';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import DropdownMenuList from './DropdownMenuList';
 
@@ -51,6 +51,10 @@ export default function Dropdown({
   const setIsOpen = externalSetIsOpen || setInternalIsOpen;
   const dropdownRef = useRef<HTMLDivElement>(null);
   const displayValue = selectedDropdownMenu || '';
+
+  useEffect(() => {
+    setSelectedDropdownMenu(value || '');
+  }, [value]);
 
   useClickOutside(dropdownRef, () => setIsOpen(false));
 

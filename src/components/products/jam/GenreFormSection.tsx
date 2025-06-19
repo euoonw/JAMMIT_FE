@@ -1,8 +1,8 @@
-import { useCallback, useRef } from 'react';
+import { useCallback } from 'react';
 import { UseFormSetValue, UseFormWatch } from 'react-hook-form';
 import TagSelector from '@/components/commons/TagSelector';
 import { GENRE_TAGS } from '@/constants/tags';
-import { GENRE_KR_TO_ENUM } from '@/constants/tagsMapping';
+import { GENRE_KR_TO_ENUM, GENRE_ENUM_TO_KR } from '@/constants/tagsMapping';
 import { RegisterGatheringsRequest } from '@/types/gather';
 import { GenreType } from '@/types/tags';
 
@@ -15,22 +15,19 @@ export default function GenreFormSection({
   setValue,
   watch,
 }: GenreFormSectionProps) {
-  const pendingUpdateRef = useRef<string[] | null>(null);
-
   const handleTagChange = useCallback(
     (tags: string[]) => {
-      pendingUpdateRef.current = tags;
-      requestAnimationFrame(() => {
-        if (pendingUpdateRef.current) {
-          const convertedTags = pendingUpdateRef.current
-            .map((tag) => GENRE_KR_TO_ENUM[tag])
-            .filter(Boolean) as GenreType[];
-          setValue('genres', convertedTags);
-          pendingUpdateRef.current = null;
-        }
-      });
+      const convertedTags = tags
+        .map((tag) => GENRE_KR_TO_ENUM[tag])
+        .filter(Boolean) as GenreType[];
+      setValue('genres', convertedTags);
     },
     [setValue],
+  );
+
+  const currentGenres = watch('genres') || [];
+  const initialSelected = currentGenres.map(
+    (genre) => GENRE_ENUM_TO_KR[genre] || '',
   );
 
   return (
@@ -40,12 +37,7 @@ export default function GenreFormSection({
         mode="selectable"
         tags={GENRE_TAGS}
         onChange={handleTagChange}
-        initialSelected={(watch('genres') || []).map(
-          (enumVal) =>
-            Object.keys(GENRE_KR_TO_ENUM).find(
-              (k) => GENRE_KR_TO_ENUM[k] === enumVal,
-            ) || '',
-        )}
+        initialSelected={initialSelected}
       />
     </div>
   );
