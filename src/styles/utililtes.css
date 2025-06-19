@@ -3,7 +3,7 @@
 /* 그룹 상세 커스텀 스타일 */
 @layer utilities {
   .group-info-title {
-    @apply text-[1.5rem] font-bold text-gray-100;
+    @apply text-[1.5rem] font-bold break-keep text-gray-100;
   }
   .group-info-subtitle {
     @apply text-[1rem] text-gray-400;

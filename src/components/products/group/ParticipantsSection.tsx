@@ -97,8 +97,8 @@ export default function ParticipantsSection({
   };
 
   return (
-    <section className="w-[60rem] rounded-[0.5rem] bg-[#202024] p-[2.5rem]">
-      <div className="flex h-[4.375rem] flex-col justify-between">
+    <section className="pc:w-[60rem] tab:p-[2.5rem] w-full rounded-[0.5rem] bg-[#202024] p-[1.25rem]">
+      <div className="flex flex-col justify-between gap-[0.625rem]">
         <h1 className="group-info-title">{gathering.name}</h1>
         <p className="group-info-subtitle">{gathering.creator.nickname}</p>
       </div>
@@ -125,32 +125,34 @@ export default function ParticipantsSection({
 
           return (
             <div key={participantId}>
-              <div className="my-[0.75rem] flex items-center gap-[1.25rem]">
-                <ProfileImage src={profileImagePath} size={3} />
+              <div className="pc:flex-row pc:items-center my-[0.75rem] flex flex-col">
+                <div className="tab:gap-[1.25rem] mr-[1.25rem] flex items-center gap-[0.75rem]">
+                  <ProfileImage src={profileImagePath} size={3} />
 
-                <div className="flex w-[8.6875rem] items-center">
-                  <span className="text-[1rem] underline underline-offset-2">
-                    {userNickname}
-                  </span>
-                  {isHostItem && (
-                    <div className="ml-[0.4375rem] flex h-[1rem] w-[2.875rem] items-center justify-center rounded-[0.5313rem] bg-purple-700 text-center text-[0.75rem] font-semibold">
-                      주최자
-                    </div>
-                  )}
-                </div>
+                  <div className="pc:w-[8.6875rem] flex items-center">
+                    <span className="text-[1rem] underline underline-offset-2">
+                      {userNickname}
+                    </span>
+                    {isHostItem && (
+                      <div className="ml-[0.4375rem] flex h-[1rem] w-[2.875rem] items-center justify-center rounded-[0.5313rem] bg-purple-700 text-center text-[0.75rem] font-semibold">
+                        주최자
+                      </div>
+                    )}
+                  </div>
 
-                <div className="flex w-[10.4375rem] gap-[0.25rem]">
-                  {!isHostItem && (
-                    <div className="rounded-[0.5rem] bg-[#34343A] px-[0.75rem] py-[0.375rem] text-gray-100">
-                      {SESSION_ENUM_TO_KR[bandSession]}
-                    </div>
-                  )}
+                  <div className="pc:w-[10.4375rem] flex gap-[0.25rem]">
+                    {!isHostItem && (
+                      <div className="rounded-[0.5rem] bg-[#34343A] px-[0.75rem] py-[0.375rem] text-gray-100">
+                        {SESSION_ENUM_TO_KR[bandSession]}
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 <div
                   className={clsx(
-                    'line-clamp-2 overflow-hidden text-ellipsis',
-                    isCompleted ? 'w-[20.375rem]' : 'w-[29.375rem]',
+                    'pc:mt-0 mt-[0.75rem] flex items-center break-keep text-ellipsis whitespace-pre-line',
+                    isCompleted ? 'pc:w-[20.375rem]' : 'pc:w-[29.375rem]',
                   )}
                 >
                   {introduction}
@@ -158,21 +160,29 @@ export default function ParticipantsSection({
 
                 {isCompleted &&
                   user?.id !== userId &&
-                  (isParticipating || isHost) &&
-                  (hasWrittenReview ? (
-                    <Button disabled className="w-[124px]">
-                      리뷰 작성 완료
-                    </Button>
-                  ) : (
-                    <Button
-                      className="w-[124px]"
-                      onClick={() =>
-                        handleOpenReviewModal(userId, userNickname)
-                      }
-                    >
-                      리뷰 쓰기
-                    </Button>
-                  ))}
+                  (isParticipating || isHost) && (
+                    <div className="pc:mt-0 mt-[0.75rem]">
+                      {hasWrittenReview ? (
+                        <Button
+                          disabled
+                          variant="outline"
+                          className="pc:w-[124px] w-full"
+                        >
+                          리뷰 작성 완료
+                        </Button>
+                      ) : (
+                        <Button
+                          className="pc:w-[124px] w-full"
+                          variant="outline"
+                          onClick={() =>
+                            handleOpenReviewModal(userId, userNickname)
+                          }
+                        >
+                          리뷰 쓰기
+                        </Button>
+                      )}
+                    </div>
+                  )}
               </div>
               <div className="border-b-[0.0625rem] border-[#2D3035]" />
             </div>

@@ -7,14 +7,14 @@ import { ReviewFormData } from '@/types/modal';
 import TagSection from '../TagSection';
 
 const REVIEW_TAGS = [
-  '연주 실력이 좋아요',
-  '곡 준비를 잘 해왔어요',
-  '다른 파트와의 호흡이 잘 맞아요',
-  '악보나 연습 자료를 잘 공유해줬어요',
-  '분위기를 잘 이끌어요',
-  '팀워크가 좋고 함께 연주하기 편했어요',
-  '볼륨이나 톤을 배려해줘요',
-  '합주 시간 약속을 잘 지켜요',
+  '🎸 연주 실력이 좋아요',
+  '📒 곡 준비를 잘 해왔어요',
+  '🙌 다른 파트와의 호흡이 잘 맞아요',
+  '📚 악보나 연습 자료를 잘 공유해줬어요',
+  '🤘 분위기를 잘 이끌어요',
+  '🤝 팀워크가 좋고 함께 연주하기 편했어요',
+  '♪ 볼륨이나 톤을 배려해줘요',
+  '⏰ 합주 시간 약속을 잘 지켜요',
 ];
 
 interface ModalReviewProps {
@@ -62,7 +62,7 @@ export default function ModalReview({
     <ModalWrapper
       title="리뷰쓰기"
       onClose={onCancel}
-      className="relative h-auto w-[32.5rem] rounded-lg bg-[#242429] p-[1.5rem] text-gray-100"
+      className="tab:w-[32.5rem] relative h-auto w-full rounded-lg bg-[#242429] p-[1.5rem] text-gray-100"
     >
       <FormProvider {...methods}>
         <form

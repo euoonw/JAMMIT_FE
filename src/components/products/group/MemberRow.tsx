@@ -13,7 +13,7 @@ interface MemberRowProps {
   introduction: string;
   profileImage?: string | null;
   isSelectable?: boolean;
-  gathering?: number;
+  gatheringId?: number;
 }
 
 export default function MemberRow({
@@ -25,7 +25,7 @@ export default function MemberRow({
   introduction,
   profileImage = null,
   isSelectable = true,
-  gathering,
+  gatheringId: gatheringId,
 }: MemberRowProps) {
   return (
     <div>
@@ -37,24 +37,30 @@ export default function MemberRow({
         ) : (
           <div className="w-[1rem]" />
         )}
-        <ProfileImage src={profileImage} size={3} />
 
-        <div className="w-[8.6875rem] underline underline-offset-2">
-          {!gathering && nickname}
-          {gathering && (
-            <Link href={`/group/${gathering}/reviews/${id}`}>{nickname}</Link>
-          )}
-        </div>
+        <div className="pc:flex-row flex w-full flex-col">
+          <div className="tab:gap-[1.25rem] mr-[1.25rem] flex items-center gap-[0.75rem]">
+            <ProfileImage src={profileImage} size={3} />
 
-        <div className="flex w-[10.4375rem] gap-[0.25rem]">
-          <div className="rounded-[0.5rem] bg-[#34343A] px-[0.75rem] py-[0.375rem] text-gray-100">
-            {SESSION_ENUM_TO_KR[session]}
+            <div className="pc:w-[8.6875rem] underline underline-offset-2">
+              <Link href={`/group/${gatheringId}/reviews/${id}`}>
+                {nickname}
+              </Link>
+            </div>
+
+            <div className="pc:w-[10.4375rem] flex gap-[0.25rem]">
+              <div className="rounded-[0.5rem] bg-[#34343A] px-[0.75rem] py-[0.375rem] text-gray-100">
+                {SESSION_ENUM_TO_KR[session]}
+              </div>
+            </div>
+          </div>
+
+          <div className="pc:w-[22.875rem] pc:mt-0 mt-[0.75rem] break-keep whitespace-pre-line">
+            {introduction}
           </div>
         </div>
-        <div className="line-clamp-2 w-[22.875rem] overflow-hidden text-ellipsis">
-          {introduction}
-        </div>
       </div>
+
       <div className="border-b-[0.0625rem] border-[#2D3035]" />
     </div>
   );

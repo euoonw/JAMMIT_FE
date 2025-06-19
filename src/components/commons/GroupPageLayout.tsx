@@ -72,7 +72,7 @@ export default function GroupPageLayout({
         </div>
       )}
 
-      <div className="pc:flex-row pc:px-0 pc:gap-0 mx-auto flex w-full max-w-[84rem] flex-col justify-between gap-[14px] px-5 pb-[3.875rem]">
+      <div className="pc:flex-row pc:px-0 pc:gap-0 tab:px-[1.5rem] mx-auto flex w-full max-w-[84rem] flex-col justify-between gap-[0.875rem] px-[1.125rem] pb-[3.875rem]">
         {/* 메인 본문 */}
         {children}
 

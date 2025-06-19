@@ -67,20 +67,20 @@ export default function GroupInfoSection({
 
   return (
     <>
-      <section className="pc:max-w-[60rem] w-full rounded-[0.5rem] bg-[#202024] p-[2.5rem]">
+      <section className="pc:max-w-[60rem] tab:p-[2.5rem] w-full rounded-[0.5rem] bg-[#202024] p-[1.25rem]">
         {/* 모임 제목, 주최자 */}
-        <div className="flex h-[4.375rem] flex-col justify-between">
+        <div className="relative flex flex-col gap-[0.625rem]">
           <div className="flex w-full justify-between">
             <h1 className="group-info-title">{name}</h1>
-            <div className="relative">
-              <ShareIcon
-                className="absolute top-1.5 right-[2.5rem] w-7 cursor-pointer"
-                onClick={() => setIsShareModalOpen(true)}
-              />
-              <Like item={convertToCardItem(gathering)} />
-            </div>
           </div>
           <p className="group-info-subtitle">{creator.nickname}</p>
+          <ShareIcon
+            className="pc:top-0 absolute right-10 bottom-0 w-7 cursor-pointer"
+            onClick={() => setIsShareModalOpen(true)}
+          />
+          <div className="pc:top-[-4] absolute right-0 bottom-7">
+            <Like item={convertToCardItem(gathering)} />
+          </div>
         </div>
 
         <div className="group-info-divider-line" />
@@ -148,7 +148,9 @@ export default function GroupInfoSection({
 
         {/* 모임 소개글 */}
         <p className="group-info-subtitle mb-[1.25rem]">모임 소개글</p>
-        <div className="group-info-text whitespace-pre-line">{description}</div>
+        <div className="group-info-text break-keep whitespace-pre-line">
+          {description}
+        </div>
       </section>
 
       <div className="ml-[1.25rem]">
@@ -158,7 +160,7 @@ export default function GroupInfoSection({
               <Button
                 key={label}
                 variant={variant as 'solid' | 'outline'}
-                className="w-[22.75rem]"
+                className="pc:w-[22.75rem] w-full"
                 onClick={onClick}
               >
                 {label}
