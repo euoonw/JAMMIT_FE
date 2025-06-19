@@ -34,6 +34,7 @@ export default function GenreFormSection({
     <div className="flex flex-col gap-[0.5rem]">
       <p className="text-sm font-semibold text-gray-100">모임 장르</p>
       <TagSelector
+        key={initialSelected.join(',')}
         mode="selectable"
         tags={GENRE_TAGS}
         onChange={handleTagChange}
