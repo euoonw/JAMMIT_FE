@@ -120,3 +120,6 @@ class ApiClient {
 }
 
 export const apiClient = new ApiClient(process.env.NEXT_PUBLIC_API_URL || '');
+export const nestApiClient = new ApiClient(
+  process.env.NEXT_PUBLIC_APP_URL_NEST || '',
+);
