@@ -117,7 +117,10 @@ export default function JamPage({
         onSuccess: (response) => {
           localStorage.removeItem(TEMP_STORAGE_KEY);
           queryClient.refetchQueries({
-            queryKey: ['list'],
+            predicate: (query) =>
+              query.queryKey &&
+              query.queryKey[0] === 'gatherings' &&
+              query.queryKey[1] === 'list',
           });
           router.push(`/?showShareModal=true&groupId=${response.id}`);
         },

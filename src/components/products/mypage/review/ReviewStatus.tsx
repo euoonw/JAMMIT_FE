@@ -1,15 +1,14 @@
 'use client';
-import { useUserMeQuery } from '@/hooks/queries/user/useUserMeQuery';
 import { getStatus } from '@/lib/review/received';
 import { useQuery } from '@tanstack/react-query';
 
 import ReviewStatusItem from './ReviewsReceived';
 import SkeletonStatus from './SkeletonStatus';
+import { userKeys } from '@/hooks/queries/queryKeys';
 
 export default function ReviewStatus() {
-  const { data: user } = useUserMeQuery();
   const { data } = useQuery({
-    queryKey: ['getStatus', user?.id],
+    queryKey: userKeys.reviews.statistics(),
     queryFn: getStatus,
   });
   if (!data) return <SkeletonStatus />;

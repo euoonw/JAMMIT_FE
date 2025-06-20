@@ -1,5 +1,6 @@
 import { putUpdateProfileImage } from '@/lib/mypage/updateprofileimage';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { userKeys } from '../queryKeys';
 
 export const useUpdateProfileImage = () => {
   const queryClient = useQueryClient();
@@ -9,7 +10,7 @@ export const useUpdateProfileImage = () => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['me'],
+        queryKey: userKeys.me(),
       });
     },
   });

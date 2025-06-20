@@ -24,7 +24,6 @@ export default function RecruitPage({
   const router = useRouter();
   const { data, fetchNextPage, hasNextPage, isFetching } =
     useCommonInfiniteQuery({
-      key: 'list',
       size: 8,
       genres,
       sessions,

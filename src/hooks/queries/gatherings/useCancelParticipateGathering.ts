@@ -2,6 +2,7 @@ import { cancelParticipateGathering } from '@/lib/gatherings/gatherings';
 import { useToastStore } from '@/stores/useToastStore';
 import { handleAuthApiError } from '@/utils/authApiError';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { gatheringKeys } from '../queryKeys';
 
 export const useCancelParticipateGatheringMutation = () => {
   const queryClient = useQueryClient();
@@ -17,14 +18,13 @@ export const useCancelParticipateGatheringMutation = () => {
     onSuccess: (data) => {
       useToastStore.getState().show(data.message);
       queryClient.invalidateQueries({
-        queryKey: ['gatheringDetail', data.gatheringId],
+        queryKey: gatheringKeys.details(data.gatheringId).detail,
       });
       queryClient.invalidateQueries({
-        queryKey: ['gatheringParticipants', data.gatheringId],
+        queryKey: gatheringKeys.details(data.gatheringId).participants,
       });
     },
     onError: (error) => {
-      // console.error('참여 취소 실패:', error);
       handleAuthApiError(error, '참여 취소 중 문제가 발생했습니다.', {
         section: 'gather',
         action: 'cancel_gather',

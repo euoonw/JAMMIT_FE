@@ -30,7 +30,6 @@ export default async function Home({ searchParams }: HomeProps) {
 
   await prefetchCommonInfiniteQuery({
     queryClient,
-    key: 'list',
     genres: defaultGenres,
     sessions: defaultSessions,
     size: 8,

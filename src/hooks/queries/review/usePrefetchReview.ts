@@ -3,10 +3,13 @@ import { getReviewWrites } from '@/lib/review/towrite';
 import { RecruitResponse } from '@/types/recruit';
 import { ReviewRequest } from '@/types/review';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { gatheringKeys, userKeys } from '../queryKeys';
 
 export const useReviewQuery = ({ gatheringId, userId }: ReviewRequest) => {
   return useQuery({
-    queryKey: ['prefetch_review', gatheringId, userId],
+    queryKey: gatheringKeys
+      .details(gatheringId)
+      .participantReviewProfile(userId),
     queryFn: () => getReviewRead({ gatheringId, userId }),
   });
 };
@@ -14,16 +17,14 @@ export const useReviewQuery = ({ gatheringId, userId }: ReviewRequest) => {
 interface ReivewProps {
   size: number;
   includeCanceled: boolean;
-  id: number;
 }
 
 export const useReviewToWriteInfiniteQuery = ({
   size,
   includeCanceled,
-  id,
 }: ReivewProps) => {
   return useInfiniteQuery({
-    queryKey: ['getReviewWrite', includeCanceled, id],
+    queryKey: userKeys.myParticipatedGatherings({ size, includeCanceled }),
     queryFn: ({ pageParam = 0 }) =>
       getReviewWrites({ pageParam, size, includeCanceled }),
     initialPageParam: 0,

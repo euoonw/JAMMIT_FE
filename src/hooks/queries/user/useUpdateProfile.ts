@@ -1,5 +1,6 @@
 import { putUpdateProfile } from '@/lib/mypage/updateprofile';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { userKeys } from '../queryKeys';
 
 export const useUpdateProfile = () => {
   const queryClient = useQueryClient();
@@ -9,7 +10,7 @@ export const useUpdateProfile = () => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['me'],
+        queryKey: userKeys.me(),
       });
     },
   });

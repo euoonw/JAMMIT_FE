@@ -1,15 +1,15 @@
 import { getReview } from '@/lib/review/received';
 import { ReviewResponse } from '@/types/review';
 import { useInfiniteQuery } from '@tanstack/react-query';
+import { userKeys } from '../queryKeys';
 
 interface ReviewProps {
   size: number;
-  id: number;
 }
 
-export const useReviewInfiniteQuery = ({ size, id }: ReviewProps) => {
+export const useReviewInfiniteQuery = ({ size }: ReviewProps) => {
   return useInfiniteQuery({
-    queryKey: ['received-reviews', id],
+    queryKey: userKeys.reviews.received(),
     queryFn: ({ pageParam = 0 }) => getReview({ pageParam, size }),
     initialPageParam: 0,
     getNextPageParam: (lastPage: ReviewResponse) =>

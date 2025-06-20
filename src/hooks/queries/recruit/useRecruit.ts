@@ -2,9 +2,9 @@ import { getRecruit } from '@/lib/recruit/recruit';
 import { RecruitResponse } from '@/types/recruit';
 import { BandSession, Genre } from '@/types/tags';
 import { QueryClient, useInfiniteQuery } from '@tanstack/react-query';
+import { gatheringKeys } from '../queryKeys';
 
 interface CommonQueryParams {
-  key: string;
   size: number;
   sort: string;
   genres: Genre[];
@@ -12,14 +12,13 @@ interface CommonQueryParams {
 }
 
 export const useCommonInfiniteQuery = ({
-  key,
   size,
   sort,
   genres,
   sessions,
 }: CommonQueryParams) => {
   return useInfiniteQuery({
-    queryKey: [key, genres, sessions],
+    queryKey: gatheringKeys.list({ size, sort, genres, sessions }),
     queryFn: ({ pageParam = 0 }) =>
       getRecruit({ pageParam, size, sort, genres, sessions }),
     initialPageParam: 0,
@@ -30,16 +29,16 @@ export const useCommonInfiniteQuery = ({
     staleTime: 1000 * 60 * 1,
   });
 };
+
 export const prefetchCommonInfiniteQuery = async ({
   queryClient,
-  key,
   size,
   sort,
   genres,
   sessions,
 }: CommonQueryParams & { queryClient: QueryClient }) => {
   return await queryClient.prefetchInfiniteQuery({
-    queryKey: [key, genres, sessions],
+    queryKey: gatheringKeys.list({ size, sort, genres, sessions }),
     queryFn: ({ pageParam = 0 }) =>
       getRecruit({ pageParam, size, sort, genres, sessions }),
     initialPageParam: 0,

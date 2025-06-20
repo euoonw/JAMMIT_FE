@@ -13,7 +13,6 @@ export default function ReviewsToWrite() {
     useReviewToWriteInfiniteQuery({
       size: 8,
       includeCanceled: false,
-      id: user?.id as number,
     });
   useSentryErrorLogger({
     isError: !!isError,

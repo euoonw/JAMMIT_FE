@@ -13,7 +13,6 @@ import {
 import { usePrefetchedCount } from '@/hooks/queries/gather/usePrefetchedCoint';
 import { useReviewToWriteInfiniteQuery } from '@/hooks/queries/review/usePrefetchReview';
 import { useReviewInfiniteQuery } from '@/hooks/queries/review/useReviewInfiniteQuery';
-import { useUserMeQuery } from '@/hooks/queries/user/useUserMeQuery';
 import { useQueryTab } from '@/hooks/useQueryTab';
 import clsx from 'clsx';
 import { useMemo } from 'react';
@@ -45,11 +44,9 @@ export default function MyPage() {
     selector: (data) => data.totalElements,
   });
 
-  const { data: user } = useUserMeQuery();
   const { data: write } = useReviewToWriteInfiniteQuery({
     size: 8,
     includeCanceled: false,
-    id: user?.id as number,
   });
 
   const writeCount =
@@ -57,7 +54,6 @@ export default function MyPage() {
       .length ?? 0;
   const { data: review } = useReviewInfiniteQuery({
     size: 8,
-    id: user?.id as number,
   });
 
   const reviewCount = review?.pages[0].totalElements ?? 0;

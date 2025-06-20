@@ -2,6 +2,7 @@ import { approveParticipant } from '@/lib/gatherings/gatherings';
 import { useToastStore } from '@/stores/useToastStore';
 import { handleAuthApiError } from '@/utils/authApiError';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { gatheringKeys } from '../queryKeys';
 
 export const useApproveParticipantMutation = () => {
   const queryClient = useQueryClient();
@@ -17,17 +18,19 @@ export const useApproveParticipantMutation = () => {
     onSuccess: (data, { gatheringId }) => {
       useToastStore.getState().show('참가가 승인되었습니다.');
       queryClient.invalidateQueries({
-        queryKey: ['gatheringParticipants', gatheringId],
+        queryKey: gatheringKeys.details(gatheringId).participants,
       });
       queryClient.invalidateQueries({
-        queryKey: ['gatheringDetail', gatheringId],
+        queryKey: gatheringKeys.details(gatheringId).detail,
       });
       queryClient.invalidateQueries({
-        queryKey: ['list'],
+        predicate: (query) =>
+          query.queryKey &&
+          query.queryKey[0] === 'gatherings' &&
+          query.queryKey[1] === 'list',
       });
     },
     onError: (error) => {
-      // console.error('참가 승인 실패:', error);
       handleAuthApiError(error, '참가 승인 실패했습니다.', {
         section: 'gather',
         action: 'approval_gather',

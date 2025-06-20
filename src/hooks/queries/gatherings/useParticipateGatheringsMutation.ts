@@ -2,6 +2,7 @@ import { postParticipateGatherings } from '@/lib/gatherings/gatherings';
 import { BandSessionType } from '@/types/tags';
 import { handleAuthApiError } from '@/utils/authApiError';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { gatheringKeys } from '../queryKeys';
 
 interface ParticipateGatheringParams {
   id: number;
@@ -21,14 +22,13 @@ export const useParticipateGatheringMutation = () => {
       postParticipateGatherings(id, bandSession, introduction),
     onSuccess: (data) => {
       queryClient.invalidateQueries({
-        queryKey: ['gatheringDetail', data.gatheringId],
+        queryKey: gatheringKeys.details(data.gatheringId).detail,
       });
       queryClient.invalidateQueries({
-        queryKey: ['gatheringParticipants', data.gatheringId],
+        queryKey: gatheringKeys.details(data.gatheringId).participants,
       });
     },
     onError: (error) => {
-      // console.error('모임 참여 신청 실패:', error);
       handleAuthApiError(error, '모임 참여 신청 중 문제가 발생했어요.', {
         section: 'gather',
         action: 'register_gather',

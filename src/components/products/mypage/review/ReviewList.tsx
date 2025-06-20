@@ -12,7 +12,6 @@ export default function ReviewList() {
   const { data, fetchNextPage, hasNextPage, isFetching, isError } =
     useReviewInfiniteQuery({
       size: 8,
-      id: user?.id as number,
     });
   useSentryErrorLogger({
     isError: !!isError,

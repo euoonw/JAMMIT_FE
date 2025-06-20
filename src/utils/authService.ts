@@ -6,6 +6,7 @@ import { queryClient } from '@/lib/react-query';
 import { apiClient } from './apiClient';
 import { useUserStore } from '@/stores/useUserStore';
 import { useErrorModalStore } from '@/stores/useErrorModalStore';
+import { userKeys } from '@/hooks/queries/queryKeys';
 
 export const login = async (loginRequest: LoginRequest): Promise<void> => {
   const result = await postLogin(loginRequest);
@@ -15,7 +16,7 @@ export const login = async (loginRequest: LoginRequest): Promise<void> => {
 
   useUserStore.getState().setUser(result.user);
 
-  queryClient.invalidateQueries({ queryKey: ['me'] });
+  queryClient.invalidateQueries({ queryKey: userKeys.me() });
 };
 
 export const signup = async (signupRequest: SignupRequest): Promise<void> => {
@@ -45,7 +46,7 @@ export const refreshAccessToken = async (): Promise<void> => {
     );
 
     tokenService.setAccessToken(accessToken);
-    queryClient.invalidateQueries({ queryKey: ['me'] });
+    queryClient.invalidateQueries({ queryKey: userKeys.me() });
   } catch {
     useErrorModalStore
       .getState()

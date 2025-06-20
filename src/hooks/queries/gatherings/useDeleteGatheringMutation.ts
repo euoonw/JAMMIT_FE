@@ -2,6 +2,7 @@ import { deleteGathering } from '@/lib/gatherings/gatherings';
 import { useToastStore } from '@/stores/useToastStore';
 import { handleAuthApiError } from '@/utils/authApiError';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { gatheringKeys } from '../queryKeys';
 
 export const useDeleteGatheringMutation = () => {
   const queryClient = useQueryClient();
@@ -10,13 +11,24 @@ export const useDeleteGatheringMutation = () => {
     mutationFn: (id: number) => deleteGathering(id),
     onSuccess: (_, id) => {
       useToastStore.getState().show('모임이 성공적으로 취소되었습니다.');
-      queryClient.invalidateQueries({ queryKey: ['gatheringDetail', id] });
       queryClient.invalidateQueries({
-        queryKey: ['gatheringParticipants', id],
+        queryKey: gatheringKeys.details(id).detail,
       });
-      queryClient.invalidateQueries({ queryKey: ['me', 'created'] });
       queryClient.invalidateQueries({
-        queryKey: ['list'],
+        queryKey: gatheringKeys.details(id).participants,
+      });
+      queryClient.invalidateQueries({
+        predicate: (query) =>
+          query.queryKey &&
+          query.queryKey[0] === 'me' &&
+          query.queryKey[1] === 'gatherings' &&
+          query.queryKey[2] === 'created',
+      });
+      queryClient.invalidateQueries({
+        predicate: (query) =>
+          query.queryKey &&
+          query.queryKey[0] === 'gatherings' &&
+          query.queryKey[1] === 'list',
       });
     },
     onError: (error) => {
