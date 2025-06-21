@@ -72,7 +72,7 @@ export default function InfinityScroll<T>({
       <div className="flex-auto rounded-lg bg-[#28282a] px-[3.75rem] py-[3.75rem] text-center">
         <Image
           src="/images/img_character01.png"
-          alt="링크 공유 캐릭터 이미지"
+          alt="캐릭터 이미지"
           width={128}
           height={128}
           className="mx-auto my-0 mb-[1.375rem]"

@@ -14,3 +14,7 @@ export const formatDateToKoreanStyle = (date: string): string => {
 
   return `${d.format('YYYY년 M월 D일 dddd')} ${ampm} ${hour12}시`;
 };
+
+export const formatDateToYYMMDD = (date: string): string => {
+  return dayjs(date).format('YY.MM.DD');
+};

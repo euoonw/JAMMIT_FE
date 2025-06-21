@@ -8,6 +8,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'torip.s3.ap-northeast-2.amazonaws.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'image.mux.com',
+      },
     ],
     // 우선 렌더링 되야 하는것들
     formats: ['image/avif', 'image/webp'],
