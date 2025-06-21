@@ -77,5 +77,13 @@ export const videoKeys = {
     [...videoKeys.all, 'list', filters] as const,
 
   // 영상 상세
-  detail: (videoId: number) => [...videoKeys.all, 'detail', videoId] as const,
+  detail: (videoId: string) => [...videoKeys.all, 'detail', videoId] as const,
+
+  // 영상 좋아요 여부
+  likeStatus: (videoId: string) =>
+    [...videoKeys.all, 'likeStatus', videoId] as const,
+
+  // 댓글
+  comment: (filters: { page?: number; take?: number; videoId?: string }) =>
+    [...videoKeys.all, 'comment', filters] as const,
 };

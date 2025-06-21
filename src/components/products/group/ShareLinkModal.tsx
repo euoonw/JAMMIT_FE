@@ -7,11 +7,13 @@ import { useState } from 'react';
 interface ShareLinkModalProps {
   inviteLink: string;
   onClose: () => void;
+  text?: string;
 }
 
 export default function ShareLinkModal({
   inviteLink,
   onClose,
+  text = '합주를',
 }: ShareLinkModalProps) {
   const [copied, setCopied] = useState(false);
 
@@ -34,10 +36,10 @@ export default function ShareLinkModal({
         />
         <div className="mt-[0.5rem] text-center">
           <p className="text-[1.5rem] font-semibold">
-            이제 합주를 소문내보세요!
+            이제 {text} 소문내보세요!
           </p>
           <p className="mt-[0.5rem] text-sm font-semibold text-gray-400">
-            아래 링크를 복사해서 합주를 알려보세요.
+            아래 링크를 복사해서 {text} 알려보세요.
           </p>
         </div>
 

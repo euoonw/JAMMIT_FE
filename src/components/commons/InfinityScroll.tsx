@@ -7,7 +7,7 @@ import { forwardRef, Fragment, ReactNode, useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { Virtuoso, VirtuosoGrid } from 'react-virtuoso';
 
-export type InfinityScrollVariant = 'list' | 'grid';
+export type InfinityScrollVariant = 'list' | 'grid' | 'comment';
 
 // 0.5: 화면에 요소의 절반이 보이면 감지
 // 0: 화면에 요소의 조금이라도 보이면 감지
@@ -67,6 +67,10 @@ export default function InfinityScroll<T>({
     }
   }, [list]);
 
+  if (!list || (list.length === 0 && variant === 'comment')) {
+    return null;
+  }
+
   if (!list || list.length === 0) {
     return (
       <div className="flex-auto rounded-lg bg-[#28282a] px-[3.75rem] py-[3.75rem] text-center">
@@ -86,7 +90,7 @@ export default function InfinityScroll<T>({
     className ??
       'pc:grid-cols-4 grid grid-cols-1 pc:gap-x-5 gap-y-10 pc:px-0 tab:px-6 px-4',
   );
-  if (variant === 'list') {
+  if (variant === 'list' || variant === 'comment') {
     return (
       <Fragment>
         <Virtuoso

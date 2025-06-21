@@ -1,14 +1,14 @@
 'use client';
 
+import { ErrorMessage } from '@hookform/error-message';
+import clsx from 'clsx';
 import React, {
   ChangeEventHandler,
   FocusEventHandler,
   memo,
   useCallback,
 } from 'react';
-import { useFormContext, RegisterOptions } from 'react-hook-form';
-import { ErrorMessage } from '@hookform/error-message';
-import clsx from 'clsx';
+import { RegisterOptions, useFormContext } from 'react-hook-form';
 
 export interface TextAreaProps {
   name: string;
@@ -21,6 +21,7 @@ export interface TextAreaProps {
   onFocus?: FocusEventHandler<HTMLTextAreaElement>;
   onBlur?: FocusEventHandler<HTMLTextAreaElement>;
   onChange?: ChangeEventHandler<HTMLTextAreaElement>;
+  classnames?: string;
 }
 
 function TextArea({
@@ -33,6 +34,7 @@ function TextArea({
   maxLength,
   onFocus,
   onBlur,
+  classnames,
   onChange,
 }: TextAreaProps) {
   const {
@@ -73,7 +75,7 @@ function TextArea({
   });
 
   return (
-    <div className="flex flex-col gap-[0.5rem]">
+    <div className={`flex flex-col gap-[0.5rem] ${classnames}`}>
       <textarea
         id={name}
         placeholder={placeholder}

@@ -33,6 +33,7 @@ export default function UserCardItem({
         return 8;
     }
   };
+
   return (
     <div className="pc:h-[15.625rem] pc:gap-[3.3125rem] tab:gap-5 flex h-[7.375rem] w-[full] items-center justify-center gap-6 bg-[#36114E]">
       <ProfileImage src={user.profileImagePath} size={getProfileSize()} />

@@ -8,7 +8,7 @@ import { useWishStore } from '@/stores/useWishStore';
 import { BandSession, Genre } from '@/types/tags';
 import { useState } from 'react';
 
-export default function Page() {
+export default function WishPage() {
   const [genres, setGenres] = useState<Genre[]>([]);
   const [sessions, setSessions] = useState<BandSession[]>([]);
   const data = useWishStore((s) => s.items);
