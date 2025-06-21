@@ -7,8 +7,10 @@ import { useClickOutside } from '@/hooks/useClickOutside';
 import Button from '@/components/commons/Button';
 import { imgChange } from '@/utils/imgChange';
 import { usePreventScroll } from '@/hooks/usePreventScroll';
+import { useDeviceType } from '@/hooks/useDeviceType';
 
-const FIRST_RENDERING = 12;
+const MOBILE_FIRST_RENDERING = 6;
+const DEFAULT_FIRST_RENDERING = 12;
 const TOTAL_IMAGES = 18;
 
 interface ModalImgEditProps {
@@ -20,16 +22,20 @@ interface ModalImgEditProps {
 function ModalImgEdit({ onSubmit, onClose }: ModalImgEditProps) {
   const modalRef = useRef<HTMLDivElement>(null);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-  const [visibleCount, setVisibleCount] = useState(FIRST_RENDERING);
+  const [visibleCount, setVisibleCount] = useState(DEFAULT_FIRST_RENDERING);
   const [mounted, setMounted] = useState(false);
+  const device = useDeviceType();
 
   useClickOutside(modalRef, onClose);
-  usePreventScroll();
+  usePreventScroll(true);
 
   useEffect(() => {
+    const firstCount =
+      device === 'mob' ? MOBILE_FIRST_RENDERING : DEFAULT_FIRST_RENDERING;
+    setVisibleCount(firstCount);
     setMounted(true);
     return () => setMounted(false);
-  }, []);
+  }, [device]);
 
   // 배너 이미지 파일명 생성 함수
   const getBannerFileName = (index: number): string => {
@@ -49,7 +55,7 @@ function ModalImgEdit({ onSubmit, onClose }: ModalImgEditProps) {
       />
       <div
         ref={modalRef}
-        className="fixed top-1/2 left-1/2 z-50 h-auto w-[57.75rem] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-3xl border-0 bg-[#242429] px-[3.25rem] py-[2.75rem]"
+        className="pc:w-[57.75rem] pc:h-[25.625rem] tab:w-[39rem] max-h-auto fixed top-1/2 left-1/2 z-50 min-h-[32.9375rem] w-[19.625rem] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-3xl border-0 bg-[#242429] px-[3.25rem] py-[2.75rem]"
       >
         <div className="flex flex-col items-center gap-[2rem]">
           <div className="flex flex-col items-center">
@@ -59,7 +65,7 @@ function ModalImgEdit({ onSubmit, onClose }: ModalImgEditProps) {
             </h2>
           </div>
 
-          <div className="grid grid-cols-6 gap-[1.25rem]">
+          <div className="pc:grid-cols-6 tab:grid-cols-4 pc:gap-[1.25rem] grid grid-cols-2 gap-[0.75rem]">
             {[...Array(visibleCount)].map((_, idx) => {
               const fileName = getBannerFileName(idx);
               const imageData = imgChange(fileName, 'banner');
@@ -95,7 +101,7 @@ function ModalImgEdit({ onSubmit, onClose }: ModalImgEditProps) {
             </button>
           )}
         </div>
-        <div className="absolute top-[3.25rem] right-[2.75rem]">
+        <div className="pc:absolute pc:top-[3.25rem] pc:right-[2.75rem] pc:mt-[0rem] mt-[1.3125rem] flex justify-center">
           <Button
             variant="solid"
             size="small"

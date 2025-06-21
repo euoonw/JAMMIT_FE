@@ -6,11 +6,13 @@ import { useFormContext } from 'react-hook-form';
 import { RegisterGatheringsRequest } from '@/types/gather';
 import EmptyImageIcon from '@/assets/icons/ic_emptyimage.svg';
 import { imgChange } from '@/utils/imgChange';
+import { useWatch } from 'react-hook-form';
 
 export default function ImageEdit() {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
-  const { setValue, watch } = useFormContext<RegisterGatheringsRequest>();
+  const { setValue } = useFormContext<RegisterGatheringsRequest>();
+  const thumbnail = useWatch({ name: 'thumbnail' });
 
   const handleOpenModal = useCallback(() => {
     setIsOpen(true);
@@ -26,11 +28,10 @@ export default function ImageEdit() {
   );
 
   useEffect(() => {
-    const thumb = watch('thumbnail');
-    if (thumb) {
-      setSelectedFileName(thumb);
+    if (thumbnail) {
+      setSelectedFileName(thumbnail);
     }
-  }, [watch('thumbnail')]);
+  }, [thumbnail]);
 
   const selectedImageSrc = selectedFileName
     ? imgChange(selectedFileName, 'banner')

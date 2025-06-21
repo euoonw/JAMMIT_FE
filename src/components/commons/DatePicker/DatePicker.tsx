@@ -80,7 +80,7 @@ export function DatePicker({ value, onChange }: DatePickerProps) {
         <button
           type="button"
           className={clsx(
-            'flex h-[2.75rem] w-[13.0625rem] items-center justify-center gap-[0.625rem] rounded-[0.5rem] bg-[#34343a] px-[1rem] text-[1rem] text-gray-100',
+            'pc:w-[13.125rem] tab:max-w-[40rem] pc:justify-center flex h-[2.75rem] w-full items-center justify-between gap-[0.625rem] rounded-[0.5rem] bg-[#34343a] px-[1rem] text-[1rem] text-gray-100',
             isOpen ? 'border border-[#505057]' : 'border-none',
             !date && 'cursor-pointer text-gray-400',
           )}

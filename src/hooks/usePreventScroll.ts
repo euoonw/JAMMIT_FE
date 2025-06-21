@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
 
-export const usePreventScroll = () => {
+export const usePreventScroll = (isActive: boolean) => {
   useEffect(() => {
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, []);
+    if (isActive) {
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = '';
+      };
+    }
+  }, [isActive]);
 };

@@ -85,7 +85,7 @@ function Input({
     sm: 'pc:w-[25rem] w-[19.4375rem]',
     // 448px
     md: 'w-[28rem]',
-    lg: 'w-auto',
+    lg: 'w-full pc:w-[896px]',
   }[size || 'lg'];
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {

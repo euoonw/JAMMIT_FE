@@ -39,7 +39,7 @@ export default function SearchInput({ value, onChange }: SearchInputProps) {
         <label className="block text-sm font-semibold text-gray-100">
           모임 장소
         </label>
-        <div className="relative w-[27.9375rem] text-gray-400">
+        <div className="pc:w-full tab:max-w-[40rem] relative w-full text-gray-400">
           <label className="block cursor-pointer">
             <input
               ref={inputRef}

@@ -27,7 +27,7 @@ function ModalWrapper({
   const [mounted, setMounted] = useState(false);
 
   useClickOutside(modalRef, onClose);
-  usePreventScroll();
+  usePreventScroll(true);
 
   useEffect(() => {
     setMounted(true);

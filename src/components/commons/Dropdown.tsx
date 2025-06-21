@@ -2,7 +2,9 @@
 
 import { ReactNode, useRef, useState, useEffect } from 'react';
 import { useClickOutside } from '@/hooks/useClickOutside';
+import { useDeviceType } from '@/hooks/useDeviceType';
 import DropdownMenuList from './DropdownMenuList';
+import { usePreventScroll } from '@/hooks/usePreventScroll';
 
 interface DropdownProps {
   /** 사용자가 드롭다운 항목을 선택했을 때 호출되는 콜백 함수 */
@@ -41,7 +43,7 @@ export default function Dropdown({
 }: DropdownProps) {
   const sizeClass = {
     sm: 'w-[9rem]',
-    md: 'w-[26rem]',
+    md: 'pc:w-[26rem] tab:w-[32.5rem] w-full',
     lg: 'w-auto',
   }[size || 'lg'];
 
@@ -51,12 +53,20 @@ export default function Dropdown({
   const setIsOpen = externalSetIsOpen || setInternalIsOpen;
   const dropdownRef = useRef<HTMLDivElement>(null);
   const displayValue = selectedDropdownMenu || '';
+  const device = useDeviceType();
+  const isMobile = device === 'mob';
+
+  usePreventScroll(isOpen && isMobile);
 
   useEffect(() => {
     setSelectedDropdownMenu(value || '');
   }, [value]);
 
-  useClickOutside(dropdownRef, () => setIsOpen(false));
+  useClickOutside(dropdownRef, () => {
+    if (!isMobile) {
+      setIsOpen(false);
+    }
+  });
 
   const handleDropdownMenu = () => {
     setIsOpen(!isOpen);
@@ -76,7 +86,11 @@ export default function Dropdown({
       <div className="relative">
         <button
           onClick={handleDropdownMenu}
-          className={`flex items-center justify-between gap-[0.625rem] rounded-lg border-0 bg-[#34343A] text-gray-100 ${sizeClass} ${isProfile ? 'h-auto w-auto border-none bg-transparent p-0' : 'px-[1rem] py-[0.625rem]'}`}
+          className={`flex items-center justify-between gap-[0.625rem] rounded-lg border-0 bg-[#34343A] text-gray-100 ${sizeClass} ${
+            isProfile
+              ? 'h-auto w-auto border-none bg-transparent p-0'
+              : 'px-[1rem] py-[0.625rem]'
+          }`}
           type="button"
           aria-label="드롭다운 이미지 버튼"
         >
@@ -108,13 +122,39 @@ export default function Dropdown({
         </button>
 
         {isOpen && (
-          <div className={`absolute z-50 ${isProfile && 'w-[8.875rem]'}`}>
-            <DropdownMenuList
-              menuOptions={menuOptions}
-              onSelect={handleSelect}
-              size={size}
-            />
-          </div>
+          <>
+            {isMobile && !isProfile ? (
+              <div
+                className="fixed inset-0 z-50 bg-black/60"
+                onClick={() => setIsOpen(false)}
+              >
+                <div
+                  onClick={(e) => e.stopPropagation()}
+                  className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                >
+                  <DropdownMenuList
+                    menuOptions={menuOptions}
+                    onSelect={handleSelect}
+                    size={size}
+                    isMobile={isMobile}
+                  />
+                </div>
+              </div>
+            ) : (
+              <div
+                className={`absolute z-50 ${
+                  isProfile ? '-right-10 -bottom-[0.625rem] w-[8.875rem]' : ''
+                }`}
+              >
+                <DropdownMenuList
+                  menuOptions={menuOptions}
+                  onSelect={handleSelect}
+                  size={size}
+                  isMobile={false}
+                />
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

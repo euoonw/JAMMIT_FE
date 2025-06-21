@@ -22,7 +22,7 @@ interface DateFormSectionProps {
 
 export default function DateFormSection({ control }: DateFormSectionProps) {
   return (
-    <div className="flex gap-[1.25rem]">
+    <div className="pc:flex-row flex flex-col gap-[1.25rem]">
       {DATE_FIELDS.map(({ name, label, htmlFor }) => (
         <div key={name} className="flex flex-col gap-[0.5rem]">
           <label

@@ -103,7 +103,7 @@ export default function SignupStep2Page() {
       const profileImagePath = profileImageUrl;
       const fullData = {
         email,
-        username: name,
+        username: data.nickname,
         password,
         nickname: data.nickname,
         preferredGenres,
