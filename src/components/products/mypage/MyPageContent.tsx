@@ -19,12 +19,15 @@ import { useMemo } from 'react';
 import GatheringList from './gather/GatheringList';
 import GatheringListComponents from './gather/GatheringListComponents';
 import MyReview from './review/MyReview';
+import MyVideo from './video/MyVideo';
+import { userVideoCountQuery } from '@/hooks/queries/video/useUserVideoCountQuery';
 
 type TabKey =
   | 'participating'
   | 'created'
   | 'reviews_received'
-  | 'reviews_towrite';
+  | 'reviews_towrite'
+  | 'video';
 
 export default function MyPage() {
   const { activeTab, setTab } = useQueryTab<TabKey>('tab', 'participating', [
@@ -32,6 +35,7 @@ export default function MyPage() {
     'created',
     'reviews_received',
     'reviews_towrite',
+    'video',
   ]);
 
   const participatingCount = usePrefetchedCount({
@@ -54,6 +58,11 @@ export default function MyPage() {
       .length ?? 0;
   const { data: review } = useReviewInfiniteQuery({
     size: 8,
+  });
+
+  const videoCount = usePrefetchedCount({
+    ...userVideoCountQuery(),
+    selector: (data) => data.count,
   });
 
   const reviewCount = review?.pages[0].totalElements ?? 0;
@@ -106,8 +115,14 @@ export default function MyPage() {
         count: writeCount,
         component: <ReviewsToWrite />,
       },
+      {
+        key: 'video',
+        label: '재밋 후기',
+        count: videoCount,
+        component: <MyVideo />,
+      },
     ],
-    [participatingCount, createdCount, reviewCount, writeCount],
+    [participatingCount, createdCount, reviewCount, writeCount, videoCount],
   );
 
   const tabClass = (isActive: boolean) =>

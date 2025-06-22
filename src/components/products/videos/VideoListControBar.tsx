@@ -1,6 +1,7 @@
 'use client';
 import IcSort from '@/assets/icons/ic_sort.svg';
 import Button from '@/components/commons/Button';
+import { useRouter } from 'next/navigation';
 
 interface VideoListControlBarProps {
   sort: 'latest' | 'popular';
@@ -11,6 +12,7 @@ export default function VideoListControlBar({
   sort,
   setSort,
 }: VideoListControlBarProps) {
+  const router = useRouter();
   const sortLabel = sort === 'latest' ? '최신순' : '인기순';
 
   const toggleSort = () => {
@@ -27,7 +29,12 @@ export default function VideoListControlBar({
         <IcSort />
         {sortLabel}
       </button>
-      <Button variant="solid" className="w-[148px]">
+      <Button
+        variant="solid"
+        className="w-[148px]"
+        onClick={() => router.push('/video/upload')}
+        aria-label="재밋후기 글 작성 페이지로 이동"
+      >
         글 작성
       </Button>
     </div>

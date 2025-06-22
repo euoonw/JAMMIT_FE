@@ -63,10 +63,16 @@ export const userKeys = {
   },
 
   // 영상 관련
-  uploadedVideos: (userId?: string) =>
-    userId
+  videos: (userId?: number) => ({
+    // 유저가 업로드한 영상 목록
+    list: userId
       ? ([...userKeys.base, 'videos', userId] as const)
       : ([...userKeys.base, 'videos', 'me'] as const),
+    // 유저가 업로드한 영상 개수
+    count: userId
+      ? ([...userKeys.base, 'videosCount', userId] as const)
+      : ([...userKeys.base, 'videosCount', 'me'] as const),
+  }),
 };
 
 export const videoKeys = {

@@ -6,7 +6,7 @@ export function usePrefetchedCount<T>({
   queryFn,
   selector,
 }: {
-  queryKey: unknown[];
+  queryKey: readonly unknown[];
   queryFn: () => Promise<T>;
   selector: (data: T) => number;
 }) {

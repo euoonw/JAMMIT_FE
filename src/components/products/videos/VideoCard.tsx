@@ -9,7 +9,8 @@ interface VideoCardProps {
 
 export function VideoCard({ video }: VideoCardProps) {
   const router = useRouter();
-  const formatDuration = (duration: string) => {
+  const formatDuration = (duration: string | null) => {
+    if (!duration) return '00:00';
     const [h, m, s] = duration.split(':');
     return h === '00' ? `${m}:${s}` : `${h}:${m}:${s}`;
   };

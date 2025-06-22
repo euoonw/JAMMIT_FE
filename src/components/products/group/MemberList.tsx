@@ -98,6 +98,7 @@ export default function MemberList({
             <MemberRow
               key={`${member.userId}-${member.bandSession}`}
               id={member.participantId}
+              memberId={member.userId}
               nickname={member.userNickname}
               session={member.bandSession}
               introduction={member.introduction}

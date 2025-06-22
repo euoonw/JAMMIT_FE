@@ -6,6 +6,7 @@ import Link from 'next/link';
 
 interface MemberRowProps {
   id: number;
+  memberId?: number;
   selected: boolean;
   onSelectChange: (id: number) => void;
   nickname: string;
@@ -18,6 +19,7 @@ interface MemberRowProps {
 
 export default function MemberRow({
   id,
+  memberId,
   selected,
   onSelectChange,
   nickname,
@@ -43,7 +45,7 @@ export default function MemberRow({
             <ProfileImage src={profileImage} size={3} />
 
             <div className="pc:w-[8.6875rem] underline underline-offset-2">
-              <Link href={`/group/${gatheringId}/reviews/${id}`}>
+              <Link href={`/group/${gatheringId}/reviews/${memberId}`}>
                 {nickname}
               </Link>
             </div>
