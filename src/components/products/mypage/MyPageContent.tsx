@@ -13,6 +13,7 @@ import {
 import { usePrefetchedCount } from '@/hooks/queries/gather/usePrefetchedCoint';
 import { useReviewToWriteInfiniteQuery } from '@/hooks/queries/review/usePrefetchReview';
 import { useReviewInfiniteQuery } from '@/hooks/queries/review/useReviewInfiniteQuery';
+import { userVideoCountQuery } from '@/hooks/queries/video/useUserVideoCountQuery';
 import { useQueryTab } from '@/hooks/useQueryTab';
 import clsx from 'clsx';
 import { useMemo } from 'react';
@@ -20,7 +21,6 @@ import GatheringList from './gather/GatheringList';
 import GatheringListComponents from './gather/GatheringListComponents';
 import MyReview from './review/MyReview';
 import MyVideo from './video/MyVideo';
-import { userVideoCountQuery } from '@/hooks/queries/video/useUserVideoCountQuery';
 
 type TabKey =
   | 'participating'
@@ -129,7 +129,7 @@ export default function MyPage() {
     clsx(
       'text-[1rem]',
       isActive
-        ? 'relative after:absolute after:left-0 after:-bottom-[8px] after:h-[2px] after:w-full after:bg-[var(--purple-500)]'
+        ? 'border-b-2 border-[var(--purple-500)] text-[var(--purple-500)] pb-[0.5rem]'
         : 'text-gray-400 cursor-pointer',
     );
 
@@ -153,7 +153,7 @@ export default function MyPage() {
   return (
     <main className="min-h-screen bg-[#212121] pb-[3.75rem]">
       <UserCard />
-      <div className="pc:my-10 pc:max-w-[84rem] pc:px-0 hide-scrollbar mx-auto my-5 flex gap-[1.25rem] overflow-x-auto px-8">
+      <div className="pc:my-10 pc:max-w-[84rem] pc:px-0 hide-scrollbar mx-auto my-5 flex items-start gap-[1.25rem] overflow-x-auto px-8">
         {tabList.map(({ key, label, count }) =>
           renderTabButton(key as TabKey, label, count, activeTab === key),
         )}

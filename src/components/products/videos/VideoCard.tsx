@@ -9,11 +9,6 @@ interface VideoCardProps {
 
 export function VideoCard({ video }: VideoCardProps) {
   const router = useRouter();
-  const formatDuration = (duration: string | null) => {
-    if (!duration) return '00:00';
-    const [h, m, s] = duration.split(':');
-    return h === '00' ? `${m}:${s}` : `${h}:${m}:${s}`;
-  };
 
   const handleClick = () => {
     router.push(`/video/${video.id}`);
@@ -33,7 +28,7 @@ export function VideoCard({ video }: VideoCardProps) {
           className="h-full w-full object-cover"
         />
         <div className="absolute right-[0.625rem] bottom-[0.625rem] flex h-[1.5rem] items-center justify-center rounded-[0.25rem] bg-white/40 px-[0.375rem] text-[0.875rem] text-black">
-          <span className="text-center">{formatDuration(video.duration)}</span>
+          <span className="text-center">{video.duration}</span>
         </div>
       </div>
 

@@ -39,13 +39,18 @@ export const mockReviews: ReviewItem[] = Array.from({ length: 5 }).map(
       'img_banner_11',
       'img_banner_12',
     ];
+    const getRandomSession = (): BandSession => {
+      const values = Object.values(BandSession);
+      const randomIndex = Math.floor(Math.random() * values.length);
+      return values[randomIndex];
+    };
     return {
       id: i + 1,
       reviewerId: i + 100,
       reviewerNickname: nicknames[i],
       revieweeId: 1,
       revieweeNickname: '리뷰당한넘',
-      reviewerBandSessions: [BandSession.BASS, BandSession.ELECTRIC_GUITAR],
+      reviewerBandSession: getRandomSession(),
       gatheringThumbnail: thumbnails[i % thumbnails.length],
       gatheringHostNickname: '호스트',
       gatheringId: i + 200,
