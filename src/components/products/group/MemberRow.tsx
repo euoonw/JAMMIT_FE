@@ -29,6 +29,7 @@ export default function MemberRow({
   isSelectable = true,
   gatheringId: gatheringId,
 }: MemberRowProps) {
+  console.log('확인', nickname, profileImage);
   return (
     <div>
       <div className="my-[0.75rem] flex items-center gap-[1.25rem] px-[1.0625rem]">

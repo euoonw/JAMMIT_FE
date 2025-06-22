@@ -21,11 +21,11 @@ export function VideoCard({ video }: VideoCardProps) {
 
   return (
     <div
-      className="h-[16.25rem] w-[20rem] cursor-pointer rounded-lg"
+      className="pc:w-[20rem] w-full cursor-pointer rounded-lg"
       onClick={handleClick}
     >
-      <div className="relative h-[11.25rem] w-full">
-        <div className="w-full overflow-hidden rounded-[0.5rem]">
+      <div className="pc:aspect-[16/9] tab:aspect-[87/25] relative aspect-[343/200] w-full">
+        <div className="pc:aspect-[16/9] tab:aspect-[87/25] aspect-[343/200] w-full overflow-hidden rounded-[0.5rem]">
           <Image
             src={video.thumbnailUrl}
             alt={video.title}

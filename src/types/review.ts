@@ -5,7 +5,7 @@ export interface ReviewItem {
   id: number;
   reviewerId: number;
   reviewerNickname: string;
-  reviewerBandSessions: BandSession[];
+  reviewerBandSession: BandSession;
   revieweeId: number;
   revieweeNickname: string;
   gatheringId: number;

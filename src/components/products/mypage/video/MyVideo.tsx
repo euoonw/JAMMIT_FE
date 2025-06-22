@@ -3,9 +3,19 @@ import { useUserVideoInfiniteQuery } from '@/hooks/queries/video/useUserVideoInf
 import { VideoCard } from '../../videos/VideoCard';
 import VideoCardSkeleton from '../../videos/VideoCardSkeleton';
 
-export default function MyVideo() {
+interface MyVideoProps {
+  userId?: number;
+}
+
+export default function MyVideo({ userId }: MyVideoProps) {
+  const queryArgs = {
+    ...(userId !== undefined && { userId }),
+    sort: 'latest' as const,
+    size: 12,
+  };
+
   const { data, fetchNextPage, hasNextPage, isFetching, isLoading } =
-    useUserVideoInfiniteQuery({ sort: 'latest', size: 12 });
+    useUserVideoInfiniteQuery(queryArgs);
 
   const flatVideos = data?.pages.flatMap((page) => page.data) ?? [];
   const isInitialLoading = isLoading && flatVideos.length === 0;

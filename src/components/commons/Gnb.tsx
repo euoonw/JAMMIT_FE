@@ -7,12 +7,23 @@ import { logout } from '@/utils/authService';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import ProfileImage from './ProfileImage';
+import { DeviceType, useDeviceType } from '@/hooks/useDeviceType';
 
 const PROFILE_OPTIONS = ['마이페이지', '로그아웃'];
 
 export default function Gnb() {
   const router = useRouter();
   const pathname = usePathname();
+
+  const device: DeviceType = useDeviceType();
+
+  const logoSize: Record<DeviceType, { width: number; height: number }> = {
+    mob: { width: 83, height: 14 },
+    tab: { width: 113, height: 20 },
+    pc: { width: 113, height: 20 },
+  };
+
+  const { width, height } = logoSize[device];
 
   const user = useUserStore((state) => state.user);
   const isLoggedIn = useUserStore((state) => state.isLoggedIn);
@@ -38,15 +49,16 @@ export default function Gnb() {
 
   return (
     <header className="fixed top-0 left-0 z-50 w-full">
-      <div className="flex h-[3.75rem] w-full items-center justify-center bg-[#151515] px-[1.75rem]">
+      <div className="tab:px-[1.5rem] flex h-[3.75rem] w-full items-center justify-center bg-[#151515] px-[1rem]">
         <div className="flex w-full max-w-[84rem] items-center justify-between text-white">
           <nav className="pc:gap-[1.5rem] flex gap-[0.75rem]">
             <Link
               href="/"
               data-active={pathname === '/'}
               aria-label="JAMMIT 홈으로 이동"
+              className="flex items-center"
             >
-              <JammitLogo width={113} height={20} />
+              <JammitLogo width={width} height={height} />
             </Link>
             {navItems.map(({ href, label }) => (
               <Link

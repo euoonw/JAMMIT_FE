@@ -16,9 +16,10 @@ export default function ReviewItems({ item }: { item: ReviewItem }) {
       <div className="mb-6 flex items-center gap-3">
         <DefaultProfileImage width={56} height={56} />
         <p className="font-bold">{item.reviewerNickname}</p>
-        {item.reviewerBandSessions.map((session) => (
-          <span key={session}>{SESSION_ENUM_TO_KR[session] ?? session}</span>
-        ))}
+        <span>
+          {SESSION_ENUM_TO_KR[item.reviewerBandSession] ??
+            item.reviewerBandSession}
+        </span>
       </div>
       <ul className="flex flex-wrap gap-1.5">
         {REVIEW_METRICS.filter((m) => item[m.key as keyof ReviewItem]).map(

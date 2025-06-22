@@ -10,12 +10,14 @@ interface UserCardprops {
   user: UserResponse;
   setIsModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   type?: string;
+  isMypage?: boolean;
 }
 
 export default function UserCardItem({
   user,
   setIsModalOpen,
   type = 'mypage',
+  isMypage = true,
 }: UserCardprops) {
   const handleProfileEdit = () => {
     setIsModalOpen?.(true);
@@ -72,12 +74,16 @@ export default function UserCardItem({
               {GENRE_ENUM_TO_KR[genre]}
             </div>
           ))}
-          <div className="h-[1.25rem] w-[0.0938rem] bg-gray-500" />
-          <p>개설모임수</p>
-          <p>{user.totalCreatedGatheringCount}</p>
-          <div className="h-[1.25rem] w-[0.0938rem] bg-gray-500" />
-          <p>작성글수</p>
-          <p>{user.completedGatheringCount}</p>
+          {isMypage && (
+            <>
+              <div className="h-[1.25rem] w-[0.0938rem] bg-gray-500" />
+              <p>개설모임수</p>
+              <p>{user.totalCreatedGatheringCount}</p>
+              <div className="h-[1.25rem] w-[0.0938rem] bg-gray-500" />
+              <p>작성글수</p>
+              <p>{user.completedGatheringCount}</p>
+            </>
+          )}
         </div>
       </div>
     </div>

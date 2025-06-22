@@ -1,3 +1,4 @@
+import { useDeviceType } from '@/hooks/useDeviceType';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
@@ -9,12 +10,30 @@ export default function VideoListBanner({
   weekTopVideoId,
 }: VideoListBannerProps) {
   const router = useRouter();
+  const device = useDeviceType();
 
   const handleClick = () => {
     if (weekTopVideoId) {
       router.push(`/video/${weekTopVideoId}`);
     }
   };
+
+  if (device !== 'pc') {
+    return (
+      <div className="relative h-[12.5rem] w-full overflow-hidden">
+        <Image
+          src="/images/main/img_video_banner_tab.avif"
+          alt="비디오 게시판 베너 이미지"
+          fill
+          className="object-cover object-center"
+        />
+        <p className="absolute bottom-[0.5625rem] left-[1.25rem] text-[1.25rem] font-semibold text-gray-100">
+          지금 가장 핫한
+          <br />이 영상은 보고 재밋하니?
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="pc:h-[15.625rem] pc:rounded-[0.5rem] flex h-[12.4375rem] w-full items-center justify-between bg-[#2d2d2d] pl-[5.8125rem]">
@@ -35,7 +54,7 @@ export default function VideoListBanner({
       </div>
       <div className="h-[12.5rem] w-[40.625rem]">
         <Image
-          src="/images/main/img_video_banner.avif"
+          src="/images/main/img_video_banner_pc.avif"
           alt="비디오 게시판 베너 이미지"
           width={650}
           height={200}
