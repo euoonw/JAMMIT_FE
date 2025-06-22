@@ -29,7 +29,6 @@ export default function RecruitPage({
       sessions,
       sort,
     });
-
   const flatData = data?.pages.flatMap((page) => page.gatherings) ?? [];
 
   const handleModalClose = () => {

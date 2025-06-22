@@ -131,7 +131,7 @@ function Input({
         >
           {label}
         </label>
-        <div className={`relative ${sizeClass} text-gray-400`}>
+        <div className={`relative ${sizeClass}`}>
           <div className="flex flex-row items-center gap-[0.5rem]">
             <input
               id={name}

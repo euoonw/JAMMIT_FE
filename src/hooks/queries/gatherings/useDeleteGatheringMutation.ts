@@ -1,6 +1,7 @@
 import { deleteGathering } from '@/lib/gatherings/gatherings';
 import { useToastStore } from '@/stores/useToastStore';
 import { handleAuthApiError } from '@/utils/authApiError';
+import { logToSentry } from '@/utils/logToSentry';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { gatheringKeys } from '../queryKeys';
 
@@ -32,10 +33,11 @@ export const useDeleteGatheringMutation = () => {
       });
     },
     onError: (error) => {
-      handleAuthApiError(error, '모임 삭제 중 오류가 발생했습니다.', {
+      logToSentry(error, {
         section: 'meeting',
         action: 'cancel_meeting',
       });
+      handleAuthApiError(error, '모임 삭제 중 오류가 발생했습니다.');
     },
   });
 };

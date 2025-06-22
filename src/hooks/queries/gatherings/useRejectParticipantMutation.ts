@@ -1,6 +1,7 @@
 import { rejectParticipant } from '@/lib/gatherings/gatherings';
 import { useToastStore } from '@/stores/useToastStore';
 import { handleAuthApiError } from '@/utils/authApiError';
+import { logToSentry } from '@/utils/logToSentry';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { gatheringKeys } from '../queryKeys';
 
@@ -25,10 +26,11 @@ export const useRejectParticipantMutation = () => {
       });
     },
     onError: (error) => {
-      handleAuthApiError(error, '참가 거절 중 오류가 발생했습니다.', {
+      logToSentry(error, {
         section: 'gather',
         action: 'refuse_gather',
       });
+      handleAuthApiError(error, '참가 거절 중 오류가 발생했습니다.');
     },
   });
 };

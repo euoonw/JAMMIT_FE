@@ -8,15 +8,15 @@ import {
 } from '@tanstack/react-query';
 import { Metadata } from 'next';
 
-interface Params {
-  videoId: string;
-}
+type PageProps = {
+  params: Promise<{
+    videoId: string;
+  }>;
+};
 
 export async function generateMetadata({
   params,
-}: {
-  params: Params;
-}): Promise<Metadata> {
+}: PageProps): Promise<Metadata> {
   const { videoId } = await params;
   const data = await getVideoDetail({ videoId });
 
@@ -34,9 +34,10 @@ export async function generateMetadata({
   };
 }
 
-export default async function page({ params }: { params: Params }) {
-  const queryClient = new QueryClient();
+export default async function Page({ params }: PageProps) {
   const { videoId } = await params;
+  const queryClient = new QueryClient();
+
   await prefetchVideoQuery({ queryClient, videoId });
 
   return (

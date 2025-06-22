@@ -69,6 +69,14 @@ export interface CommentRequest {
   content: string;
 }
 
+export interface CreateVideoRequest {
+  videoFile: File;
+  title: string;
+  description: string;
+  accessToken: string;
+  onProgress: (progress: number) => void;
+}
+
 export interface GetUserVideoListResponse {
   page: number;
   totalPage: number;

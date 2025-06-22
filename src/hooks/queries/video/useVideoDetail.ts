@@ -9,6 +9,7 @@ import {
 import { useAuthStore } from '@/stores/useAuthStore';
 import { CommentResponse, LikeStatus } from '@/types/video';
 import { handleAuthApiError } from '@/utils/authApiError';
+import { logToSentry } from '@/utils/logToSentry';
 import {
   QueryClient,
   useInfiniteQuery,
@@ -82,10 +83,14 @@ export const useLikeMutation = () => {
           context.previousLikeStatus,
         );
       }
-      handleAuthApiError(error, '좋아요 중 오류가 발생했습니다.', {
+      logToSentry(error, {
         section: 'video',
-        action: 'toggle_like',
+        action: 'like',
+        extra: {
+          videoId: context?.videoId,
+        },
       });
+      handleAuthApiError(error, '좋아요 중 오류가 발생했습니다.');
     },
 
     onSettled: (data, error, variables) => {
@@ -124,11 +129,16 @@ export const useCommentMutation = (videoId: string, take = 10) => {
         exact: true,
       });
     },
-    onError: (error) => {
-      handleAuthApiError(error, '댓글작성 중 오류가 발생했습니다.', {
-        section: 'comment',
-        action: 'post',
+    onError: (error, variables) => {
+      logToSentry(error, {
+        section: 'video',
+        action: 'comment',
+        extra: {
+          videoId,
+          content: variables,
+        },
       });
+      handleAuthApiError(error, '댓글작성 중 오류가 발생했습니다.');
     },
   });
 };

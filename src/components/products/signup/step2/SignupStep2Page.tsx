@@ -12,6 +12,7 @@ import { useImageUpload } from '@/hooks/useImageUpload';
 import { useSignupStore } from '@/stores/useSignupStore';
 import { useToastStore } from '@/stores/useToastStore';
 import { handleAuthApiError } from '@/utils/authApiError';
+import { logToSentry } from '@/utils/logToSentry';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import {
@@ -117,10 +118,11 @@ export default function SignupStep2Page() {
 
       resetSignupData();
     } catch (error) {
-      handleAuthApiError(error, '회원가입에 실패했습니다.', {
+      logToSentry(error, {
         section: 'signup',
         action: 'signup',
       });
+      handleAuthApiError(error, '회원가입에 실패했습니다.');
     }
   };
 

@@ -15,7 +15,8 @@ import {
 } from '@/hooks/queries/video/useVideoDetail';
 import { useDeviceType } from '@/hooks/useDeviceType';
 import { CommentRequest } from '@/types/video';
-import { getDate } from '@/utils/date';
+import { formatDateToYYMMDD } from '@/utils/formatDate';
+import { useSentryErrorLogger } from '@/utils/useSentryErrorLogger';
 import MuxPlayer from '@mux/mux-player-react';
 import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -28,17 +29,25 @@ interface prop {
 export default function VideoDetailClient({ videoId }: prop) {
   const deviceType = useDeviceType();
   const [open, setOpen] = useState(false);
-  const { data, isLoading } = useVideoDetailQuery({ videoId });
+  const { data, isLoading, isError, error } = useVideoDetailQuery({ videoId });
   const {
     data: comment,
     fetchNextPage,
     hasNextPage,
     isFetching,
+    isError: isCommentError,
+    error: commentError,
   } = useCommentQuery({ take: 10, videoId });
-  const { mutate: submitComment } = useCommentMutation(videoId);
-  const { data: likeStatus, isLoading: likeStatusLoading } = useLikeStatus({
+  const {
+    data: likeStatus,
+    isLoading: likeStatusLoading,
+    isError: isLikeError,
+    error: likeError,
+  } = useLikeStatus({
     videoId,
   });
+  const { mutate: submitComment } = useCommentMutation(videoId);
+
   const { mutate: toggleLike } = useLikeMutation();
 
   const flatData = comment?.pages.flatMap((item) => item.data);
@@ -68,6 +77,27 @@ export default function VideoDetailClient({ videoId }: prop) {
     submitComment(data.content);
     methods.reset();
   };
+  // 자동 Sentry 로깅
+  useSentryErrorLogger({
+    isError,
+    error,
+    tags: { section: 'video', action: 'detail' },
+    message: '비디오 상세 정보 불러오기 실패',
+  });
+
+  useSentryErrorLogger({
+    isError: isCommentError,
+    error: commentError,
+    tags: { section: 'video', action: 'comment' },
+    message: '댓글 불러오기 실패',
+  });
+
+  useSentryErrorLogger({
+    isError: isLikeError,
+    error: likeError,
+    tags: { section: 'video', action: 'likeStatus' },
+    message: '좋아요 상태 불러오기 실패',
+  });
   if (isLoading || likeStatusLoading) return null;
   return (
     <div className="pc:max-w-[84rem] pc:mt-6 pc:mb-36 tab:mb-11 mx-auto mb-6">
@@ -92,7 +122,7 @@ export default function VideoDetailClient({ videoId }: prop) {
             <p className="leading-none opacity-60">
               조회수 {data?.viewCount ?? 0}회
               <span className="mx-2 inline-flex">|</span>
-              {getDate(data?.createdAt as string)}
+              {formatDateToYYMMDD(data?.createdAt as string)}
             </p>
           </div>
           <div className="pc:mt-0 tab:mt-0 mt-8 flex items-center gap-6">

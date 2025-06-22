@@ -1,6 +1,7 @@
 import { cancelParticipateGathering } from '@/lib/gatherings/gatherings';
 import { useToastStore } from '@/stores/useToastStore';
 import { handleAuthApiError } from '@/utils/authApiError';
+import { logToSentry } from '@/utils/logToSentry';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { gatheringKeys } from '../queryKeys';
 
@@ -25,10 +26,11 @@ export const useCancelParticipateGatheringMutation = () => {
       });
     },
     onError: (error) => {
-      handleAuthApiError(error, '참여 취소 중 문제가 발생했습니다.', {
+      logToSentry(error, {
         section: 'gather',
         action: 'cancel_gather',
       });
+      handleAuthApiError(error, '참여 취소 중 문제가 발생했습니다.');
     },
   });
 };

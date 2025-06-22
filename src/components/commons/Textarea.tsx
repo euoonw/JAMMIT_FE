@@ -82,7 +82,7 @@ function TextArea({
         ref={ref}
         onFocus={handleFocus}
         className={clsx(
-          'h-[11rem] resize-none rounded-lg border-0 bg-[#34343A] px-[1rem] py-[0.625rem] text-base font-medium text-white outline-none',
+          'h-[11rem] resize-none rounded-lg border-0 bg-[#34343A] px-[1rem] py-[0.625rem] text-base font-medium outline-none',
           isError && 'border-errorBorder border',
           width,
           className,

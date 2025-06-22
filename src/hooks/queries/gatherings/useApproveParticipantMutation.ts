@@ -1,6 +1,7 @@
 import { approveParticipant } from '@/lib/gatherings/gatherings';
 import { useToastStore } from '@/stores/useToastStore';
 import { handleAuthApiError } from '@/utils/authApiError';
+import { logToSentry } from '@/utils/logToSentry';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { gatheringKeys } from '../queryKeys';
 
@@ -31,10 +32,11 @@ export const useApproveParticipantMutation = () => {
       });
     },
     onError: (error) => {
-      handleAuthApiError(error, '참가 승인 실패했습니다.', {
+      logToSentry(error, {
         section: 'gather',
         action: 'approval_gather',
       });
+      handleAuthApiError(error, '참가 승인 실패했습니다.');
     },
   });
 };

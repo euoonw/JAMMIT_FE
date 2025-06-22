@@ -1,6 +1,7 @@
 import { postSendCode } from '@/lib/auth/sendcode';
 import { useToastStore } from '@/stores/useToastStore';
 import { handleAuthApiError } from '@/utils/authApiError';
+import { logToSentry } from '@/utils/logToSentry';
 import { useMutation } from '@tanstack/react-query';
 
 export const useSendCodeMutation = () => {
@@ -16,10 +17,11 @@ export const useSendCodeMutation = () => {
       useToastStore.getState().show('인증 코드가 전송되었습니다.');
     },
     onError: (error) => {
-      handleAuthApiError(error, '인증 코드 전송 중 오류가 발생했습니다.', {
+      logToSentry(error, {
         section: 'auth',
         action: 'send_email_code',
       });
+      handleAuthApiError(error, '인증 코드 전송 중 오류가 발생했습니다.');
     },
   });
 };

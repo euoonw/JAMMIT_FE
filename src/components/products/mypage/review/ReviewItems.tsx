@@ -2,7 +2,7 @@ import DefaultProfileImage from '@/assets/icons/ic_default_profile.svg';
 import { REVIEW_METRICS } from '@/constants/review';
 import { SESSION_ENUM_TO_KR } from '@/constants/tagsMapping';
 import { ReviewItem } from '@/types/review';
-import { getDate } from '@/utils/date';
+import { formatDateToYYMMDD } from '@/utils/formatDate';
 import { imgChange } from '@/utils/imgChange';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -34,7 +34,9 @@ export default function ReviewItems({ item }: { item: ReviewItem }) {
         )}
       </ul>
       <p className="my-6">{item.content}</p>
-      <p className="mb-[35px] opacity-60">{getDate(item.createdAt)}</p>
+      <p className="mb-[35px] opacity-60">
+        {formatDateToYYMMDD(item.createdAt)}
+      </p>
       <Link
         href={`/group/${item.gatheringId}?tab=recruit`}
         className="pc:py-3 pc:pr-[13px] pc:pl-[27px] tab:px-3 flex w-full items-center justify-between rounded-lg border border-[#464141] px-5 py-4"
