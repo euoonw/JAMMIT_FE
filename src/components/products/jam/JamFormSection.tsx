@@ -42,6 +42,7 @@ export default function JamFormSection({
           name="name"
           type="text"
           label="모임 제목"
+          size="lg"
           placeholder="모임 제목을 작성하세요."
           rules={{
             required: '모임 제목을 입력하세요.',

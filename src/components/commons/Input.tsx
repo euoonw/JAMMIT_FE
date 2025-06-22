@@ -85,8 +85,9 @@ function Input({
     sm: 'pc:w-[25rem] w-[19.4375rem]',
     // 448px
     md: 'w-[28rem]',
-    lg: 'w-full pc:w-[896px]',
-  }[size || 'lg'];
+    lg: 'w-full pc:w-[56rem]',
+    xlg: 'w-full',
+  }[size || 'xlg'];
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const newValue = e.target.value;

@@ -24,7 +24,7 @@ export default function SessionFormSection({
         count: s.recruitCount,
       }));
     }
-    return [{ sortOption: '', count: 0 }];
+    return [{ sortOption: '', count: 1 }];
   });
 
   const selectedSessions = sessionList
@@ -32,7 +32,7 @@ export default function SessionFormSection({
     .filter((option) => option !== '');
 
   const handleAddSession = useCallback(() => {
-    setSessionList((prev) => [...prev, { sortOption: '', count: 0 }]);
+    setSessionList((prev) => [...prev, { sortOption: '', count: 1 }]);
   }, []);
 
   const handleDeleteSession = useCallback((index: number) => {
