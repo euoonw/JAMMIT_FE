@@ -55,7 +55,7 @@ function ModalImgEdit({ onSubmit, onClose }: ModalImgEditProps) {
       />
       <div
         ref={modalRef}
-        className="pc:w-[57.75rem] pc:h-[25.625rem] tab:w-[39rem] max-h-auto fixed top-1/2 left-1/2 z-50 min-h-[32.9375rem] w-[19.625rem] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-3xl border-0 bg-[#242429] px-[3.25rem] py-[2.75rem]"
+        className="pc:w-[57.75rem] tab:w-[39rem] max-h-auto fixed top-1/2 left-1/2 z-50 w-[19.625rem] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-3xl border-0 bg-[#242429] px-[3.25rem] py-[2.75rem]"
       >
         <div className="flex flex-col items-center gap-[2rem]">
           <div className="flex flex-col items-center">
@@ -73,7 +73,7 @@ function ModalImgEdit({ onSubmit, onClose }: ModalImgEditProps) {
               return (
                 <div
                   key={idx}
-                  className={`cursor-pointer rounded-lg border-2 ${
+                  className={`cursor-pointer overflow-hidden rounded-lg border-2 ${
                     selectedIndex === idx
                       ? 'border-[#9900FF]'
                       : 'border-transparent'

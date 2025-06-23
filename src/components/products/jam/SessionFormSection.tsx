@@ -115,9 +115,9 @@ export default function SessionFormSection({
         </div>
         <div className="flex gap-[0.75rem]">
           <Button
-            variant="outline"
+            variant="solid"
             onClick={handleAddSession}
-            className="pc:w-[109px] w-[91px] text-gray-100 hover:text-white"
+            className="pc:w-[6.8125rem] w-[5.6875rem]"
           >
             추가
           </Button>
@@ -125,7 +125,7 @@ export default function SessionFormSection({
             variant="outline"
             onClick={() => handleDeleteSession(sessionList.length - 1)}
             disabled={sessionList.length === 1}
-            className="pc:w-[109px] w-[91px] text-gray-100 hover:text-white"
+            className="pc:w-[6.8125rem] w-[5.6875rem]"
           >
             삭제
           </Button>

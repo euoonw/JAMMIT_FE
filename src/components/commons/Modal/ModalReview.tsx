@@ -35,6 +35,7 @@ export default function ModalReview({
       tags: [],
       review: '',
     },
+    mode: 'onChange',
   });
 
   const { handleSubmit, watch, setValue } = methods;
@@ -92,7 +93,6 @@ export default function ModalReview({
                 name="review"
                 placeholder="남겨주신 리뷰는 프로그램 운영 및 다른 회원 분들께 큰 도움이 됩니다."
                 rules={{
-                  required: '소개글을 입력하세요.',
                   maxLength: {
                     value: 500,
                     message: '소개글은 500자 이내로 입력해주세요.',

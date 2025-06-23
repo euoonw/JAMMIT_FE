@@ -95,7 +95,12 @@ export function DatePicker({ value, onChange }: DatePickerProps) {
         align="start"
         className="box-shadow-lg flex h-[16.625rem] w-auto overflow-hidden border-[0.0625rem] border-[#505057] bg-[#34343a] p-[1.375rem] pr-[0.125rem]"
       >
-        <Calendar mode="single" selected={date} onSelect={handleDateChange} />
+        <Calendar
+          mode="single"
+          selected={date}
+          onSelect={handleDateChange}
+          disabled={{ before: new Date(new Date().setHours(0, 0, 0, 0)) }}
+        />
 
         <div className="mx-[0.1875rem] ml-[1.0625rem] h-full w-0 border-r-[1px] border-[#4a4e55]" />
 

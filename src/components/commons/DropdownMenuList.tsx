@@ -23,7 +23,7 @@ export default function DropdownMenuList({
 
   return (
     <div
-      className={`${!isMobile ? 'absolute' : ''} ${sizeClass} gap-[0.625rem] rounded-lg border-1 border-[#505057] bg-[#34343A] text-gray-100`}
+      className={`${!isMobile ? 'absolute' : ''} ${sizeClass} gap-[0.625rem] overflow-hidden rounded-lg border-1 border-[#505057] bg-[#34343A] text-gray-100`}
     >
       {menuOptions.map((option) => (
         <div

@@ -47,6 +47,8 @@ interface InputProps {
   onRightButtonClick?: () => void;
   /** 버튼 내용 */
   children?: ReactNode;
+  /** 자동완성 설정 */
+  autoComplete?: string;
 }
 
 function Input({
@@ -67,6 +69,7 @@ function Input({
   rightButtonDisabled,
   onRightButtonClick,
   children,
+  autoComplete = 'off',
 }: InputProps) {
   const {
     register,
@@ -141,6 +144,7 @@ function Input({
               defaultValue={defaultValue}
               minLength={minLength}
               maxLength={maxLength}
+              autoComplete={autoComplete}
               ref={(el) => {
                 ref(el);
                 if (innerRef) {

@@ -76,7 +76,7 @@ function Calendar({
           'rounded-[0.5rem] w-[2.1875rem] text-center text-[0.875rem] focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-[#9900FF] [&:has([aria-selected].day-range-end)]:rounded-[0.5rem] cursor-pointer',
         ),
         day_button: cn('size-8 p-0 font-semibold aria-selected:opacity-100'),
-        selected: 'bg-[#9900FF]',
+        selected: 'bg-[#9900FF] text-gray-100',
         today: 'text-[#9900ff]',
         outside: 'day-outside text-gray-500',
         disabled: 'opacity-50',
