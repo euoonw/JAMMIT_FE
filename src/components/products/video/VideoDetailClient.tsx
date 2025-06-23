@@ -102,7 +102,6 @@ export default function VideoDetailClient({ videoId }: prop) {
     message: '좋아요 상태 불러오기 실패',
   });
   if (isLoading || likeStatusLoading) return <VideoDetailSkeleton />;
-
   return (
     <div className="pc:max-w-[84rem] pc:mt-6 pc:mb-36 tab:mb-11 mx-auto mb-6">
       <MuxPlayer

@@ -31,7 +31,8 @@ export default function WishPage() {
     if (hasGenres) return genreMatched;
     if (hasSessions) return sessionMatched;
   });
-
+  const defaultGenres: Genre[] = [];
+  const defaultSessions: BandSession[] = [];
   return (
     <div className="pc:max-w-[84rem] pc:mt-8 pc:pb-[5rem] mx-auto max-w-full pb-[1.375rem]">
       <RecruitHeader
@@ -40,6 +41,8 @@ export default function WishPage() {
         sessions={sessions}
         setSessions={setSessions}
         page="wish"
+        defaultSessions={defaultSessions}
+        defaultGenres={defaultGenres}
       />
       <VirtualGrid
         list={filteredData}
