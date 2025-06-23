@@ -8,6 +8,9 @@ import Providers from './providers';
 
 export const metadata: Metadata = {
   title: 'JAMMIT - 밴드 모임 플랫폼',
+  icons: {
+    icon: '/images/favicon.ico',
+  },
   description:
     'JAMMIT은 밴드 모임을 위한 플랫폼입니다. 밴드원을 찾고, 모임을 만들고, 음악을 공유하세요.',
   keywords: '밴드, 모임, 음악, 밴드원 구인, 밴드원 구직, 밴드 모임',

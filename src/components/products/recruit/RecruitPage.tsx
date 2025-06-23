@@ -8,7 +8,7 @@ import { useCommonInfiniteQuery } from '@/hooks/queries/recruit/useRecruit';
 import { RecruitPageProps } from '@/types/recruit';
 import { BandSession, Genre } from '@/types/tags';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 export default function RecruitPage({
   defaultGenres,
@@ -22,13 +22,19 @@ export default function RecruitPage({
   const [sort, setSort] = useState<string>('recruitDeadline,asc');
   const [isShareModalOpen, setIsShareModalOpen] = useState(showShareModal);
   const router = useRouter();
-  const { data, fetchNextPage, hasNextPage, isFetching } =
-    useCommonInfiniteQuery({
+
+  const filters = useMemo(
+    () => ({
       size: 8,
+      sort,
       genres,
       sessions,
-      sort,
-    });
+    }),
+    [sort, genres, sessions],
+  );
+
+  const { data, fetchNextPage, hasNextPage, isFetching } =
+    useCommonInfiniteQuery(filters);
   const flatData = data?.pages.flatMap((page) => page.gatherings) ?? [];
 
   const handleModalClose = () => {
