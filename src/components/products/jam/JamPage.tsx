@@ -131,7 +131,7 @@ export default function JamPage({
       registerGathering(data, {
         onSuccess: (response) => {
           localStorage.removeItem(TEMP_STORAGE_KEY);
-          queryClient.refetchQueries({
+          queryClient.invalidateQueries({
             predicate: (query) =>
               query.queryKey &&
               query.queryKey[0] === 'gatherings' &&
