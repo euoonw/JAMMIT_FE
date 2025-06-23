@@ -110,7 +110,7 @@ export default function ModalEdit({
       <ModalWrapper
         title="프로필 수정하기"
         onClose={onCancel}
-        className="pc:h-[35.5rem] relative h-auto w-[32.5rem] max-w-md overflow-y-auto rounded-lg bg-[#242429] p-[1.5rem]"
+        className="relative h-auto max-h-[90vh] w-[32.5rem] max-w-md overflow-y-auto rounded-lg bg-[#242429] p-[1.5rem]"
       >
         <FormProvider {...methods}>
           <form
