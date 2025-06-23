@@ -5,12 +5,14 @@ import { GatheringCard } from '@/types/card';
 import { GatheringsResponse, GetUserGatheringsParams } from '@/types/gather';
 import { useSentryErrorLogger } from '@/utils/useSentryErrorLogger';
 import SkeletonGatheringList from './SkeletonGatheringList';
+import { useUserStore } from '@/stores/useUserStore';
 
 interface UseGatheringHook {
   (params: GetUserGatheringsParams): {
     data?: GatheringsResponse;
     isError?: boolean;
     error?: Error | null;
+    enabled?: boolean;
   };
 }
 
@@ -42,10 +44,12 @@ export default function GatheringList({
 }: GatheringListProps) {
   const [page, setPage] = useState(0);
   const [list, setList] = useState<GatheringCard[]>([]);
+  const { user, isLoaded, isRefreshing } = useUserStore();
+  const isQueryReady = isLoaded && !isRefreshing && !!user;
 
   const params = useMemo(
-    () => ({ page, size, includeCanceled }),
-    [page, size, includeCanceled],
+    () => ({ page, size, includeCanceled, enabled: isQueryReady }),
+    [page, size, includeCanceled, isQueryReady],
   );
   const { data, isError, error } = useHook(params);
 

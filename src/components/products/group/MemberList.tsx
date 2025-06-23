@@ -22,7 +22,6 @@ export default function MemberList({
   setSelectedIds,
   gatheringId: gatheringId,
 }: MemberListProps) {
-  console.log('members: ', members);
   const device = useDeviceType();
   const handleSelectChange = (id: number) => {
     if (!isSelectable || !setSelectedIds) {

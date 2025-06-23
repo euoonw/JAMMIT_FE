@@ -14,6 +14,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { gatheringKeys } from '@/hooks/queries/queryKeys';
 
 const TEMP_STORAGE_KEY = 'jam_temp_data';
 
@@ -96,21 +97,30 @@ export default function JamPage({
 
   const onSubmit = (data: RegisterGatheringsRequest) => {
     if (formType === 'edit' && groupId) {
-      modifyGathering({
-        id: groupId,
-        name: data.name,
-        thumbnail: data.thumbnail,
-        place: data.place,
-        gatheringDateTime: data.gatheringDateTime,
-        totalRecruitCount: data.gatheringSessions.reduce(
-          (sum, session) => sum + session.recruitCount,
-          0,
-        ),
-        recruitDeadline: data.recruitDateTime,
-        genres: data.genres,
-        description: data.description,
-        gatheringSessions: data.gatheringSessions,
-      });
+      modifyGathering(
+        {
+          id: groupId,
+          name: data.name,
+          thumbnail: data.thumbnail,
+          place: data.place,
+          gatheringDateTime: data.gatheringDateTime,
+          totalRecruitCount: data.gatheringSessions.reduce(
+            (sum, session) => sum + session.recruitCount,
+            0,
+          ),
+          recruitDeadline: data.recruitDateTime,
+          genres: data.genres,
+          description: data.description,
+          gatheringSessions: data.gatheringSessions,
+        },
+        {
+          onSuccess: () => {
+            queryClient.invalidateQueries({
+              queryKey: gatheringKeys.details(groupId).detail,
+            });
+          },
+        },
+      );
       router.push(`/group/${groupId}`);
     } else {
       registerGathering(data, {

@@ -7,11 +7,13 @@ import ReviewItems from './ReviewItems';
 import SkeletonReviewList from './SkeletonReviewList';
 
 export default function ReviewList() {
-  const { user } = useUserStore();
+  const { user, isLoaded, isRefreshing } = useUserStore();
+  const isQueryReady = isLoaded && !isRefreshing && !!user;
 
   const { data, fetchNextPage, hasNextPage, isFetching, isError } =
     useReviewInfiniteQuery({
       size: 8,
+      enabled: isQueryReady,
     });
   useSentryErrorLogger({
     isError: !!isError,

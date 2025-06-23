@@ -10,7 +10,7 @@ export const gatheringKeys = {
   }) => [...gatheringKeys.all, 'list', filters] as const,
 
   // 개별 모임
-  details: (id: number) => ({
+  details: (id: number | undefined) => ({
     // 모임 상세
     detail: [...gatheringKeys.all, id, 'detail'] as const,
     // 모임의 리뷰 목록

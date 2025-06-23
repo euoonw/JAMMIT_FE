@@ -17,7 +17,12 @@ export const gatherMeParticipantsQuery = ({
 });
 
 export const useGatherMeParticipants = (
-  { page, size = 4, includeCanceled = false }: GetUserGatheringsParams = {
+  {
+    page,
+    size = 4,
+    includeCanceled = false,
+    enabled = true,
+  }: GetUserGatheringsParams = {
     page: 0,
     size: 4,
     includeCanceled: true,
@@ -31,6 +36,7 @@ export const useGatherMeParticipants = (
     }) as unknown as unknown[],
     queryFn: () =>
       getUserParticipantsGatherings({ page, size, includeCanceled }),
+    enabled,
     retry: true,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,

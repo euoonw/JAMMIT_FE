@@ -17,6 +17,7 @@ import {
 import { useErrorModalStore } from '@/stores/useErrorModalStore';
 import ErrorModal from './ErrorModal';
 import { useImageUpload } from '@/hooks/useImageUpload';
+import { PASSWORD_RULE } from '@/constants/regex';
 
 interface ModalEditProps {
   /** "확인" 버튼 클릭 시 실행할 콜백 */
@@ -128,13 +129,7 @@ export default function ModalEdit({
                 type="password"
                 label="비밀번호"
                 placeholder="비밀번호를 입력해주세요."
-                rules={{
-                  required: '비밀번호는 필수 입력입니다.',
-                  minLength: {
-                    value: 8,
-                    message: '비밀번호는 최소 8자 이상이어야 합니다.',
-                  },
-                }}
+                rules={PASSWORD_RULE}
               />
               <Input
                 name="passwordConfirm"

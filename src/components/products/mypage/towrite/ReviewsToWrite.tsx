@@ -4,15 +4,18 @@ import CardSkeleton from '@/components/commons/Card/SkeletonItem';
 import InfinityScroll from '@/components/commons/InfinityScroll';
 import { CARD_STATE } from '@/constants/card';
 import { useReviewToWriteInfiniteQuery } from '@/hooks/queries/review/usePrefetchReview';
-import { useUserMeQuery } from '@/hooks/queries/user/useUserMeQuery';
+import { useUserStore } from '@/stores/useUserStore';
 import { useSentryErrorLogger } from '@/utils/useSentryErrorLogger';
 
 export default function ReviewsToWrite() {
-  const { data: user } = useUserMeQuery();
+  const { user, isLoaded, isRefreshing } = useUserStore();
+  const isQueryReady = isLoaded && !isRefreshing && !!user;
+
   const { data, fetchNextPage, hasNextPage, isFetching, isError } =
     useReviewToWriteInfiniteQuery({
       size: 8,
       includeCanceled: false,
+      enabled: isQueryReady,
     });
   useSentryErrorLogger({
     isError: !!isError,

@@ -8,12 +8,14 @@ interface UseUserVideoInfiniteQueryParams {
   userId?: number;
   sort: 'latest' | 'popular';
   size?: number;
+  enabled?: boolean;
 }
 
 export const useUserVideoInfiniteQuery = ({
   userId,
   sort,
   size = 10,
+  enabled = true,
 }: UseUserVideoInfiniteQueryParams) => {
   return useInfiniteQuery({
     queryKey: userKeys.videos(userId).list,
@@ -25,5 +27,6 @@ export const useUserVideoInfiniteQuery = ({
       return page < totalPage ? page + 1 : undefined;
     },
     staleTime: 1000 * 60 * 1,
+    enabled,
   });
 };

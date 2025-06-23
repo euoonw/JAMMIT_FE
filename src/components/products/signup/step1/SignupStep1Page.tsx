@@ -16,6 +16,7 @@ import {
 } from 'react-hook-form';
 import { useSendCodeMutation } from '@/hooks/queries/auth/useSendCodeMutation';
 import { useVerifyCodeMutation } from '@/hooks/queries/auth/useVerifyCodeMutation';
+import { PASSWORD_RULE } from '@/constants/regex';
 
 interface FormValues {
   email: string;
@@ -151,7 +152,6 @@ export default function SignUpStep1Page() {
                   name="email"
                   type="text"
                   label="아이디"
-                  size="lg"
                   placeholder="이메일을 입력해주세요."
                   isrightbutton={true}
                   rightButtonDisabled={isSendButtonDisabled}
@@ -182,7 +182,6 @@ export default function SignUpStep1Page() {
                   name="name"
                   type="text"
                   label="인증번호 입력"
-                  size="lg"
                   placeholder="인증 6자리를 입력해주세요."
                   isrightbutton={true}
                   rightButtonDisabled={isVerifyButtonDisabled}
@@ -205,13 +204,7 @@ export default function SignUpStep1Page() {
                 type="password"
                 label="비밀번호"
                 placeholder="비밀번호를 입력해주세요."
-                rules={{
-                  required: '비밀번호는 필수 입력입니다.',
-                  minLength: {
-                    value: 8,
-                    message: '비밀번호는 최소 8자 이상이어야 합니다.',
-                  },
-                }}
+                rules={PASSWORD_RULE}
               />
               <Input
                 name="passwordConfirm"

@@ -12,6 +12,7 @@ export interface GetUserGatheringsParams {
   page: number;
   size: number;
   includeCanceled?: boolean;
+  enabled?: boolean;
 }
 export interface RegisterGatheringsRequest {
   name: string;

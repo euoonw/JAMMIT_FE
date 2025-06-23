@@ -17,8 +17,12 @@ export default function UserCard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const updateProfile = useUpdateProfile();
   const updateProfileImage = useUpdateProfileImage();
-  const { isLoaded, isRefreshing, setUser } = useUserStore();
-  const { data: user, isLoading } = useUserMeQuery();
+  const { user: initialUser, isLoaded, isRefreshing, setUser } = useUserStore();
+  const isUserMeQueryReady = isLoaded && !isRefreshing && !!initialUser;
+
+  const { data: user, isLoading } = useUserMeQuery({
+    enabled: isUserMeQueryReady,
+  });
 
   const isQueryReady = isLoaded && !isRefreshing && !!user;
 

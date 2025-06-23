@@ -2,16 +2,21 @@ import InfinityScroll from '@/components/commons/InfinityScroll';
 import { useUserVideoInfiniteQuery } from '@/hooks/queries/video/useUserVideoInfiniteQuery';
 import { VideoCard } from '../../videos/VideoCard';
 import VideoCardSkeleton from '../../videos/VideoCardSkeleton';
+import { useUserStore } from '@/stores/useUserStore';
 
 interface MyVideoProps {
   userId?: number;
 }
 
 export default function MyVideo({ userId }: MyVideoProps) {
+  const { user, isLoaded, isRefreshing } = useUserStore();
+  const isQueryReady = isLoaded && !isRefreshing && !!user;
+
   const queryArgs = {
     ...(userId !== undefined && { userId }),
     sort: 'latest' as const,
     size: 12,
+    enabled: isQueryReady,
   };
 
   const { data, fetchNextPage, hasNextPage, isFetching, isLoading } =

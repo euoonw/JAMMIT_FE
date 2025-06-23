@@ -5,15 +5,20 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { userKeys } from '../queryKeys';
 
-export const useUserMeQuery = () => {
-  const { setUser, isLoaded, isRefreshing } = useUserStore((state) => state);
-  const isQueryReady = isLoaded && !isRefreshing;
+interface UseUserMeQueryOptions {
+  enabled?: boolean;
+}
+
+export const useUserMeQuery = ({
+  enabled = true,
+}: UseUserMeQueryOptions = {}) => {
+  const { setUser } = useUserStore((state) => state);
 
   const query = useQuery<UserResponse>({
     queryKey: userKeys.me(),
     queryFn: getUserMe,
     retry: true,
-    enabled: isQueryReady,
+    enabled,
   });
 
   useEffect(() => {

@@ -25,11 +25,13 @@ export const useReviewQuery = (
 interface ReivewProps {
   size: number;
   includeCanceled: boolean;
+  enabled?: boolean;
 }
 
 export const useReviewToWriteInfiniteQuery = ({
   size,
   includeCanceled,
+  enabled = true,
 }: ReivewProps) => {
   return useInfiniteQuery({
     queryKey: userKeys.myParticipatedGatherings({ size, includeCanceled }),
@@ -41,5 +43,6 @@ export const useReviewToWriteInfiniteQuery = ({
         ? lastPage.currentPage + 1
         : undefined,
     staleTime: 1000 * 60 * 5,
+    enabled,
   });
 };

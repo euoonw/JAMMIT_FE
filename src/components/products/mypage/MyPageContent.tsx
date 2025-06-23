@@ -21,6 +21,7 @@ import GatheringList from './gather/GatheringList';
 import GatheringListComponents from './gather/GatheringListComponents';
 import MyReview from './review/MyReview';
 import MyVideo from './video/MyVideo';
+import { useUserStore } from '@/stores/useUserStore';
 
 type TabKey =
   | 'participating'
@@ -37,20 +38,25 @@ export default function MyPage() {
     'reviews_towrite',
     'video',
   ]);
+  const { user, isLoaded, isRefreshing } = useUserStore();
+  const isQueryReady = isLoaded && !isRefreshing && !!user;
 
   const participatingCount = usePrefetchedCount({
     ...gatherMeParticipantsQuery({ page: 0, size: 1, includeCanceled: true }),
     selector: (data) => data.totalElements,
+    enabled: isQueryReady,
   });
 
   const createdCount = usePrefetchedCount({
     ...gatherMeCreateQuery({ page: 0, size: 1, includeCanceled: true }),
     selector: (data) => data.totalElements,
+    enabled: isQueryReady,
   });
 
   const { data: write } = useReviewToWriteInfiniteQuery({
     size: 8,
     includeCanceled: false,
+    enabled: isQueryReady,
   });
 
   const writeCount =
@@ -58,11 +64,13 @@ export default function MyPage() {
       .length ?? 0;
   const { data: review } = useReviewInfiniteQuery({
     size: 8,
+    enabled: isQueryReady,
   });
 
   const videoCount = usePrefetchedCount({
     ...userVideoCountQuery(),
     selector: (data) => data.count,
+    enabled: isQueryReady,
   });
 
   const reviewCount = review?.pages[0].totalElements ?? 0;
