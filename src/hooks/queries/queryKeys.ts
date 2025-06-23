@@ -92,4 +92,7 @@ export const videoKeys = {
   // 댓글
   comment: (filters: { page?: number; take?: number; videoId?: string }) =>
     [...videoKeys.all, 'comment', filters] as const,
+
+  // 참여한 모임
+  gether: () => [...videoKeys.all, 'videoAll'] as const,
 };

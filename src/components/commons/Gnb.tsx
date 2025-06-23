@@ -2,12 +2,12 @@
 
 import JammitLogo from '@/assets/icons/ic_jammit_logo.svg';
 import Dropdown from '@/components/commons/Dropdown';
+import { DeviceType, useDeviceType } from '@/hooks/useDeviceType';
 import { useUserStore } from '@/stores/useUserStore';
 import { logout } from '@/utils/authService';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import ProfileImage from './ProfileImage';
-import { DeviceType, useDeviceType } from '@/hooks/useDeviceType';
 
 const PROFILE_OPTIONS = ['마이페이지', '로그아웃'];
 

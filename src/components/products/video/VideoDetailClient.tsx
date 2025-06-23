@@ -2,6 +2,7 @@
 import IcLove from '@/assets/icons/ic_love.svg';
 import IcShare from '@/assets/icons/ic_share.svg';
 import Button from '@/components/commons/Button';
+import GoGether from '@/components/commons/GoGether';
 import InfinityScroll from '@/components/commons/InfinityScroll';
 import Liked from '@/components/commons/Liked';
 import ProfileImage from '@/components/commons/ProfileImage';
@@ -21,6 +22,7 @@ import MuxPlayer from '@mux/mux-player-react';
 import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import ShareLinkModal from '../group/ShareLinkModal';
+import VideoDetailSkeleton from './VideoDetailSkeleton';
 
 interface prop {
   videoId: string;
@@ -98,7 +100,8 @@ export default function VideoDetailClient({ videoId }: prop) {
     tags: { section: 'video', action: 'likeStatus' },
     message: '좋아요 상태 불러오기 실패',
   });
-  if (isLoading || likeStatusLoading) return null;
+  if (isLoading || likeStatusLoading) return <VideoDetailSkeleton />;
+  console.log(data);
   return (
     <div className="pc:max-w-[84rem] pc:mt-6 pc:mb-36 tab:mb-11 mx-auto mb-6">
       <MuxPlayer
@@ -154,9 +157,15 @@ export default function VideoDetailClient({ videoId }: prop) {
             </button>
           </div>
         </div>
-        <p className="pc:mt-11 pc:mb-[3.125rem] mt-8 mb-8 leading-[160%]">
-          {data?.description}
-        </p>
+        <p className="pc:my-10 my-8 leading-[160%]">{data?.description}</p>
+        <div className="pc:my-10 my-8">
+          <GoGether
+            gatheringId={Number(data?.slug)}
+            gatheringName={data?.creatorTitle as string}
+            gatheringHostNickname={data?.creatorName as string}
+            gatheringThumbnail={data?.creatorThumbnailUrl as string}
+          />
+        </div>
         <div className="flex items-center">
           <em className="text-[1.25rem]">댓글</em>
           <span className="mr-5 ml-2 block text-[1.25rem] text-[var(--purple-500)]">

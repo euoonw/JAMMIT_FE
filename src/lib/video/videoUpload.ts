@@ -1,5 +1,5 @@
-import { CreateVideoRequest } from '@/types/video';
-import { nestApiClient } from '@/utils/apiClient';
+import { CreateVideoRequest, GetGetherItem } from '@/types/video';
+import { apiClient, nestApiClient } from '@/utils/apiClient';
 
 export const uploadVideo = async ({
   videoFile,
@@ -7,6 +7,10 @@ export const uploadVideo = async ({
   description,
   accessToken,
   onProgress,
+  slug,
+  creatorTitle,
+  creatorName,
+  thumbnailUrl,
 }: CreateVideoRequest) => {
   // 1. 업로드용 URL 발급
   const res = await fetch(
@@ -42,18 +46,21 @@ export const uploadVideo = async ({
 
     xhr.send(videoFile);
   });
-  // const uploadRes = await fetch(uploadUrl, {
-  //     method: 'PUT',
-  //     headers: {
-  //     'Content-Type': videoFile.type,
-  //     },
-  //     body: videoFile,
-  // });
-  // if (!uploadRes.ok) throw new Error('Mux 업로드 실패');
+
   // STEP 3. 백엔드에 업로드 정보 등록
   return nestApiClient.post(`/video/register`, {
     title,
     description,
     uploadId,
+    slug,
+    creatorTitle,
+    creatorName,
+    thumbnailUrl,
   });
+};
+
+export const gether = async (): Promise<GetGetherItem[]> => {
+  return apiClient.get<GetGetherItem[]>(
+    `/gatherings/{gatheringId}/participants/my/completed`,
+  );
 };

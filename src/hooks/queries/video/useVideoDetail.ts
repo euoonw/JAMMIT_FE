@@ -31,6 +31,7 @@ export const prefetchVideoQuery = ({
     queryFn: async () => {
       const viewResp = await postView({ videoId });
       const detail = await getVideoDetail({ videoId });
+
       return {
         ...detail,
         viewCount: viewResp.viewCount,
