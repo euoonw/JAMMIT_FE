@@ -57,7 +57,12 @@ export default function JamPage({
       gatheringDateTime: '',
       recruitDateTime: '',
       genres: [],
-      gatheringSessions: [],
+      gatheringSessions: [
+        {
+          bandSession: undefined,
+          recruitCount: 1,
+        },
+      ],
     },
     mode: 'onChange',
   });
@@ -167,12 +172,7 @@ export default function JamPage({
           }
           isTab={false}
         >
-          <JamFormSection
-            control={control}
-            watch={watch}
-            setValue={setValue}
-            initialData={initialData}
-          />
+          <JamFormSection control={control} watch={watch} setValue={setValue} />
         </GroupPageLayout>
       </form>
       {showLoginModal && (

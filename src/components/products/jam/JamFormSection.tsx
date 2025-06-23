@@ -16,14 +16,12 @@ interface JamFormSectionProps {
   control: Control<RegisterGatheringsRequest>;
   watch: UseFormWatch<RegisterGatheringsRequest>;
   setValue: UseFormSetValue<RegisterGatheringsRequest>;
-  initialData?: RegisterGatheringsRequest;
 }
 
 export default function JamFormSection({
   control,
   watch,
   setValue,
-  initialData,
 }: JamFormSectionProps) {
   const place = watch('place') || '';
 
@@ -63,16 +61,12 @@ export default function JamFormSection({
       <hr className={DIVIDER} />
 
       {/** 모집 세션 */}
-      <SessionFormSection
-        control={control}
-        setValue={setValue}
-        initialData={initialData}
-      />
+      <SessionFormSection control={control} />
 
       <hr className={DIVIDER} />
 
       {/* 모임 장르 */}
-      <GenreFormSection watch={watch} setValue={setValue} />
+      <GenreFormSection control={control} />
 
       <hr className={DIVIDER} />
 
