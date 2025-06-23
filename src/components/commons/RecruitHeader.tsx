@@ -6,6 +6,7 @@ import { useDeviceType } from '@/hooks/useDeviceType';
 import { BandSession, Genre } from '@/types/tags';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import React, { Fragment, useCallback, useEffect, useState } from 'react';
 
 interface FilterHeaderProps {
@@ -16,6 +17,8 @@ interface FilterHeaderProps {
   setSort?: React.Dispatch<React.SetStateAction<string>>;
   page?: string;
   sort?: string;
+  defaultSessions: BandSession[];
+  defaultGenres: Genre[];
 }
 
 export default function RecruitHeader({
@@ -26,6 +29,8 @@ export default function RecruitHeader({
   setSort,
   page = 'main',
   sort,
+  defaultSessions,
+  defaultGenres,
 }: FilterHeaderProps) {
   // 반응형 이미지
   const [src, setSrc] = useState<string | null>(null);
@@ -35,14 +40,21 @@ export default function RecruitHeader({
     else if (device === 'tab') setSrc('/images/main/img_main_banner_tab.avif');
     else setSrc('/images/main/img_main_banner_pc.avif');
   }, [device]);
-
-  const handleSort = useCallback(() => {
-    setSort?.((prev) =>
-      prev === 'recruitDeadline,asc'
+  const router = useRouter();
+  const handleSort = () => {
+    const nextSort =
+      sort === 'recruitDeadline,asc'
         ? 'recruitDeadline,desc'
-        : 'recruitDeadline,asc',
-    );
-  }, [setSort]);
+        : 'recruitDeadline,asc';
+    setSort?.(nextSort);
+    const url = new URL(window.location.href);
+    url.searchParams.set('sort', nextSort);
+    router.replace(`${url.pathname}?${url.searchParams.toString()}`);
+  };
+  const handleReset = useCallback(() => {
+    setGenres(defaultGenres);
+    setSessions(defaultSessions);
+  }, [setSessions, setGenres, defaultSessions, defaultGenres]);
   const sortLabel = sort === 'recruitDeadline,asc' ? '마감임박' : '최신순';
   if (!src) return null;
   return (
@@ -93,6 +105,12 @@ export default function RecruitHeader({
               {sortLabel}
             </button>
           )}
+          <button
+            onClick={handleReset}
+            className="pc:h-10 pc:w-[6.875rem] pc:gap-1 pc:rounded-lg pc:text-sm flex h-9 w-9 items-center justify-center gap-0 rounded-xl bg-[var(--gray-100)] text-[0px]"
+          >
+            필터 초기화
+          </button>
         </div>
         {page !== 'wish' && (
           <Link

@@ -7,7 +7,7 @@ import { CARD_STATE } from '@/constants/card';
 import { useCommonInfiniteQuery } from '@/hooks/queries/recruit/useRecruit';
 import { RecruitPageProps } from '@/types/recruit';
 import { BandSession, Genre } from '@/types/tags';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 
 export default function RecruitPage({
@@ -16,10 +16,12 @@ export default function RecruitPage({
   showShareModal = false,
   shareGroupId,
 }: RecruitPageProps) {
+  const searchParams = useSearchParams();
+  const initialSort = searchParams.get('sort') || 'recruitDeadline,asc';
   // 장르, 세션
   const [genres, setGenres] = useState<Genre[]>(defaultGenres);
   const [sessions, setSessions] = useState<BandSession[]>(defaultSessions);
-  const [sort, setSort] = useState<string>('recruitDeadline,asc');
+  const [sort, setSort] = useState<string>(initialSort);
   const [isShareModalOpen, setIsShareModalOpen] = useState(showShareModal);
   const router = useRouter();
 
@@ -58,6 +60,8 @@ export default function RecruitPage({
           setSessions={setSessions}
           setSort={setSort}
           sort={sort}
+          defaultGenres={defaultGenres}
+          defaultSessions={defaultSessions}
         />
         <InfinityScroll
           isInitialLoading={isInitialLoading}

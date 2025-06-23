@@ -7,6 +7,8 @@ import React, {
   FocusEventHandler,
   memo,
   useCallback,
+  useEffect,
+  useRef,
 } from 'react';
 import { RegisterOptions, useFormContext } from 'react-hook-form';
 
@@ -22,8 +24,11 @@ export interface TextAreaProps {
   onBlur?: FocusEventHandler<HTMLTextAreaElement>;
   onChange?: ChangeEventHandler<HTMLTextAreaElement>;
   classnames?: string;
+  autoResize?: boolean;
 }
 
+const MAX_HEIGHT = 92;
+const MIN_HEIGHT = 44;
 function TextArea({
   name,
   placeholder,
@@ -36,13 +41,13 @@ function TextArea({
   onBlur,
   classnames,
   onChange,
+  autoResize = false,
 }: TextAreaProps) {
   const {
     register,
     setValue,
     formState: { errors },
   } = useFormContext();
-
   const isError = !!errors[name];
 
   const handleChange: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
@@ -65,7 +70,7 @@ function TextArea({
     [onBlur],
   );
 
-  const { ref, ...rest } = register(name, {
+  const { ref: formRef, ...rest } = register(name, {
     onChange: handleChange,
     onBlur: handleBlur,
     minLength,
@@ -74,12 +79,37 @@ function TextArea({
     shouldUnregister: true,
   });
 
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const handleResize = () => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = `${MIN_HEIGHT}px`;
+      const newHeight = Math.min(textarea.scrollHeight, MAX_HEIGHT);
+      textarea.style.height = `${newHeight}px`;
+      textarea.style.overflowY =
+        textarea.scrollHeight > MAX_HEIGHT ? 'auto' : 'hidden';
+    }
+  };
+  const setRef = (el: HTMLTextAreaElement | null) => {
+    textareaRef.current = el;
+    if (typeof formRef === 'function') {
+      formRef(el);
+    }
+  };
+  useEffect(() => {
+    if (autoResize) {
+      handleResize(); // 마운트 시 초기 크기 설정
+    }
+  }, [autoResize]);
+
   return (
     <div className={`flex flex-col gap-[0.5rem] ${classnames}`}>
       <textarea
         id={name}
         placeholder={placeholder}
-        ref={ref}
+        ref={setRef}
+        onInput={autoResize ? handleResize : undefined}
         onFocus={handleFocus}
         className={clsx(
           'h-[11rem] resize-none rounded-lg border-0 bg-[#34343A] px-[1rem] py-[0.625rem] text-base font-medium outline-none',

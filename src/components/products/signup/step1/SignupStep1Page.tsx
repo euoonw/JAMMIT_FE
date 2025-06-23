@@ -2,6 +2,9 @@
 import AuthCard from '@/components/commons/AuthCard';
 import Button from '@/components/commons/Button';
 import Input from '@/components/commons/Input';
+import { PASSWORD_RULE } from '@/constants/regex';
+import { useSendCodeMutation } from '@/hooks/queries/auth/useSendCodeMutation';
+import { useVerifyCodeMutation } from '@/hooks/queries/auth/useVerifyCodeMutation';
 import { checkEmailDuplicate } from '@/lib/auth/signup';
 import { useSignupStore } from '@/stores/useSignupStore';
 import * as Sentry from '@sentry/nextjs';
@@ -14,9 +17,6 @@ import {
   useForm,
   useWatch,
 } from 'react-hook-form';
-import { useSendCodeMutation } from '@/hooks/queries/auth/useSendCodeMutation';
-import { useVerifyCodeMutation } from '@/hooks/queries/auth/useVerifyCodeMutation';
-import { PASSWORD_RULE } from '@/constants/regex';
 
 interface FormValues {
   email: string;

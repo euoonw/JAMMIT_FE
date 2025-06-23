@@ -23,6 +23,12 @@ export const useVideoUploadMutation = (
     }) => uploadVideo({ ...payload, onProgress: setProgress }),
     onSuccess: () => {
       queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes('videos'),
+      });
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey.includes('videosCount'),
+      });
+      queryClient.invalidateQueries({
         predicate: (query) =>
           query.queryKey[0] === 'videos' && query.queryKey[1] === 'list',
       });

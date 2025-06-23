@@ -29,7 +29,7 @@ export async function generateMetadata({
       url: `https://jammit-fe-six.vercel.app/video/${data.id}`,
       siteName: 'JAMMIT',
       type: 'video.other',
-      images: [data.thumbnailUrl],
+      images: data.thumbnailUrl,
     },
   };
 }

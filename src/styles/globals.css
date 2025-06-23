@@ -164,3 +164,7 @@
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
+mux-player {
+    --media-accent-color: var(--purple-600) !important;
+
+}

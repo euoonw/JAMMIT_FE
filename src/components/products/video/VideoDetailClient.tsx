@@ -71,6 +71,7 @@ export default function VideoDetailClient({ videoId }: prop) {
     defaultValues: {
       content: '',
     },
+    mode: 'onChange',
   });
 
   const { handleSubmit, watch } = methods;
@@ -101,7 +102,6 @@ export default function VideoDetailClient({ videoId }: prop) {
     message: '좋아요 상태 불러오기 실패',
   });
   if (isLoading || likeStatusLoading) return <VideoDetailSkeleton />;
-  console.log(data);
   return (
     <div className="pc:max-w-[84rem] pc:mt-6 pc:mb-36 tab:mb-11 mx-auto mb-6">
       <MuxPlayer
@@ -111,6 +111,7 @@ export default function VideoDetailClient({ videoId }: prop) {
           video_title: data?.title,
           viewer_user_id: data?.nickname,
         }}
+        className="mux-player"
         style={{ width: '100%', height: 'auto' }}
       />
       <div className="pc:mt-6 tab:mt-8 pc:mx-0 tab:mx-8 mx-4 mt-4">
@@ -181,17 +182,18 @@ export default function VideoDetailClient({ videoId }: prop) {
           <FormProvider {...methods}>
             <form
               onSubmit={handleSubmit(onSubmit)}
-              className="pc:gap-9 tab:gap-6 pc:my-8 flex flex-wrap items-center justify-end gap-3 py-5"
+              className="pc:gap-9 tab:gap-6 pc:my-8 pc:items-start flex flex-wrap items-center justify-end gap-3 py-5"
             >
               <Textarea
-                classnames="pc:flex-[1] tab:flex-[1] w-full h-11 "
-                placeholder="댓글 내용을 입력해주세요."
+                classnames="pc:flex-[1] tab:flex-[1] w-full max-h-[5.75rem] box-sizing "
+                placeholder="댓글을 입력해주세요."
                 name="content"
+                autoResize
                 rules={{
-                  required: '소개글을 입력하세요.',
+                  required: '댓글을 입력하세요.',
                   maxLength: {
-                    value: 500,
-                    message: '소개글은 500자 이내로 입력해주세요.',
+                    value: 300,
+                    message: '댓글은 300자 이내로 입력해주세요.',
                   },
                 }}
               />
@@ -199,7 +201,7 @@ export default function VideoDetailClient({ videoId }: prop) {
                 size="middle"
                 variant="outlineOrder"
                 type="submit"
-                disabled={!commentValue?.trim()}
+                disabled={!commentValue?.trim() || commentValue.length > 300}
                 aria-label="댓글 저장 버튼"
               >
                 등록

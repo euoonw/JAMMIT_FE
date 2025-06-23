@@ -2,7 +2,7 @@ import ShimmerSkeleton from '@/components/commons/ShimmerSkeleton';
 
 export default function SkeletonReviewList() {
   return (
-    <ul className="flex animate-pulse flex-col gap-5">
+    <ul className="flex flex-[1] animate-pulse flex-col gap-5">
       {Array.from({ length: 3 }).map((_, i) => (
         <li
           key={i}

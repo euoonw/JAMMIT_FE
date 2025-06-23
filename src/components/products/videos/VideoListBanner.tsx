@@ -20,7 +20,11 @@ export default function VideoListBanner({
 
   if (device !== 'pc') {
     return (
-      <div className="relative h-[12.5rem] w-full overflow-hidden">
+      <button
+        className="relative h-[12.5rem] w-full overflow-hidden"
+        onClick={handleClick}
+        aria-label="이번 주 인기 영상 상세 페이지로 이동"
+      >
         <Image
           src="/images/main/img_video_banner_tab.avif"
           alt="비디오 게시판 베너 이미지"
@@ -31,7 +35,7 @@ export default function VideoListBanner({
           지금 가장 핫한
           <br />이 영상은 보고 재밋하니?
         </p>
-      </div>
+      </button>
     );
   }
 
