@@ -158,14 +158,17 @@ export default function VideoDetailClient({ videoId }: prop) {
           </div>
         </div>
         <p className="pc:my-10 my-8 leading-[160%]">{data?.description}</p>
-        <div className="pc:my-10 my-8">
-          <GoGether
-            gatheringId={Number(data?.slug)}
-            gatheringName={data?.creatorTitle as string}
-            gatheringHostNickname={data?.creatorName as string}
-            gatheringThumbnail={data?.creatorThumbnailUrl as string}
-          />
-        </div>
+        {data?.slug && (
+          <div className="pc:my-10 my-8">
+            <GoGether
+              gatheringId={Number(data?.slug)}
+              gatheringName={data?.creatorTitle as string}
+              gatheringHostNickname={data?.creatorName as string}
+              gatheringThumbnail={data?.creatorThumbnailUrl as string}
+            />
+          </div>
+        )}
+
         <div className="flex items-center">
           <em className="text-[1.25rem]">댓글</em>
           <span className="mr-5 ml-2 block text-[1.25rem] text-[var(--purple-500)]">
