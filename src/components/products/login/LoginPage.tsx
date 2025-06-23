@@ -2,17 +2,22 @@
 import AuthCard from '@/components/commons/AuthCard';
 import Button from '@/components/commons/Button';
 import Input from '@/components/commons/Input';
+import Checkbox from '@/assets/icons/ic_checkbox.svg';
+import CheckboxEmpty from '@/assets/icons/ic_checkbox_empty.svg';
 import { useLoginMutation } from '@/hooks/queries/auth/useLoginMutaion';
 import { useToastStore } from '@/stores/useToastStore';
 import { handleAuthApiError } from '@/utils/authApiError';
 import { logToSentry } from '@/utils/logToSentry';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 
 interface FormValues {
   email: string;
   password: string;
 }
+
+const STORAGE_KEY = 'savedEmail';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -23,14 +28,30 @@ export default function LoginPage() {
   });
   const {
     formState: { isValid },
+    setValue,
     reset,
   } = methods;
-
   const { mutateAsync } = useLoginMutation();
+  const [saveEmail, setSaveEmail] = useState(false);
+
+  useEffect(() => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      setValue('email', saved);
+      setSaveEmail(true);
+    }
+  }, [setValue]);
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
       await mutateAsync(data);
+
+      if (saveEmail) {
+        localStorage.setItem(STORAGE_KEY, data.email);
+      } else {
+        localStorage.removeItem(STORAGE_KEY);
+      }
+
       useToastStore.getState().show('로그인 성공!');
       router.push('/');
       reset();
@@ -80,10 +101,24 @@ export default function LoginPage() {
                 }}
               />
             </div>
+            <div className="mt-[1.5rem] flex items-center gap-2">
+              <div
+                onClick={() => setSaveEmail((prev) => !prev)}
+                className="cursor-pointer"
+              >
+                {saveEmail ? <Checkbox /> : <CheckboxEmpty />}
+              </div>
+              <label
+                onClick={() => setSaveEmail((prev) => !prev)}
+                className="cursor-pointer text-sm text-[0.938rem] font-medium text-gray-400"
+              >
+                아이디 저장
+              </label>
+            </div>
             <Button
               variant="solid"
               size="large"
-              className="mt-[2.5rem] w-full"
+              className="mt-[1.5rem] w-full"
               type="submit"
               disabled={!isValid}
             >
