@@ -1,4 +1,5 @@
 'use client';
+import IcReload from '@/assets/icons/ic_reload.svg';
 import IcSort from '@/assets/icons/ic_sort.svg';
 import MultiSelectDropdown from '@/components/commons/MultiSelectDropdown';
 import { GENRE_OPTIONS, SESSION_OPTIONS } from '@/constants/checkbox';
@@ -96,21 +97,24 @@ export default function RecruitHeader({
               onChange={setSessions}
             />
           </div>
-          {page !== 'wish' && (
+          <div className="flex gap-2">
+            {page !== 'wish' && (
+              <button
+                onClick={handleSort}
+                className="pc:h-10 pc:w-[6.875rem] pc:gap-1 pc:rounded-lg pc:text-sm flex h-9 w-9 items-center justify-center gap-0 rounded-xl bg-[var(--gray-100)] text-[0px]"
+              >
+                <IcSort />
+                {sortLabel}
+              </button>
+            )}
             <button
-              onClick={handleSort}
+              onClick={handleReset}
               className="pc:h-10 pc:w-[6.875rem] pc:gap-1 pc:rounded-lg pc:text-sm flex h-9 w-9 items-center justify-center gap-0 rounded-xl bg-[var(--gray-100)] text-[0px]"
             >
-              <IcSort />
-              {sortLabel}
+              <IcReload />
+              필터 초기화
             </button>
-          )}
-          <button
-            onClick={handleReset}
-            className="pc:h-10 pc:w-[6.875rem] pc:gap-1 pc:rounded-lg pc:text-sm flex h-9 w-9 items-center justify-center gap-0 rounded-xl bg-[var(--gray-100)] text-[0px]"
-          >
-            필터 초기화
-          </button>
+          </div>
         </div>
         {page !== 'wish' && (
           <Link
